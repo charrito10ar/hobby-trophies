@@ -1,0 +1,62 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_white"
+    tools:context="com.marbit.hobbytrophies.fragments.ProfileFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/translucent">
+
+        <FrameLayout
+            android:id="@+id/btnExpBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:background="@color/colorBackgroundDark"/>
+
+        <ProgressBar
+            android:id="@+id/profile_progress_bar_level"
+            android:layout_width="120dp"
+            android:layout_height="24dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:progress="0"
+            style="@style/CustomProgressBarHorizontal"/>
+
+        <com.marbit.hobbytrophies.overwrite.SecondaryMediumTextView
+            android:id="@+id/profile_level_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/material_white"
+            android:textSize="13sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:textAllCaps="true"
+            android:text="Cargando..."/>
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_profile_swipe_refresh"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="com.marbit.hobbytrophies.MainActivity">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_games_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/translucent"
+            android:paddingTop="48dp"
+            android:clipToPadding="false">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

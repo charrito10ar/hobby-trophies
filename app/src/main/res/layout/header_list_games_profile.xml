@@ -1,0 +1,200 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/translucent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/layout_avatar_profile"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="@color/translucent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/translucent"
+            android:layout_alignParentTop="true"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/material_white"
+            android:layout_alignParentBottom="true"/>
+
+        <ImageView
+            android:id="@+id/ic_avatar_profile"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/avatar"/>
+
+        <ImageView
+            android:id="@+id/ic_psn_plus_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_psn_plus"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/ic_avatar_profile"
+            android:layout_alignEnd="@+id/ic_avatar_profile" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/user_name_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@+id/layout_avatar_profile"
+        android:layout_centerHorizontal="true"
+        android:background="@color/material_white"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="nombre usuario"/>
+
+
+    <LinearLayout
+        android:id="@+id/layout_trophies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/material_blueGrey_300"
+        android:gravity="center"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:weightSum="5"
+        android:layout_below="@+id/user_name_profile">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/ic_platinum"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_platinum"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_platinum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_white"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="-"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/ic_gold_medal"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_gold_medal"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_gold_medal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_white"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="-"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/ic_silver_medal"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_silver_medal"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_silver_medal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_white"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="-"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/ic_bronze_medal"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_bronze_medal"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_bronze_medal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_white"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="-"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/ic_total_medal"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_total_medal"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_total_medal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_white"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="-"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+

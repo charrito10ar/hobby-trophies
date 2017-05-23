@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/card_view_games"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    card_view:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/text_view_name_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/material_textBlack_text"
+            android:text="Robinson: The Journey"/>
+
+
+        <ImageView
+            android:id="@+id/image_game"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_name_game"
+            android:src="@drawable/placeholder"/>
+
+
+        <LinearLayout
+            android:id="@+id/layout_trophies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_toRightOf="@id/image_game"
+            android:layout_toEndOf="@+id/image_game"
+            android:layout_below="@+id/text_view_name_game">
+
+            <ImageView
+                android:id="@+id/ic_platinum"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_platinum"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_platinum"
+                android:layout_width="18dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="1"/>
+
+
+            <ImageView
+                android:id="@+id/ic_gold_medal"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_gold_medal"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_gold_medal"
+                android:layout_width="18dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="46"/>
+
+
+            <ImageView
+                android:id="@+id/ic_silver_medal"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_silver_medal"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_silver_medal"
+                android:layout_width="18dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="4"/>
+
+
+            <ImageView
+                android:id="@+id/ic_bronze_medal"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_bronze_medal"/>
+
+            <TextView
+                android:id="@+id/text_view_amount_bronze_medal"
+                android:layout_width="18dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="24"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_trophies"
+            android:layout_toRightOf="@+id/image_game"
+            android:layout_toEndOf="@+id/image_game"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ic_ps3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:textSize="12sp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:background="@color/material_blue_400"
+                android:textColor="@color/material_white"
+                android:text="PS3"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/ic_ps4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:background="@color/material_blue_400"
+                android:textColor="@color/material_white"
+                android:text="PS4"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/ic_vita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:background="@color/material_blue_400"
+                android:textColor="@color/material_white"
+                android:text="VITA"
+                android:visibility="gone"/>
+
+
+        </LinearLayout>
+        
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_below="@+id/image_game"
+            android:background="@color/material_grey_400"/>
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

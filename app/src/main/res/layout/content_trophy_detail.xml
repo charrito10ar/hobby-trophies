@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.marbit.hobbytrophies.TrophyDetailActivity"
+    tools:showIn="@layout/activity_trophy_detail">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/head_layout"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:background="@color/colorBackgroundDark"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/layout_icons_first_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ic_trophy_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_one_player" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_two_player" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_third"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_lots_players" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_fourth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_bug" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_fifth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_collectable" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_icons_second_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:layout_below="@+id/layout_icons_first_row"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:id="@+id/ic_trophy_sixth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_random" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_seventh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_random" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_eighth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_random" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_nineth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_random" />
+
+                <ImageView
+                    android:id="@+id/ic_trophy_tenth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_round"
+                    android:padding="6dp"
+                    android:layout_marginLeft="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_game_random" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_below="@+id/head_layout">
+
+            <TextView
+                android:id="@+id/text_description_title_trophy_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:text="Descripción" />
+
+            <TextView
+                android:id="@+id/text_description_trophy_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="DESCRIPCION"
+                android:layout_below="@+id/text_description_title_trophy_detail"/>
+
+
+            <TextView
+                android:id="@+id/text_guide_trophy_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:text="Guía"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_below="@+id/text_description_trophy_detail"/>
+
+            <TextView
+                android:id="@+id/text_guide_description_trophy_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Obteniendo guía..."
+                android:layout_below="@+id/text_guide_trophy_detail"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

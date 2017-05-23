@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:foo="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    tools:context="com.marbit.hobbytrophies.MeetingDetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/image_meeting_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/placeholder"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:background="@color/translucent_grey">
+
+                <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                    android:id="@+id/text_view_timer_meeting_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    foo:customFont="share_tech_mono_regular.ttf"
+                    android:textStyle="bold"
+                    android:textSize="28sp"
+                    android:textColor="@color/material_white"
+                    android:text="5d - 11:18:06 "/>
+                <TextView
+                    android:id="@+id/text_view_description_meeting_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/material_white"
+                    android:layout_marginBottom="16dp"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/meeting_detail_swipe_refresh"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_above="@+id/post_comment_layout">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_meeting_trophies"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:paddingBottom="64dp"
+            android:clipToPadding="false"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <LinearLayout
+        android:id="@+id/post_comment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@color/material_grey_200"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <EditText
+            android:id="@+id/edit_text_comment"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:hint="Escribe un comentario"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:textStyle="italic"/>
+
+        <ImageButton
+            android:id="@+id/button_send_comment"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:src="@android:drawable/ic_menu_send"
+            android:background="@color/material_grey_600"
+            android:layout_height="match_parent"
+            android:onClick="clickSendMessage"
+            android:contentDescription="Send" />
+    </LinearLayout>
+
+</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

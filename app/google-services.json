@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "222571364260",
+    "firebase_url": "https://hobbytrophies-a3f23.firebaseio.com",
+    "project_id": "hobbytrophies-a3f23",
+    "storage_bucket": "hobbytrophies-a3f23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222571364260:android:fb1674b1f5437c44",
+        "android_client_info": {
+          "package_name": "com.marbit.hobbytrophies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222571364260-rmge780epne0oqj4k9l3210ht7n2i684.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marbit.hobbytrophies",
+            "certificate_hash": "2e85d789dabc752368e80030a61079f566f2d0f6"
+          }
+        },
+        {
+          "client_id": "222571364260-aib7rtfkukt46r23rtq8tiq1cpio9584.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYYpgRt8uXekTn5NNg-G-jPqyLNu5aZcU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222571364260-aib7rtfkukt46r23rtq8tiq1cpio9584.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

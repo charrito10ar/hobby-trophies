@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:ads="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.gms.ads.NativeExpressAdView
+        android:id="@+id/adViewMeeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adUnitId="ca-app-pub-8211299087542513/2513333582"
+        ads:adSize="360X100">
+    </com.google.android.gms.ads.NativeExpressAdView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jugadores en esta quedada"
+        android:gravity="center_horizontal"
+        android:padding="12dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_meeting_players"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trofeos que se intentan ganar"
+        android:gravity="center_horizontal"
+        android:padding="12dp"/>
+
+</LinearLayout>

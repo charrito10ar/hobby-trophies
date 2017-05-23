@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4d8add486764385d01e31915ddd714b92fa2f9ca">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c98b8ffb61930bd1e24ac1d11947c14af60d983a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="caff8e51a24901cfc9cd7e1cf83d84f4cb0c103b">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_1e289a7d33b203dcd8efde100305f61a34aafda8/classes.dex" />
+    </item>
+
+</items>

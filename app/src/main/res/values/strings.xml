@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">HobbyTrophies PSN</string>
+    <string name="main_banner_ad_unit_id">ca-app-pub-8211299087542513/1176201187</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_game_datail">GameDatailActivity</string>
+
+    <string name="title_header_trophy_dlc">DLC: %s</string>
+
+
+    <!-- ANIMATIONS -->
+    <string name="transition_image_trophy">ImageTrophy</string>
+    <string name="transition_title_trophy">transitionTitleTrophy</string>
+    <string name="transition_image_game">ImageGame</string>
+
+    <string name="title_activity_trophy_detaill">TrophyDetaillActivity</string>
+    <string name="cancel">Cancelar</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="hint_validate_code">Ingrese el siguiente código en el campo ABOUT ME de su perfil.</string>
+    <string name="title_validate_code">Usuario: %s</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_game_detail_profile">GameDetailProfileActivity</string>
+    <string name="title_activity_meeting_list">MeetingListActivity</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string name="january">January</string>
+    <string name="febrary">Martes</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="augost">Augost</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+
+    <string name="date_time_meeting">%2$s, %5$s %1$d - %3$d:%4$d</string>
+
+    <string name="boosting">Boosting</string>
+    <string name="competitive">Competitive</string>
+    <string name="just_for_fun">Just for fan</string>
+    <string name="cooperative">Cooperative</string>
+    <string name="share_play">Share and play</string>
+    <string name="title_activity_meeting_detail">MeetingDetailActivity</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_join">Unirse</string>
+    <string name="action_exit">Salir</string>
+
+    <string name="edit_meeting_text">Datos generales</string>
+    <string name="edit_meeting_trophies_text">Trofeos de la quedada</string>
+    <string name="delet_meeting_text">Eliminar quedada</string>
+    <string name="edit_meeting_dialog_title">¿Qué desea editar?</string>
+    <string name="user_name_in_meeting">%1$s (%2$d/%3$d)</string>
+    <string name="filter_meeting_dialog_title">¿Cuáles quieres ver?</string>
+    <string name="filter_all_meetings">Todas las quedadas</string>
+    <string name="filter_my_games_meetings">Sólo las de mis juegos</string>
+    <string name="filter_my_meetings">Sólo las que yo cree</string>
+    <string name="coments_count_text">Comentarios %d</string>
+    <string name="notification_meeting_is_coming_title">¡Prepárate para %s!</string>
+    <string name="notification_meeting_is_coming_txt">La quedada comienza a las %s</string>
+    <string name="count_down_meeting">%1$dd - %2$d:%3$02d %4$02d</string>
+
+
+</resources>
