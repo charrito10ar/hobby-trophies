@@ -8,9 +8,6 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 
-/**
- * Created by marcelo on 22/12/16.
- */
 
 public class Network {
 

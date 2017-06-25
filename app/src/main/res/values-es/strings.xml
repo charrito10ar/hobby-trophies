@@ -76,4 +76,9 @@
     <string name="notification_meeting_is_coming_txt">La quedada comienza a las %s</string>
     <string name="count_down_meeting">%1$dd - %2$d:%3$02d %4$02d</string>
 
+    <string name="item_type_game">Juego</string>
+    <string name="item_type_console">Consola</string>
+    <string name="item_type_accessories">Accesorios</string>
+    <string name="item_type_others">Otros</string>
+
 </resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:foo="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/item_main_image"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_image_placeholder"/>
+
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:id="@+id/text_view_item_price"
+                android:text="38 $"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                foo:customFont="BrandonText-Bold.otf"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_margin="6dp"/>
+
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:id="@+id/text_view_item_title"
+                android:text="Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                foo:customFont="BrandonText-Medium.otf"
+                android:maxLength="20"
+                android:textSize="16sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+
+            <TextView
+                android:id="@+id/text_view_item_description"
+                android:text="Descripción"
+                android:textColor="@android:color/secondary_text_dark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLength="20"
+                android:ellipsize="end"
+                android:layout_margin="10dp"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

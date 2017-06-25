@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/layout_item_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="¿Qué quieres vender?"
+                android:textSize="22sp"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:padding="16dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/layout_item_game"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_item_games"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="bottom|center_horizontal"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:background="@color/translucent_grey"
+                        android:textColor="@color/material_white"
+                        android:padding="16dp"
+                        android:text="Juegos"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_item_console"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_item_console"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="bottom|center_horizontal"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:background="@color/translucent_grey"
+                        android:textColor="@color/material_white"
+                        android:padding="16dp"
+                        android:text="Consolas"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="2"
+                android:padding="16dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/layout_item_accesories"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_item_accessories"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="bottom|center_horizontal"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:background="@color/translucent_grey"
+                        android:textColor="@color/material_white"
+                        android:padding="16dp"
+                        android:text="Accesorios"/>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/layout_item_others"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_item_others"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="bottom|center_horizontal"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:background="@color/translucent_grey"
+                        android:textColor="@color/material_white"
+                        android:padding="16dp"
+                        android:text="Otros"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>
+

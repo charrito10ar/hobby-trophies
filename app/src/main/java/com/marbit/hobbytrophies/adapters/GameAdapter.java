@@ -17,10 +17,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by marcelo on 18/11/16.
- */
-
 public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Game> gameList;

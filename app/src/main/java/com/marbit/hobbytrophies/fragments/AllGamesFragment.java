@@ -66,7 +66,7 @@ public class AllGamesFragment extends Fragment implements SearchView.OnQueryText
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private OnAllGamesFragmentInteractionListener mListener;
 
     public AllGamesFragment() {
         // Required empty public constructor
@@ -253,21 +253,14 @@ public class AllGamesFragment extends Fragment implements SearchView.OnQueryText
         this.loading = true;
     }
 
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnAllGamesFragmentInteractionListener) {
+            mListener = (OnAllGamesFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnAllGamesFragmentInteractionListener");
         }
     }
 
@@ -314,7 +307,6 @@ public class AllGamesFragment extends Fragment implements SearchView.OnQueryText
         return false;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    public interface OnAllGamesFragmentInteractionListener {
     }
 }

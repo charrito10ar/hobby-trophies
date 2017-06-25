@@ -1,62 +1,254 @@
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.marbit.hobbytrophies.fragments.ProfileFragment">
 
-    <RelativeLayout
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/translucent">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <FrameLayout
-            android:id="@+id/btnExpBottomSheet"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:background="@color/colorBackgroundDark"/>
-
-        <ProgressBar
-            android:id="@+id/profile_progress_bar_level"
-            android:layout_width="120dp"
-            android:layout_height="24dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="12dp"
-            android:progress="0"
-            style="@style/CustomProgressBarHorizontal"/>
-
-        <com.marbit.hobbytrophies.overwrite.SecondaryMediumTextView
-            android:id="@+id/profile_level_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/material_white"
-            android:textSize="13sp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:textAllCaps="true"
-            android:text="Cargando..."/>
-
-    </RelativeLayout>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/fragment_profile_swipe_refresh"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context="com.marbit.hobbytrophies.MainActivity">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_games_profile"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/translucent"
-            android:paddingTop="48dp"
-            android:clipToPadding="false">
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            android:background="@color/colorBackgroundDark"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        </android.support.v7.widget.RecyclerView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/translucent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+                <ProgressBar
+                    android:id="@+id/profile_progress_bar_level"
+                    android:layout_width="120dp"
+                    android:layout_height="24dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:progress="0"
+                    style="@style/CustomProgressBarHorizontal"/>
 
-</RelativeLayout>
+                <com.marbit.hobbytrophies.overwrite.SecondaryMediumTextView
+                    android:id="@+id/profile_level_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/material_white"
+                    android:textSize="13sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:textAllCaps="true"
+                    android:text="Cargando..."/>
+
+                <RelativeLayout
+                    android:id="@+id/layout_avatar_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:layout_below="@id/profile_progress_bar_level">
+
+                    <ImageView
+                        android:id="@+id/ic_avatar_profile"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/avatar"/>
+
+                    <ImageView
+                        android:id="@+id/ic_psn_plus_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_psn_plus"
+                        android:layout_alignBottom="@+id/ic_avatar_profile"
+                        android:layout_alignRight="@+id/ic_avatar_profile"
+                        android:layout_alignEnd="@+id/ic_avatar_profile" />
+
+                    <TextView
+                        android:id="@+id/user_name_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:layout_below="@+id/ic_avatar_profile"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:text="nombre usuario"/>
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_trophies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/material_blueGrey_300"
+                    android:gravity="center"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:weightSum="5"
+                    android:layout_below="@+id/layout_avatar_profile">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/ic_platinum"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginStart="6dp"
+                            android:src="@drawable/ic_platinum"/>
+
+                        <TextView
+                            android:id="@+id/text_view_amount_platinum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/material_white"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text="-"/>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/ic_gold_medal"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginStart="6dp"
+                            android:src="@drawable/ic_gold_medal"/>
+
+                        <TextView
+                            android:id="@+id/text_view_amount_gold_medal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/material_white"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text="-"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/ic_silver_medal"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginStart="6dp"
+                            android:src="@drawable/ic_silver_medal"/>
+
+                        <TextView
+                            android:id="@+id/text_view_amount_silver_medal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/material_white"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text="-"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/ic_bronze_medal"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginStart="6dp"
+                            android:src="@drawable/ic_bronze_medal"/>
+
+                        <TextView
+                            android:id="@+id/text_view_amount_bronze_medal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/material_white"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text="-"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="right"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/ic_total_medal"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginStart="6dp"
+                            android:src="@drawable/ic_total_medal"/>
+
+                        <TextView
+                            android:id="@+id/text_view_amount_total_medal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/material_white"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:text="-"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent" />
+
+        </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

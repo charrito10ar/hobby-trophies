@@ -1,5 +1,8 @@
 package com.marbit.hobbytrophies.utilities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by marcelo on 6/12/16.
  */
@@ -33,4 +36,10 @@ public class Constants {
     /** RANKING **/
     public final static String PREFERENCE_DAY_LAST_UPDATE_RANKING = "TIME_LAST_UPDATE_RANKING";
     public final static String PREFERENCE_RANKING_JSON = "RANKING_JSON";
+
+    /** Market - Item **/
+    public final static int PREFERENCE_ITEM_CATEGORY_GAME = 0;
+    public final static int PREFERENCE_ITEM_CATEGORY_CONSOLE = 1;
+    public final static int PREFERENCE_ITEM_CATEGORY_ACCESSORIES = 2;
+    public final static int PREFERENCE_ITEM_CATEGORY_OTHER= 3;
 }

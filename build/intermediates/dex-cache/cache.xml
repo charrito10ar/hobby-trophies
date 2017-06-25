@@ -3,21 +3,165 @@
 
     <item
         is-multidex="true"
-        jar="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="/home/marcelo/.android/build-cache/94bf188dcd080cae92e175579231cdb533198189/output/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="25.0.2"
-        sha1="4d8add486764385d01e31915ddd714b92fa2f9ca">
-        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c98b8ffb61930bd1e24ac1d11947c14af60d983a/classes.dex" />
+        revision="25.0.3"
+        sha1="09cf6aa1390f95157e8295d02be7868f568825fc">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_136673dc8dc4ea0ed7b1eaa9e6bb9d6fb507d024/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/9907dcfa03e825fcfe35b15c84d09f315cffa6cc/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="25438f55fc6d906a0e72f30b21487541430ede43">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_c80a4ea68f1ca22fc5f1d79348c005e9e577867f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/67163c7b88a8acb0f0d8a94ffe9ea3e85240f384/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="8010ae6ed32828a145b25ec97bc07b7a83c6318f">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_5eac55aab4d13dc3445ee58fe3d63d62fb286e0d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/e58c929c7aef7c58caecaed662f29aff4fba12cf/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="dd39827d2067497e60e21da48a7926000b6d4b0c">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_263d63272b5e6d571143b7a7cba25a12ae5bda51/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/3881c544b29c85da33fc20f3afa23e83646eeb3c/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="57c2eceb8548de84509d1ebc293fedec53231f6c">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_574a6e0806e5ef833662805ca8a8c6a28603340f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/829dad5e28424bb45d419ec502c4b37e70d0bbc6/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="486371f97baad8e607f332f20fee1d3dd00a731a">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_9655ae24721951c0076c0e5993347aee4171a8e4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/19b32ef5d267466260cd0cd9d1a460b5fc8e4e22/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b955cb3a1ad6f1b6ff728ce1e0cd592c1717b440">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_a6823617b3d34427c0d3b93461102c5752796355/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/8b8d945c79b64dbd28db958e4084a26d2956c259/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="1d193729baf37df3d902a423291423a0df7e3779">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_ab16c65ade5ba811d4ff2b01cd453b75e6e1c142/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/2a76ea46fb44e2b793381503fc9d4f215630127a/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6addaba208e21c6da776d0ca75b6b23a6ccd5499">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_bd80847b2619751bfcb1d75040faf1ed86a1df1d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/841b9bfadaa045844a543428a6fe3a59c4428019/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="eb0d830e3eabb9deb9ec44869cf7ac7ea1ad794c">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b828becb67aa308d1d028100913108a0d653aa03/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/3748e32af546f97da58fdc29097c7516f67c1129/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4b17463c814bdc562fb0392fa3494063623a0904">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_31db760b9ed5cf8729559e191f3b11559a36cad1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/add1eb0cdedfe2050392b0943e0a700cdeeaa661/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_4bd687c040ff4bfe03b35f19916033a1ec7050cf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/00c7fdb6495147e6760358db95071b003f88e616/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d0460bf07cc3657e0be518ca01c174493951c6b8">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3816cd5a92037784db6fdf8eed98e7378a18b791/classes.dex" />
     </item>
     <item
         is-multidex="true"
         jar="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
-        revision="25.0.2"
-        sha1="caff8e51a24901cfc9cd7e1cf83d84f4cb0c103b">
+        revision="25.0.3"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
         <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_1e289a7d33b203dcd8efde100305f61a34aafda8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/81c9d9fb001d1fcb54360fc64ae5d59093daf7ae/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_0a28ed993b428ea28dc63461ea8445230ad04245/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="acf7e3ee24d11dc976ea8230bf516c1d05d12e52">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c98b8ffb61930bd1e24ac1d11947c14af60d983a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/cc11af77ce67962dfe12111371a07188eefc9453/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="756f6297eef79784f5e356dcd4f39865028b2bd0">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_906650afa8a342d39670e5bfaaee4575825a790a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/0bb44ade472538ccc942365f7c8978f50eb72150/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="8f128aeeb7e31271b28a7adb9dac1f3a6ed9f5e7">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_827df57df47283a17f62d6e71f26e14d0393e168/classes.dex" />
     </item>
 
 </items>

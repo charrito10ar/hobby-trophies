@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_profile_swipe_refresh"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+        tools:context="com.marbit.hobbytrophies.MainActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_games_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/translucent"
+        android:clipToPadding="false">
+    </android.support.v7.widget.RecyclerView>
+</android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

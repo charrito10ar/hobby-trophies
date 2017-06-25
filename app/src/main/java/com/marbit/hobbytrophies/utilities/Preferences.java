@@ -86,8 +86,8 @@ public class Preferences {
 
     public static String getAvatar(Context context) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
-        String userName = SP.getString(Constants.PREFERENCE_USER_AVATAR, "null");
-        return userName;
+        String avatar = SP.getString(Constants.PREFERENCE_USER_AVATAR, "null");
+        return avatar;
     }
 
     public static String[] getGameTitle(Context context) {

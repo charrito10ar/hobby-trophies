@@ -3,6 +3,8 @@
     package="com.marbit.hobbytrophies">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -89,11 +91,30 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".EditMeetingActivity"
+        <activity
+            android:name=".EditMeetingActivity"
             android:parentActivityName=".MeetingDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marbit.hobbytrophies.MeetingDetailActivity" />
+        </activity>
+        <activity
+            android:name=".NewItemActivity"
+            android:label="Vender Producto"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marbit.hobbytrophies.MainActivity" />
+        </activity>
+        <activity
+            android:name=".market.ItemDetailActivity"
+            android:label=""
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marbit.hobbytrophies.MainActivity" />
         </activity>
     </application>
 

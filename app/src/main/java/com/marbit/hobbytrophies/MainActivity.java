@@ -22,6 +22,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
 import com.marbit.hobbytrophies.dialogs.DialogGeneric;
 import com.marbit.hobbytrophies.fragments.AllGamesFragment;
+import com.marbit.hobbytrophies.fragments.MarketFragment;
 import com.marbit.hobbytrophies.fragments.MeetingFragment;
 import com.marbit.hobbytrophies.fragments.ProfileFragment;
 import com.marbit.hobbytrophies.fragments.RankingFragment;
@@ -36,8 +37,9 @@ import java.util.Calendar;
 
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AllGamesFragment.OnFragmentInteractionListener, ProfileFragment.ProfileOnFragmentInteractionListener,
-        DialogGeneric.OnDialogGenericInteractionListener, MeetingFragment.MeetingInteractionListener, RankingFragment.OnRankingFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AllGamesFragment.OnAllGamesFragmentInteractionListener, ProfileFragment.ProfileOnFragmentInteractionListener,
+        DialogGeneric.OnDialogGenericInteractionListener, MeetingFragment.MeetingInteractionListener, RankingFragment.OnRankingFragmentInteractionListener,
+        MarketFragment.OnMarketFragmentInteractionListener {
 
     private TextView userNameNav;
     private ImageView avatarNav;
@@ -149,6 +151,10 @@ public class MainActivity extends BaseActivity
             fragment = RankingFragment.newInstance("", "");
             title  = "Ranking de " + this.months[currentMonth];
             fragmentTag = "Ranking";
+        } else if (id == R.id.nav_market) {
+            fragment = MarketFragment.newInstance("", "");
+            title  = "Mercadillo";
+            fragmentTag = "Market";
 
         } else if (id == R.id.nav_rate) {
 
@@ -205,8 +211,12 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void meetingOnFragmentInteraction(Meeting item) {
-
+            // Juego digital o fisico. Tipo de venta trueque o dinero
     }
 
 
+    @Override
+    public void onFragmentInteraction() {
+
+    }
 }

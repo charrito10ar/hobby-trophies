@@ -44,4 +44,11 @@
         <item>@string/filter_my_meetings</item>
     </string-array>
 
+    <string-array name="item_types">
+        <item>@string/item_type_game</item>
+        <item>@string/item_type_console</item>
+        <item>@string/item_type_accessories</item>
+        <item>@string/item_type_others</item>
+    </string-array>
+
 </resources>

@@ -1,8 +1,5 @@
 package com.marbit.hobbytrophies.dialogs;
 
-/**
- * Created by marcelo on 10/12/16.
- */
 
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
@@ -38,7 +35,7 @@ public class DialogAbcdiario extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_abcdiario, null);
 
         builder.setView(view)
-                .setTitle("Seleccione inicial")
+                .setTitle("Seleccione juego")
 
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
