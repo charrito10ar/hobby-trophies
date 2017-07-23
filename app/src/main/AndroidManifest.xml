@@ -116,6 +116,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marbit.hobbytrophies.MainActivity" />
         </activity>
+        <activity
+            android:name=".EditItemActivity"
+            android:parentActivityName=".market.ItemDetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".market.ItemDetailActivity" />
+        </activity>
+        <activity android:name=".chat.ChatActivity"
+            android:parentActivityName=".market.ItemDetailActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marbit.hobbytrophies.market.ItemDetailActivity" />
+        </activity>
     </application>
 
 </manifest>

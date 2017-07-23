@@ -9,16 +9,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.marbit.hobbytrophies.dao.ItemDAO;
 import com.marbit.hobbytrophies.interfaces.market.MarketFragmentPresenterInterface;
-import com.marbit.hobbytrophies.interfaces.market.ProfileSalesFragmentPresenterInterface;
+import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
-import com.marbit.hobbytrophies.utilities.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketFragmentInteractor {
+public class MarketFragmentInteractor implements ItemDAO.ItemDAOListener {
     private Context context;
     private FirebaseDatabase database;
     private final DatabaseReference databaseReference;
@@ -32,7 +32,9 @@ public class MarketFragmentInteractor {
     }
 
     public void loadItems() {
-        Query recentPostsQuery = databaseReference.orderByChild(DataBaseConstants.CHILD_USER_NAME);
+        Query recentPostsQuery = databaseReference
+                .orderByChild(DataBaseConstants.CHILD_STATUS)
+                .equalTo(0);
         recentPostsQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -49,5 +51,15 @@ public class MarketFragmentInteractor {
 
             }
         });
+    }
+
+    public void applyFilter(Filter filter) {
+        ItemDAO itemDAO = new ItemDAO(this);
+        itemDAO.loadItemsByFilter(filter);
+    }
+
+    @Override
+    public void loadItemsByFilterSuccess(List<Item> itemList) {
+        presenterInterface.loadItemsSuccess(itemList);
     }
 }

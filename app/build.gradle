@@ -50,6 +50,8 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:10.0.1'
     compile 'com.firebaseui:firebase-ui-storage:0.6.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
+    compile group: 'org.ocpsoft.prettytime', name: 'prettytime', version: '4.0.0.Final'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

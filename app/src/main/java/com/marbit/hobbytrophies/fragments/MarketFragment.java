@@ -11,23 +11,26 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.marbit.hobbytrophies.NewItemActivity;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.adapters.profile.ItemProfileSalesAdapter;
+import com.marbit.hobbytrophies.dialogs.DialogFilterItemsMarket;
 import com.marbit.hobbytrophies.interfaces.market.MarketFragmentView;
+import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.presenters.market.MarketFragmentPresenter;
 
 import java.util.List;
 
-public class MarketFragment extends Fragment implements MarketFragmentView, View.OnClickListener {
+public class MarketFragment extends Fragment implements MarketFragmentView, View.OnClickListener, DialogFilterItemsMarket.OnDialogFilterItemsInteractionListener {
     private static final String ARG_PARAM1 = "param1";
-
     private String mParam1;
-    private String mParam2;
 
     private OnMarketFragmentInteractionListener mListener;
     private MarketFragmentPresenter presenter;
@@ -36,7 +39,6 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     private SwipeRefreshLayout swipeContainer;
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private FloatingActionButton fabNewItem;
-
 
     public MarketFragment() {
         this.presenter = new MarketFragmentPresenter(getContext(), this);
@@ -80,6 +82,13 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
         this.fabNewItem.setOnClickListener(this);
         return view;
     }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
 
     @Override
     public void onResume(){
@@ -132,6 +141,29 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
             case R.id.fab_new_item:
                 startActivity(new Intent(getContext(), NewItemActivity.class));
         }
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_fragment_market, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                DialogFilterItemsMarket dialogFilterItemsMarket = DialogFilterItemsMarket.newInstance(1);
+                dialogFilterItemsMarket.setTargetFragment(this, 10);
+                dialogFilterItemsMarket.show(getFragmentManager(), "DialogFilterItemsMarket");
+        }
+        return true;
+    }
+
+    @Override
+    public void applyFilter(Filter filter) {
+        presenter.applyFilter(filter);
     }
 
 

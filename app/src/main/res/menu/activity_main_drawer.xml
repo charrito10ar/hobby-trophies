@@ -23,6 +23,11 @@
             android:icon="@drawable/ic_market"
             android:title="Mercadillo" />
 
+        <item
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/ic_chat"
+            android:title="Mensajes" />
+
     </group>
 
     <item android:title="Ajustes">

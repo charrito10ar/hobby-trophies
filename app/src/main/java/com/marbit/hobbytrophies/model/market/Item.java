@@ -4,11 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Item implements Parcelable{
 
@@ -16,6 +20,7 @@ public class Item implements Parcelable{
     private String userId;
     private String title;
     private String gameId;
+    private int consoleId;
     private int itemType;
     private String description;
     private double price;
@@ -24,6 +29,8 @@ public class Item implements Parcelable{
     private int imageAmount;
     private boolean isDigital;
     private boolean isBarter;
+    private Object date;
+    private int status;
 
     public Item(String userId, String description, int itemCategory, String price, boolean isDigital, boolean isBarter) {
         this.userId = userId;
@@ -33,9 +40,11 @@ public class Item implements Parcelable{
         this.images = new ArrayList<>();
         this.isDigital = isDigital;
         this.isBarter = isBarter;
+        this.date = ServerValue.TIMESTAMP;
     }
 
     public Item(){
+        this.date = ServerValue.TIMESTAMP;
     }
 
     protected Item(Parcel in) {
@@ -43,6 +52,7 @@ public class Item implements Parcelable{
         userId = in.readString();
         title = in.readString();
         gameId = in.readString();
+        consoleId = in.readInt();
         itemType = in.readInt();
         description = in.readString();
         price = in.readDouble();
@@ -51,6 +61,8 @@ public class Item implements Parcelable{
         isDigital = in.readByte() != 0;
         isBarter = in.readByte() != 0;
         imageAmount = in.readInt();
+        date = in.readValue(Object.class.getClassLoader());
+        status = in.readInt();
     }
 
     public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -158,6 +170,7 @@ public class Item implements Parcelable{
         dest.writeString(userId);
         dest.writeString(title);
         dest.writeString(gameId);
+        dest.writeInt(consoleId);
         dest.writeInt(itemType);
         dest.writeString(description);
         dest.writeDouble(price);
@@ -166,6 +179,8 @@ public class Item implements Parcelable{
         dest.writeByte((byte) (isDigital ? 1 : 0));
         dest.writeByte((byte) (isBarter ? 1 : 0));
         dest.writeInt(imageAmount);
+        dest.writeValue(date);
+        dest.writeInt(status);
     }
 
     public int getImageAmount() {
@@ -182,5 +197,29 @@ public class Item implements Parcelable{
 
     public void setGameId(String gameId) {
         this.gameId = gameId;
+    }
+
+    public int getConsoleId() {
+        return consoleId;
+    }
+
+    public void setConsoleId(int consoleId) {
+        this.consoleId = consoleId;
+    }
+
+    public Object getDate() {
+        return date;
+    }
+
+    public void setDate(Object date) {
+        this.date = date;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

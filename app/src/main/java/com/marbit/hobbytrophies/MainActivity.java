@@ -19,11 +19,14 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.marbit.hobbytrophies.chat.ChatActivity;
+import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
 import com.marbit.hobbytrophies.dialogs.DialogGeneric;
 import com.marbit.hobbytrophies.fragments.AllGamesFragment;
 import com.marbit.hobbytrophies.fragments.MarketFragment;
 import com.marbit.hobbytrophies.fragments.MeetingFragment;
+import com.marbit.hobbytrophies.fragments.MessagesFragment;
 import com.marbit.hobbytrophies.fragments.ProfileFragment;
 import com.marbit.hobbytrophies.fragments.RankingFragment;
 import com.marbit.hobbytrophies.model.Meeting;
@@ -39,7 +42,7 @@ import java.util.Calendar;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AllGamesFragment.OnAllGamesFragmentInteractionListener, ProfileFragment.ProfileOnFragmentInteractionListener,
         DialogGeneric.OnDialogGenericInteractionListener, MeetingFragment.MeetingInteractionListener, RankingFragment.OnRankingFragmentInteractionListener,
-        MarketFragment.OnMarketFragmentInteractionListener {
+        MarketFragment.OnMarketFragmentInteractionListener, MessagesFragment.MessagesFragmentInteractionListener {
 
     private TextView userNameNav;
     private ImageView avatarNav;
@@ -156,6 +159,11 @@ public class MainActivity extends BaseActivity
             title  = "Mercadillo";
             fragmentTag = "Market";
 
+        } else if (id == R.id.nav_messages) {
+            fragment = MessagesFragment.newInstance();
+            title  = "Mensajes";
+            fragmentTag = "Messages";
+
         } else if (id == R.id.nav_rate) {
 
         } else if (id == R.id.nav_log_out) {
@@ -218,5 +226,14 @@ public class MainActivity extends BaseActivity
     @Override
     public void onFragmentInteraction() {
 
+    }
+
+    @Override
+    public void openChat(Chat chat) {
+        Intent intentChat = new Intent(getApplicationContext(), ChatActivity.class);
+        intentChat.putExtra(ChatActivity.PARAM_ITEM_ID, chat.getItem());
+        intentChat.putExtra(ChatActivity.PARAM_SELLER, chat.getSeller());
+        intentChat.putExtra(ChatActivity.PARAM_BUYER, chat.getBuyer());
+        startActivity(intentChat);
     }
 }

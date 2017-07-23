@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/send_message_layout"
+        tools:context="com.marbit.hobbytrophies.chat.ChatActivity">
+
+        <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_chats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/send_message_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@color/material_grey_200"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+
+            <EditText
+                android:id="@+id/edit_text_message"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:hint="Escribe un mensaje"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine" />
+
+            <ImageButton
+                android:id="@+id/button_send_message"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:src="@android:drawable/ic_menu_send"
+                android:background="@color/material_grey_600"
+                android:layout_height="match_parent"
+                android:onClick="clickSendMessage"
+                android:contentDescription="Send" />
+        </LinearLayout>
+
+</RelativeLayout>

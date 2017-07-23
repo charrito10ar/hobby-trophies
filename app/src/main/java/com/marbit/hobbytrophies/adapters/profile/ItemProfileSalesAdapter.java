@@ -84,7 +84,7 @@ public class ItemProfileSalesAdapter  extends RecyclerView.Adapter<RecyclerView.
         }
 
         public void bindItem(final Item item) {
-            //titleItem.setText(item.getTitle());
+            this.titleItem.setText(item.getTitle());
             this.descriptionItem.setText(item.getDescription());
             this.priceItem.setText(item.getPrice() + " €");
             this.setImage(item.getId());

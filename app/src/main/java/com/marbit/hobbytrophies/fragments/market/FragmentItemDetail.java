@@ -15,6 +15,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -22,11 +24,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.firebase.database.ServerValue;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.dialogs.DialogSearchGame;
 import com.marbit.hobbytrophies.interfaces.market.FragmentItemDetailView;
@@ -39,8 +43,10 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class FragmentItemDetail extends Fragment implements View.OnClickListener, FragmentItemDetailView, CompoundButton.OnCheckedChangeListener, DialogSearchGame.DialogSearchGameListener {
+public class FragmentItemDetail extends Fragment implements View.OnClickListener, FragmentItemDetailView, DialogSearchGame.DialogSearchGameListener, AdapterView.OnItemClickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 99;
@@ -72,9 +78,10 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
     private String[] itemTypes;
     private TextInputLayout textInputLayoutPrice;
     private TextView titleItem;
-    private TextView titleItemConsole;
+    private Spinner titleItemConsole;
     private EditText titleItemOthers;
     private Game gameSelected;
+    private String[] consolesArray;
 
     public FragmentItemDetail() {
         // Required empty public constructor
@@ -101,19 +108,22 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_item_detail, container, false);
         this.photosList = new ArrayList<>();
+        this.consolesArray  = getResources().getStringArray(R.array.consoles);
         this.layoutLoading = (RelativeLayout) view.findViewById(R.id.layout_loading);
         this.presenter = new FragmentItemDetailPresenter(getContext(), this);
         this.titleItem = (TextView) view.findViewById(R.id.title_item_game);
         this.titleItem.setOnClickListener(this);
-        this.titleItemConsole = (TextView) view.findViewById(R.id.title_item_console);
-        this.titleItemConsole.setOnClickListener(this);
+        this.titleItemConsole = (Spinner) view.findViewById(R.id.title_item_console);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, consolesArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.titleItemConsole.setAdapter(adapter);
         this.titleItemOthers = (EditText) view.findViewById(R.id.title_item_others);
         this.itemTypes = getResources().getStringArray(R.array.item_types);
         this.categoryItem = (EditText) view.findViewById(R.id.text_input_item_type);
         this.descriptionItem = (EditText) view.findViewById(R.id.item_description);
         this.priceItem = (EditText) view.findViewById(R.id.item_price);
         this.checkBoxSaleType = (CheckBox) view.findViewById(R.id.checkbox_is_barter);
-        this.checkBoxSaleType.setOnCheckedChangeListener(this);
         this.checkBoxDigitalVersion = (CheckBox) view.findViewById(R.id.checkbox_digital_version);
         this.textInputLayoutPrice = (TextInputLayout) view.findViewById(R.id.text_input_layout_price);
         this.sendItemButton = (Button) view.findViewById(R.id.button_send_item);
@@ -127,14 +137,13 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
         this.firstPhoto = (ImageView) view.findViewById(R.id.image_first_photo);
         this.secondPhoto = (ImageView) view.findViewById(R.id.image_second_photo);
         this.thirdPhoto = (ImageView) view.findViewById(R.id.image_third_photo);
-
-
+        
         setItemType(itemType);
         return view;
     }
 
     private void setItemType(int itemType){
-        this.categoryItem.setText(itemTypes[itemType]);
+        this.categoryItem.setText(itemTypes[itemType+1]);
 
         if(itemType != Constants.PREFERENCE_ITEM_CATEGORY_GAME){
             checkBoxDigitalVersion.setVisibility(View.INVISIBLE);
@@ -173,6 +182,9 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
                             priceItem.getText().toString(), checkBoxDigitalVersion.isChecked(), checkBoxSaleType.isChecked());
                     this.item.setImages(photosList);
                     this.item.setImageAmount(photosList.size());
+                    Map<String, Object> value = new HashMap<>();
+                    value.put("timestamp", ServerValue.TIMESTAMP);
+                    //this.item.setDate(value);
                     this.setItem();
                     this.showLoading();
                     this.presenter.publishNewItem(item);
@@ -198,7 +210,7 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
                 dialogSearchGame.show(getFragmentManager(), "DialogSearchGame");
                 break;
             case R.id.title_item_console:
-                Toast.makeText(getContext(), "Elegir consola", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -208,13 +220,13 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
             this.item.setTitle(gameSelected.getName());
         }else {
             if(itemType == Constants.PREFERENCE_ITEM_CATEGORY_CONSOLE){
-                
+                item.setTitle(titleItemConsole.getSelectedItem().toString());
+                item.setConsoleId(titleItemConsole.getSelectedItemPosition());
             }else {
                 this.item.setTitle(titleItemOthers.getText().toString());
             }
         }
     }
-
 
     private void tryOpenFileBrowser() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -248,7 +260,6 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
     private void requestWritePermissions() {
         ActivityCompat.requestPermissions(getActivity(), PERMISSIONS_STORAGE, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
     }
-
 
     private boolean validItem() {
         if(completeTitle()){
@@ -284,7 +295,7 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
     }
 
     private boolean completeTitle() {
-        return !titleItem.getText().toString().equals("Seleccione juego") || !titleItemConsole.getText().toString().equals("Seleccione consola")
+        return !titleItem.getText().toString().equals("Seleccione juego") || !titleItemConsole.getSelectedItem().toString().equals("Seleccione Consola")
                 || !titleItemOthers.getText().toString().equals("");
     }
 
@@ -348,7 +359,6 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
@@ -358,25 +368,15 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked){
-            this.textInputLayoutPrice.setHint("");
-            this.priceItem.setHint("Sin precio");
-            this.priceItem.setText("0");
-            this.priceItem.setEnabled(false);
-        }else {
-            this.textInputLayoutPrice.setHint("Precio");
-            this.priceItem.setHint("Precio");
-            this.priceItem.setEnabled(true);
-        }
-    }
-
-    @Override
     public void selectGame(Game game) {
         this.titleItem.setText(game.getName());
         this.gameSelected = game;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String consoleSelected = consolesArray[position];
+    }
 
     public interface OnFragmentItemDetailInteractionListener {
         void onFragmentInteraction();

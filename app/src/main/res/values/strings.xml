@@ -81,5 +81,30 @@
     <string name="item_type_console">Console</string>
     <string name="item_type_accessories">Accessories</string>
     <string name="item_type_others">Others</string>
+    <string name="apply">Aplicar</string>
+    <string name="any_price_txt">Cualquier precio</string>
+    <string name="range_price">%1$d € - %2$d €</string>
+    <string name="how_much_want_pay_txt">¿Cuánto quieres pagar?</string>
+    <string name="extra_condition_txt">¿Alguna condición extra?</string>
+    <string name="barter_txt">Trueque</string>
+    <string name="digital_txt">Digital</string>
+    <string name="witch_category">Elige la categoría</string>
+    <string name="order_by_txt">Ordernar por</string>
+    <string name="item_type_any">Cualquier tipo</string>
+    <string name="order_by_date">Most recently published</string>
+    <string name="order_by_price_down">De precios altos a bajos</string>
+    <string name="order_by_price_up">De precios bajos a altos</string>
+    <string name="delete_text">Eliminar</string>
+    <string name="mark_as_sold">Marcar como vendido</string>
+    <string name="mark_as_not_sold">Desmarcar como vendido</string>
+
+    <string name="select_console">Seleccione Consola</string>
+    <string name="console_ps">PS</string>
+    <string name="console_ps2">PS2</string>
+    <string name="console_psp">PSP</string>
+    <string name="console_ps3">PS3</string>
+    <string name="console_vita">VITA</string>
+    <string name="console_ps4">PS4</string>
+
 
 </resources>

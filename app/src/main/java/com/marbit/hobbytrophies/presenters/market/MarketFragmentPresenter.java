@@ -5,6 +5,7 @@ import android.content.Context;
 import com.marbit.hobbytrophies.interactors.market.MarketFragmentInteractor;
 import com.marbit.hobbytrophies.interfaces.market.MarketFragmentPresenterInterface;
 import com.marbit.hobbytrophies.interfaces.market.MarketFragmentView;
+import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
 
 import java.util.List;
@@ -29,5 +30,9 @@ public class MarketFragmentPresenter implements MarketFragmentPresenterInterface
     public void loadItemsSuccess(List<Item> items) {
         marketFragmentView.hideLoading();
         marketFragmentView.loadItemSuccess(items);
+    }
+
+    public void applyFilter(Filter filter) {
+        interactor.applyFilter(filter);
     }
 }

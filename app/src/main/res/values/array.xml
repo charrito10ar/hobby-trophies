@@ -45,10 +45,26 @@
     </string-array>
 
     <string-array name="item_types">
+        <item>@string/item_type_any</item>
         <item>@string/item_type_game</item>
         <item>@string/item_type_console</item>
         <item>@string/item_type_accessories</item>
         <item>@string/item_type_others</item>
     </string-array>
 
+    <string-array name="consoles">
+        <item>@string/select_console</item>
+        <item>@string/console_ps</item>
+        <item>@string/console_ps2</item>
+        <item>@string/console_psp</item>
+        <item>@string/console_ps3</item>
+        <item>@string/console_vita</item>
+        <item>@string/console_ps4</item>
+    </string-array>
+
+    <string-array name="order_by">
+        <item>@string/order_by_date</item>
+        <item>@string/order_by_price_up</item>
+        <item>@string/order_by_price_down</item>
+    </string-array>
 </resources>

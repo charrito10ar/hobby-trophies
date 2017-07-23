@@ -1,0 +1,234 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button_send_item">
+
+        <LinearLayout android:id="@+id/layout_item_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context="com.marbit.hobbytrophies.fragments.market.FragmentItemDetail"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:weightSum="3"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/first_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/image_first_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_image_placeholder"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/second_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/image_second_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_image_placeholder"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/third_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/image_third_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_image_placeholder"/>
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+            <!-- Descripcion -->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/material_white"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:spinnerMode="dialog"/>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.8">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_digital_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Versión digital"/>
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/title_item_game"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:padding="4dp"
+                android:textSize="16sp"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="Seleccione juego"/>
+
+            <Spinner
+                android:id="@+id/title_item_console"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:padding="4dp"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="Seleccione consola"/>
+
+            <EditText
+                android:id="@+id/title_item_others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:hint="Escriba el título de su venta"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <EditText
+                    android:id="@+id/item_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descripción"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:textSize="17sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="€"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:padding="8dp">
+
+                    <EditText
+                        android:id="@+id/item_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="Precio"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/checkbox_is_barter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.4"
+                    android:text="Trueque"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/button_send_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/material_white"
+        android:background="@color/colorPrimary"
+        android:onClick="updateItem"
+        android:text="Actualizar producto"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/translucent_black">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/material_white"
+                android:text="Publicando... Por favor espere."/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

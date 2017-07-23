@@ -120,7 +120,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:text="Seleccione juego"/>
 
-            <TextView
+            <Spinner
                 android:id="@+id/title_item_console"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
