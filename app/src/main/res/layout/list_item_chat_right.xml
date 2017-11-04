@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/text_view_chat_right"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bubble_chat_right"
+        android:padding="8dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:text="Este es un mensaje que YO mandando"/>
+        android:layout_margin="8dp">
 
+        <TextView
+            android:id="@+id/text_view_chat_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_gravity="end"
+            android:text="Este es un mensaje que YO mandando"/>
+
+        <TextView
+            android:id="@+id/text_view_hour_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:layout_gravity="end"
+            android:text="14:16"/>
+
+    </LinearLayout>
 </RelativeLayout>

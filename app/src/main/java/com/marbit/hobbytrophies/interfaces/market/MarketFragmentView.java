@@ -10,4 +10,10 @@ public interface MarketFragmentView {
     void hideLoading();
 
     void loadItemSuccess(List<Item> items);
+
+    void checkButtonWishList();
+
+    void showEmptyLayout();
+
+    void hideEmptyLayout();
 }

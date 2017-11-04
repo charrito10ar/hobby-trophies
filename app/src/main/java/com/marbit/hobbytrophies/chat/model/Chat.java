@@ -1,5 +1,7 @@
 package com.marbit.hobbytrophies.chat.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
@@ -7,12 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Chat {
+public class Chat implements Comparable<Chat>{
 
     private String id;
     private String seller;
     private String buyer;
     private String item;
+    private String titleItem;
     private String lastMessage;
     private List<MessageChat> messages;
     private Long dateLastMessage;
@@ -99,5 +102,18 @@ public class Chat {
 
     public void setdateLastMessage(Long dateLastMessage) {
         this.dateLastMessage = dateLastMessage;
+    }
+
+    @Override
+    public int compareTo(@NonNull Chat chat) {
+        return (int) (this.getdateLastMessageLong() - chat.getdateLastMessageLong());
+    }
+
+    public String getTitleItem() {
+        return titleItem;
+    }
+
+    public void setTitleItem(String titleItem) {
+        this.titleItem = titleItem;
     }
 }

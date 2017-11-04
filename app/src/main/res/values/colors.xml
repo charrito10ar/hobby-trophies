@@ -16,6 +16,13 @@
     <color name="colorBackgroundDark">#4e555d</color>
     <color name="background_ranking">#bc4e97</color>
 
+    <color name="background_chat">#eeebe6</color>
+
+    <color name="background_bubble_right">#e1ffc7</color>
+    <color name="background_bubble_left">@color/material_white</color>
+    <color name="background_bubble_date">#d4eaf4</color>
+
+
     <!-- Red -->
     <color name="material_red_50">#fde0dc</color>
     <color name="material_red_100">#f9bdbb</color>

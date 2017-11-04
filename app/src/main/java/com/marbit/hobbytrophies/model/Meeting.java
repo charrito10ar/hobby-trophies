@@ -26,6 +26,7 @@ public class Meeting implements Parcelable {
     private String description;
     private Date date;
     private int type;
+    private int reserved;
     private int limitMembers;
     private int state;
     private int duration;
@@ -52,6 +53,7 @@ public class Meeting implements Parcelable {
         id = in.readInt();
         description = in.readString();
         type = in.readInt();
+        reserved = in.readInt();
         limitMembers = in.readInt();
         state = in.readInt();
         duration = in.readInt();
@@ -207,6 +209,7 @@ public class Meeting implements Parcelable {
         dest.writeInt(id);
         dest.writeString(description);
         dest.writeInt(type);
+        dest.writeInt(reserved);
         dest.writeInt(limitMembers);
         dest.writeInt(state);
         dest.writeInt(duration);
@@ -241,5 +244,13 @@ public class Meeting implements Parcelable {
 
     public void setFull(boolean isFull) {
         this.full = isFull;
+    }
+
+    public int getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(int reserved) {
+        this.reserved = reserved;
     }
 }

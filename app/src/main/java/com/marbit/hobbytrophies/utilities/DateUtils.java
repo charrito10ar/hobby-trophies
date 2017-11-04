@@ -99,4 +99,20 @@ public class DateUtils {
             return 0;
         return countDownTime;
     }
+
+    public boolean isDiferentDay(long dateOne, long dateTwo) {
+        Calendar mCalendarOne = Calendar.getInstance();
+        mCalendarOne.setTime(new Date(dateOne));
+        Calendar mCalendarTwo = Calendar.getInstance();
+        mCalendarTwo.setTime(new Date(dateTwo));
+
+        int dayOfYearOne = mCalendarOne.get(Calendar.DAY_OF_YEAR);
+        int dayOfYearTwo = mCalendarTwo.get(Calendar.DAY_OF_YEAR);
+
+        if(dayOfYearOne != dayOfYearTwo){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

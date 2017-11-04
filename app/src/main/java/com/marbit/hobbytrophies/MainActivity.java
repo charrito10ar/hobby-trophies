@@ -13,24 +13,32 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.marbit.hobbytrophies.chat.ChatActivity;
 import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
 import com.marbit.hobbytrophies.dialogs.DialogGeneric;
+import com.marbit.hobbytrophies.firebase.dao.FirebaseNotificationDAO;
 import com.marbit.hobbytrophies.fragments.AllGamesFragment;
+import com.marbit.hobbytrophies.fragments.FavouritesFragment;
 import com.marbit.hobbytrophies.fragments.MarketFragment;
 import com.marbit.hobbytrophies.fragments.MeetingFragment;
 import com.marbit.hobbytrophies.fragments.MessagesFragment;
 import com.marbit.hobbytrophies.fragments.ProfileFragment;
 import com.marbit.hobbytrophies.fragments.RankingFragment;
+import com.marbit.hobbytrophies.fragments.WishListFragment;
+import com.marbit.hobbytrophies.interfaces.MainActivityView;
+import com.marbit.hobbytrophies.market.ItemDetailActivity;
 import com.marbit.hobbytrophies.model.Meeting;
 import com.marbit.hobbytrophies.overwrite.CircleTransform;
+import com.marbit.hobbytrophies.presenters.MainActivityPresenter;
 import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DialogCodes;
 import com.marbit.hobbytrophies.utilities.Preferences;
@@ -42,18 +50,21 @@ import java.util.Calendar;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AllGamesFragment.OnAllGamesFragmentInteractionListener, ProfileFragment.ProfileOnFragmentInteractionListener,
         DialogGeneric.OnDialogGenericInteractionListener, MeetingFragment.MeetingInteractionListener, RankingFragment.OnRankingFragmentInteractionListener,
-        MarketFragment.OnMarketFragmentInteractionListener, MessagesFragment.MessagesFragmentInteractionListener {
+        MarketFragment.OnMarketFragmentInteractionListener, MessagesFragment.MessagesFragmentInteractionListener, View.OnClickListener,
+        FavouritesFragment.FavouritesFragmentListener, MainActivityView{
 
     private TextView userNameNav;
     private ImageView avatarNav;
     private String[] months;
     private int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+    private LinearLayout headerMenuLeft;
+    private MainActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        this.presenter = new MainActivityPresenter(getApplicationContext(), this);
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-8211299087542513~8699467989");
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("2843E996E3E48320E27B16741947CF56").build();
@@ -73,11 +84,13 @@ public class MainActivity extends BaseActivity
 
         this.userNameNav = (TextView) navigationView.getHeaderView(0).findViewById(R.id.text_view_nav_user_name);
         this.avatarNav = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ic_nav_avatar);
+        this.headerMenuLeft = (LinearLayout) navigationView.getHeaderView(0).findViewById(R.id.header_menu_left);
+        this.headerMenuLeft.setOnClickListener(this);
 
         this.setSection();
 
         this.months = getResources().getStringArray(R.array.months);
-
+        this.presenter.handleDeepLinks(this, getIntent());
     }
 
     @Override
@@ -132,15 +145,10 @@ public class MainActivity extends BaseActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
-            if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN)){
-                fragment = ProfileFragment.newInstance(Preferences.getString(getApplicationContext(), Constants.PREFERENCE_USER_NAME));
-                title = "Perfil";
-                fragmentTag = "Profile";
-            }else {
-                DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
-                dialogAlertLogin.show(getSupportFragmentManager(), "dialogAlertLogin");
-            }
+        if (id == R.id.nav_favourites) {
+            fragment = FavouritesFragment.newInstance();
+            title = "Favoritos";
+            fragmentTag = "Favoritos";
         } else if (id == R.id.nav_all_games) {
             fragment = new AllGamesFragment();
             title  = "Todos los Juegos";
@@ -155,16 +163,31 @@ public class MainActivity extends BaseActivity
             title  = "Ranking de " + this.months[currentMonth];
             fragmentTag = "Ranking";
         } else if (id == R.id.nav_market) {
-            fragment = MarketFragment.newInstance("", "");
+            fragment = MarketFragment.newInstance();
             title  = "Mercadillo";
             fragmentTag = "Market";
 
         } else if (id == R.id.nav_messages) {
-            fragment = MessagesFragment.newInstance();
-            title  = "Mensajes";
-            fragmentTag = "Messages";
+            if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN)){
+                fragment = MessagesFragment.newInstance();
+                title  = "Mensajes";
+                fragmentTag = "Messages";
+            }else {
+                DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
+                dialogAlertLogin.show(getSupportFragmentManager(), "dialogAlertLogin");
+            }
 
-        } else if (id == R.id.nav_rate) {
+        } else if (id == R.id.nav_wish_list) {
+            if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN)){
+                fragment = WishListFragment.newInstance();
+                title  = "Lista de deseos";
+                fragmentTag = "WishList";
+            }else {
+                DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
+                dialogAlertLogin.show(getSupportFragmentManager(), "dialogAlertLogin");
+            }
+        }
+        else if (id == R.id.nav_rate) {
 
         } else if (id == R.id.nav_log_out) {
             DialogGeneric dialogGeneric = DialogGeneric.newInstance("Atención", "¿Estas seguro que deseas salir?", "Salir", DialogCodes.DIALOG_ACTION_LOG_OUT);
@@ -197,23 +220,29 @@ public class MainActivity extends BaseActivity
         allGamesFragment.clickLetter(textView.getText().toString());
     }
 
-
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
     public void profileOnFragmentInteractionListener(Uri uri) {
-
     }
 
     @Override
     public void onDialogGenericInteraction(int code) {
         switch (code){
             case DialogCodes.DIALOG_ACTION_LOG_OUT:
+                unregisterFirebaseToken();
                 Preferences.logOut(getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+        }
+    }
+
+    private void unregisterFirebaseToken() {
+        FirebaseNotificationDAO firebaseNotificationDAO = new FirebaseNotificationDAO();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if(token != null) {
+            firebaseNotificationDAO.unregisterToken(Preferences.getUserName(getApplicationContext()), token);
         }
     }
 
@@ -225,15 +254,54 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onFragmentInteraction() {
-
     }
 
     @Override
     public void openChat(Chat chat) {
         Intent intentChat = new Intent(getApplicationContext(), ChatActivity.class);
         intentChat.putExtra(ChatActivity.PARAM_ITEM_ID, chat.getItem());
+        intentChat.putExtra(ChatActivity.PARAM_ITEM_TITLE, chat.getTitleItem());
         intentChat.putExtra(ChatActivity.PARAM_SELLER, chat.getSeller());
         intentChat.putExtra(ChatActivity.PARAM_BUYER, chat.getBuyer());
         startActivity(intentChat);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.header_menu_left:
+                Fragment fragment = null;
+                String title = getString(R.string.app_name);
+                String fragmentTag = "";
+                if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN)){
+                    fragment = ProfileFragment.newInstance(Preferences.getString(getApplicationContext(), Constants.PREFERENCE_USER_NAME));
+                    title = "Perfil";
+                    fragmentTag = "Profile";
+                }else {
+                    DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
+                    dialogAlertLogin.show(getSupportFragmentManager(), "dialogAlertLogin");
+                }
+                this.setFragment(fragment, fragmentTag, title);
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+        }
+    }
+
+    @Override
+    public void openActivityItemDetail(String itemId) {
+        Intent itemIntent = new Intent(getApplicationContext(), ItemDetailActivity.class);
+        itemIntent.putExtra("FROM", "DEEP-LINK");
+        itemIntent.putExtra("itemId", itemId);
+        startActivity(itemIntent);
+    }
+
+    @Override
+    public void openActivityMeetingDetail(String meetingId) {
+        Intent itemIntent = new Intent(getApplicationContext(), MeetingDetailActivity.class);
+        itemIntent.putExtra("FROM", "DEEP-LINK");
+        itemIntent.putExtra("meetingId", meetingId);
+        startActivity(itemIntent);
     }
 }

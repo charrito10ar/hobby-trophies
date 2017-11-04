@@ -44,4 +44,45 @@ public class ItemDetailActivityPresenter implements ItemDetailActivityPresenterI
     public void unmarkAsSoldSuccess() {
         itemDetailActivityView.unmarkAsSold();
     }
+
+    @Override
+    public void markFavourite() {
+        itemDetailActivityView.markFavourite();
+    }
+
+    @Override
+    public void deleteFavourite() {
+        itemDetailActivityView.unmarkFavourite();
+    }
+
+    @Override
+    public void shareItemLink(Item item, String longDynamicLink) {
+        itemDetailActivityView.shareItemLink(item, longDynamicLink);
+    }
+
+    @Override
+    public void loadRemoteItemSuccess(Item item) {
+        itemDetailActivityView.loadRemoteItemSuccess(item);
+    }
+
+    @Override
+    public void loadRemoteItemError(String message) {
+        itemDetailActivityView.loadRemoteItemError(message);
+    }
+
+    public void addFavourite(Item item) {
+        interactor.addFavourite(item);
+    }
+
+    public void deleteFavourite(Item item) {
+        interactor.deleteFavourite(item);
+    }
+
+    public void shareItem(Item item) {
+        interactor.shareItem(item);
+    }
+
+    public void loadRemoteItem(String itemId) {
+        interactor.loadRemoteItem(itemId);
+    }
 }

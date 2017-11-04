@@ -12,20 +12,12 @@ import android.view.View;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.SignUpActivity;
 
-/**
- * Created by marcelo on 21/12/16.
- */
-
 public class DialogAlertLogin extends DialogFragment {
-
-
 
     public static DialogAlertLogin newInstance() {
         DialogAlertLogin dialogAlertLogin = new DialogAlertLogin();
         return dialogAlertLogin;
     }
-
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

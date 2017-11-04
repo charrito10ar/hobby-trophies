@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.marbit.hobbytrophies.fragments.profile.ProfileSalesFragment;
+import com.marbit.hobbytrophies.fragments.profile.ProfileSoldFragment;
 import com.marbit.hobbytrophies.fragments.profile.ProfileTrophiesFragment;
 import com.marbit.hobbytrophies.model.User;
 
@@ -31,6 +32,9 @@ public class PagerProfileAdapter extends FragmentStatePagerAdapter {
             case 1:
                 ProfileSalesFragment tab2 = new ProfileSalesFragment();
                 return tab2;
+            case 2:
+                ProfileSoldFragment tab3 = new ProfileSoldFragment();
+                return tab3;
             default:
                 return null;
         }

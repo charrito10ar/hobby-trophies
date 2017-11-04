@@ -11,10 +11,6 @@ import com.marbit.hobbytrophies.model.User;
 import java.text.ParseException;
 import java.util.List;
 
-/**
- * Created by marcelo on 20/03/17.
- */
-
 public class MeetingDetailPresenter {
     private MeetingDetailInteractor interactor;
     private MeetingDetailView view;
@@ -57,5 +53,17 @@ public class MeetingDetailPresenter {
 
     public void editGeneralInfoMeeting() {
         this.view.openEditMeeting();
+    }
+
+    public void shareMeeting(Meeting meeting) {
+        interactor.shareMeeting(meeting);
+    }
+
+    public void shareMeetingLink(Meeting meeting, String longMeetingLink) {
+        this.view.shareMeetingLink(meeting, longMeetingLink);
+    }
+
+    public void loadRemoteMeeting(String meetingId) {
+
     }
 }

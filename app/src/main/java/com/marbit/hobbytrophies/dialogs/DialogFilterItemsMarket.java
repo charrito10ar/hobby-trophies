@@ -4,10 +4,11 @@ import android.app.Dialog;
 
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,10 +27,9 @@ import com.marbit.hobbytrophies.model.market.Filter;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
-public class DialogFilterItemsMarket extends DialogFragment implements View.OnClickListener, RangeSeekBar.OnRangeSeekBarChangeListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
+public class DialogFilterItemsMarket extends DialogFragment implements View.OnClickListener, RangeSeekBar.OnRangeSeekBarChangeListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener, TextWatcher {
 
     private OnDialogFilterItemsInteractionListener mListener;
-    private static final String ARG_PARAM1 = "STEP";
 
     private Spinner spinnerCategory;
     private Spinner spinnerOrderBy;
@@ -39,13 +40,10 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
     private TextView textViewRangePrice;
     private CheckBox checkboxBarter;
     private CheckBox checkboxDigital;
+    private EditText editTextSearch;
 
-    public static DialogFilterItemsMarket newInstance(int step) {
-        DialogFilterItemsMarket dialogFilterItemsMarket = new DialogFilterItemsMarket();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, step);
-        dialogFilterItemsMarket.setArguments(args);
-        return dialogFilterItemsMarket;
+    public static DialogFilterItemsMarket newInstance() {
+        return new DialogFilterItemsMarket();
     }
 
     @Override
@@ -62,9 +60,6 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //step = getArguments().getInt(ARG_PARAM1);
-        }
     }
 
     @Override
@@ -73,6 +68,8 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_filer_items_market, null);
         this.filter = new Filter();
+        this.editTextSearch = (EditText) view.findViewById(R.id.edit_text_search);
+        this.editTextSearch.addTextChangedListener(this);
         this.spinnerCategory = (Spinner) view.findViewById(R.id.spinner_category);
         this.spinnerOrderBy = (Spinner) view.findViewById(R.id.spinner_order_by);
         this.itemTypes = getResources().getStringArray(R.array.item_types);
@@ -99,7 +96,7 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(view);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.translucentBackgroundLogin)));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return dialog;
     }
@@ -130,15 +127,15 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
                 switch (position){
                     case 0:
                         checkboxDigital.setVisibility(View.INVISIBLE);
-                        filter.setItemType(-1);
+                        filter.setItemCategory(-1);
                         break;
                     case 1:
                         checkboxDigital.setVisibility(View.VISIBLE);
-                        filter.setItemType(position);
+                        filter.setItemCategory(position);
                         break;
                     default:
                         checkboxDigital.setVisibility(View.INVISIBLE);
-                        filter.setItemType(position);
+                        filter.setItemCategory(position);
                         break;
                 }
                 break;
@@ -146,12 +143,10 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
                 filter.setOrderBy(position);
                 break;
         }
-
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override
@@ -166,8 +161,25 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
         }
     }
 
+    /***
+     ***************** EDIT TEXT LISTENER *********************************
+     */
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        filter.setText(charSequence.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
     public interface OnDialogFilterItemsInteractionListener {
         void applyFilter(Filter filter);
     }
-
 }

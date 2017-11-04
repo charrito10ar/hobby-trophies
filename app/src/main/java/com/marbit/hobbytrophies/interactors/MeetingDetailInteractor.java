@@ -8,11 +8,9 @@ import com.marbit.hobbytrophies.presenters.MeetingDetailPresenter;
 import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
-
-/**
- * Created by marcelo on 20/03/17.
- */
 
 public class MeetingDetailInteractor {
 
@@ -56,6 +54,14 @@ public class MeetingDetailInteractor {
     }
 
     public void editGeneralInfoMeeting() {
+    }
 
+    public void shareMeeting(Meeting meeting) {
+        try {
+            String longMeetingLink = "https://zj77k.app.goo.gl/?link=" + URLEncoder.encode("https://hobbytrophies.com/foros?type=MEETING&meetingId=" + meeting.getId(), "UTF-8") + "&apn=com.marbit.hobbytrophies";
+            presenter.shareMeetingLink(meeting, longMeetingLink);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

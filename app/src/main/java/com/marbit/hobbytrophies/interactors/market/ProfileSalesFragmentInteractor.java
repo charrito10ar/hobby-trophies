@@ -40,7 +40,8 @@ public class ProfileSalesFragmentInteractor {
                 List<Item> items = new ArrayList<>();
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     Item item = postSnapshot.getValue(Item.class);
-                    items.add(item);
+                    if(item.getStatus() == Item.ON_SALE)
+                        items.add(item);
                 }
                 presenterInterface.loadItemsSuccess(items);
             }

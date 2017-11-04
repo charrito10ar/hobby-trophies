@@ -16,6 +16,7 @@ import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.presenters.MessagesFragmentPresenter;
 import com.marbit.hobbytrophies.utilities.Preferences;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -90,6 +91,7 @@ public class MessagesFragment extends Fragment implements MessagesFragmentView{
 
     @Override
     public void loadChatHeadersSuccessful(List<Chat> chatList) {
+        Collections.sort(chatList);
         this.chatList = chatList;
         messageChatAdapter.clearAll();
         messageChatAdapter.setList(chatList);

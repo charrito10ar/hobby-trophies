@@ -2,6 +2,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.marbit.hobbytrophies.market.ItemDetailActivity">
+
+    <item
+        android:id="@+id/action_share_item"
+        android:orderInCategory="200"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/share_txt"
+        android:visible="true"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_add_favourite"
+        android:orderInCategory="200"
+        android:icon="@drawable/ic_favourite_add"
+        android:title="@string/action_add_favourite"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_delete_favourite"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_favourite_added"
+        android:title="@string/action_add_favourite"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+
     <item
         android:id="@+id/action_edit_item"
         android:orderInCategory="100"
@@ -12,6 +38,7 @@
         android:id="@+id/action_sold"
         android:orderInCategory="100"
         android:title="@string/mark_as_sold"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item

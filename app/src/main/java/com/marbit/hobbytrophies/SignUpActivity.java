@@ -26,8 +26,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.provider.FirebaseInitProvider;
 import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
 import com.marbit.hobbytrophies.dialogs.DialogGeneric;
+import com.marbit.hobbytrophies.firebase.dao.FirebaseNotificationDAO;
 import com.marbit.hobbytrophies.model.User;
 import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DialogCodes;
@@ -173,7 +176,7 @@ public class SignUpActivity extends BaseActivity implements DialogGeneric.OnDial
                                 if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_PSN_CODE_GENERATED)){
                                     hideProgressBarValidateCode();
                                     String userAuthenticated = jsonObject.getString("authenticated");
-                                    if(userAuthenticated.equals("0")){//VALIDACION
+                                    if(userAuthenticated.equals("1")){//VALIDACION
                                         Toast.makeText(getApplicationContext(), "CODIGOS VALIDOS", Toast.LENGTH_LONG).show();
                                         Preferences.saveBoolean(getApplicationContext(), Constants.PREFERENCE_IS_PSN_CODE_OK, true);
                                         signInDataBase(psnName);
@@ -243,7 +246,7 @@ public class SignUpActivity extends BaseActivity implements DialogGeneric.OnDial
     }
 
     public void skipSignUp(View view){
-        DialogGeneric dialogGeneric = DialogGeneric.newInstance("Atención", "Si saltas el registro no podrás: \n - Crear quedadas \n - Ver tu perfil PSN \n - Comentar en las quedadas", "Saltar registro", DialogCodes.DIALOG_ACTION_INPUT_LOGIN_CODE_HELP);
+        DialogGeneric dialogGeneric = DialogGeneric.newInstance("Atención", "Si saltas el registro no podrás: \n - Crear quedadas \n - Ver tu perfil PSN \n - Comentar en las quedadas \n - Participar del ranking semanal \n - Comprar o vender en el mercadillo" , "Saltar registro", DialogCodes.DIALOG_ACTION_INPUT_LOGIN_CODE_HELP);
         dialogGeneric.show(getSupportFragmentManager(), "DialogInputLoginCodeHelp");
     }
 
@@ -258,6 +261,15 @@ public class SignUpActivity extends BaseActivity implements DialogGeneric.OnDial
     public void writeNewUser(String psnName) {
         this.stringRequest = this.getStringRequestSignUp(psnName);
         requestQueue.add(this.stringRequest);
+        registerTokenNotification(psnName);
+    }
+
+    private void registerTokenNotification(String psnName) {
+        String tokenNotification = FirebaseInstanceId.getInstance().getToken();
+        if(tokenNotification != null){
+            FirebaseNotificationDAO firebaseNotificationDAO = new FirebaseNotificationDAO();
+            firebaseNotificationDAO.registerToken(psnName, tokenNotification);
+        }
     }
 
 

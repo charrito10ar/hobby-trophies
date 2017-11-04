@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:foo="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,6 +12,25 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:id="@+id/button_add_wish_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp">
+
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                foo:customFont="BrandonText-Medium.otf"
+                android:textSize="16sp"
+                android:textAllCaps="true"
+                android:text="Agregar a la lista de deseos"/>
+
+        </FrameLayout>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/fragment_profile_sales_swipe_refresh"
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,7 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
             tools:context="com.marbit.hobbytrophies.MainActivity">
 
             <android.support.v7.widget.RecyclerView
@@ -30,6 +48,20 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:padding="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textAlignment="center"
+            android:text="No se econtraron resultados de la búsqueda. Puede agregar la búsqueda a su lista de deseos y lo notificaremos cuando haya un item que coincida."/>
+    </RelativeLayout>
 
 
     <android.support.design.widget.FloatingActionButton

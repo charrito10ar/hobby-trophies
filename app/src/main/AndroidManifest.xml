@@ -99,7 +99,7 @@
                 android:value="com.marbit.hobbytrophies.MeetingDetailActivity" />
         </activity>
         <activity
-            android:name=".NewItemActivity"
+            android:name=".market.NewItemActivity"
             android:label="Vender Producto"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="adjustResize">
@@ -117,18 +117,34 @@
                 android:value="com.marbit.hobbytrophies.MainActivity" />
         </activity>
         <activity
-            android:name=".EditItemActivity"
+            android:name=".market.EditItemActivity"
             android:parentActivityName=".market.ItemDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".market.ItemDetailActivity" />
         </activity>
-        <activity android:name=".chat.ChatActivity"
-            android:parentActivityName=".market.ItemDetailActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+        <activity
+            android:name=".chat.ChatActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marbit.hobbytrophies.market.ItemDetailActivity" />
+                android:value="com.marbit.hobbytrophies.MainActivity" />
+        </activity>
+        <activity
+            android:name=".wishes.NewWishActivity"
+            android:label="Agregar deseo"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marbit.hobbytrophies.MainActivity" />
+        </activity>
+        <activity android:name=".wishes.DetailWishActivity"
+            android:label="Detalle del deseo"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marbit.hobbytrophies.MainActivity" />
         </activity>
     </application>
 

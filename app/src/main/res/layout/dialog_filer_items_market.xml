@@ -8,118 +8,131 @@
     android:paddingRight="16dp"
     xmlns:rsb="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.marbit.hobbytrophies.overwrite.TextViewPlus
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/witch_category"
-            android:textSize="16sp"
-            app:customFont="BrandonText-Regular.otf"/>
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spinner_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/material_white"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
-            android:spinnerMode="dialog"/>
-
-        <com.marbit.hobbytrophies.overwrite.TextViewPlus
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/how_much_want_pay_txt"
-            android:textSize="16sp"
-            app:customFont="BrandonText-Regular.otf"/>
-
-        <com.marbit.hobbytrophies.overwrite.TextViewPlus
-            android:id="@+id/text_view_range_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/material_white"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="4dp"
-            android:text="@string/any_price_txt"
-            app:customFont="BrandonText-Bold.otf"/>
-
-
-        <org.florescu.android.rangeseekbar.RangeSeekBar
-            android:id="@+id/seekbar_range_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            rsb:absoluteMaxValue="1000"
-            rsb:absoluteMinValue="0"/>
-
-        <com.marbit.hobbytrophies.overwrite.TextViewPlus
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/extra_condition_txt"
-            android:textSize="16sp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
-            app:customFont="BrandonText-Regular.otf"/>
-
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:orientation="horizontal">
+            android:paddingBottom="36dp"
+            android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/edit_text_search"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <CheckBox
-                    android:id="@+id/checkbox_barter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textColor="@color/material_white"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/barter_txt"/>
-            </FrameLayout>
+                android:maxLines="1"
+                android:imeOptions="actionDone"
+                android:inputType="textAutoComplete"
+                android:hint="¿Qué estás buscando?"
+                android:layout_marginBottom="8dp"/>
 
-            <FrameLayout
-                android:layout_width="0dp"
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <CheckBox
-                    android:id="@+id/checkbox_digital"
-                    android:layout_width="wrap_content"
+                android:text="@string/witch_category"
+                android:textSize="16sp"
+                app:customFont="BrandonText-Regular.otf"/>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_white"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:spinnerMode="dialog"/>
+
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/how_much_want_pay_txt"
+                android:textSize="16sp"
+                app:customFont="BrandonText-Regular.otf"/>
+
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:id="@+id/text_view_range_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/material_white"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/any_price_txt"
+                app:customFont="BrandonText-Bold.otf"/>
+
+
+            <org.florescu.android.rangeseekbar.RangeSeekBar
+                android:id="@+id/seekbar_range_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                rsb:absoluteMaxValue="1000"
+                rsb:absoluteMinValue="0"/>
+
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/extra_condition_txt"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                app:customFont="BrandonText-Regular.otf"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textColor="@color/material_white"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/digital_txt"/>
-            </FrameLayout>
+                    android:layout_weight="1">
+                    <CheckBox
+                        android:id="@+id/checkbox_barter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/material_white"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/barter_txt"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <CheckBox
+                        android:id="@+id/checkbox_digital"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/material_white"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/digital_txt"/>
+                </FrameLayout>
 
 
+            </LinearLayout>
+
+            <com.marbit.hobbytrophies.overwrite.TextViewPlus
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_by_txt"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                app:customFont="BrandonText-Regular.otf"/>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_order_by"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/material_white"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:spinnerMode="dialog"/>
         </LinearLayout>
-
-        <com.marbit.hobbytrophies.overwrite.TextViewPlus
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/order_by_txt"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp"
-            app:customFont="BrandonText-Regular.otf"/>
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spinner_order_by"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/material_white"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
-            android:spinnerMode="dialog"/>
-
-
-    </LinearLayout>
+    </ScrollView>
 
 
     <LinearLayout

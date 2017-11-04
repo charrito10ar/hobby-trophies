@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="onClickGame"
                     android:background="?android:attr/selectableItemBackground"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:layout_gravity="center"
                     android:text="Seleccione juego"/>
 

@@ -31,6 +31,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.marbit.hobbytrophies.adapters.TrophyMeetingAdapter;
+import com.marbit.hobbytrophies.dialogs.DialogSearchLocalGame;
 import com.marbit.hobbytrophies.model.Game;
 import com.marbit.hobbytrophies.model.Trophy;
 import com.marbit.hobbytrophies.utilities.DatePickerFragment;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class NewMeetingActivity extends AppCompatActivity implements TimePickerFragment.TimeDatePickerListener, TextWatcher {
+public class NewMeetingActivity extends AppCompatActivity implements TimePickerFragment.TimeDatePickerListener, TextWatcher, DialogSearchLocalGame.DialogSearchLocalGameListener {
 
     private TextView gameNameTextView;
     private TextView gameTypeTextView;
@@ -56,14 +57,13 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
     private TextView amountMembersTextView;
     private EditText descriptionEditText;
     private int gameTypeSelected;
-    private int gameSelected;
+    private Game gameSelected;
     private String stringDateSelected;
     private MenuItem menuItemSend;
     private boolean dateTimeLoad = false;
     private boolean gameLoad = false;
     private boolean typeLoad = false;
-    private List<Game> userGamesList;
-    private String[] userGamesName;
+    private ArrayList<Game> userGamesList;
     private View layoutStepOne;
     private SwipeRefreshLayout layoutStepTwo;
     private RecyclerView recyclerViewTrophies;
@@ -84,8 +84,7 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
         this.amountMembersTextView = (TextView) findViewById(R.id.text_view_amount_people);
         this.descriptionEditText = (EditText) findViewById(R.id.text_view_description_meeting);
         this.descriptionEditText.addTextChangedListener(this);
-        this.userGamesList = Preferences.getGameList(getApplicationContext());
-        this.userGamesName = Preferences.getGameTitle(getApplicationContext());
+        this.userGamesList = (ArrayList<Game>) Preferences.getGameList(getApplicationContext());
         this.layoutStepOne = (ScrollView) findViewById(R.id.scroll_layout_step_one);
         this.layoutStepTwo = (SwipeRefreshLayout) findViewById(R.id.new_meeting_swipe_refresh);
         this.recyclerViewTrophies = (RecyclerView) findViewById(R.id.recycler_view_trophies_new_meeting);
@@ -100,7 +99,7 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
         layoutStepTwo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestQueue.add(getStringRequestTrophies(Preferences.getUserName(getApplicationContext()), userGamesList.get(gameSelected).getId()));
+                requestQueue.add(getStringRequestTrophies(Preferences.getUserName(getApplicationContext()), gameSelected.getId()));
             }
         });
     }
@@ -180,7 +179,7 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
         if (id == R.id.action_send_meeting) {
             if(this.step == 1){
                 this.layoutStepTwo.setRefreshing(true);
-                this.requestQueue.add(getStringRequestTrophies(Preferences.getUserName(getApplicationContext()), this.userGamesList.get(this.gameSelected).getId()));
+                this.requestQueue.add(getStringRequestTrophies(Preferences.getUserName(getApplicationContext()), gameSelected.getId()));
                 this.step = 2;
                 YoYo.with(Techniques.FadeOutLeft)
                         .duration(600)
@@ -207,7 +206,7 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("user-admin", Preferences.getUserName(getApplicationContext()));
-            jsonObject.put("game-id", this.userGamesList.get(this.gameSelected).getId());
+            jsonObject.put("game-id", gameSelected.getId());
             jsonObject.put("description", descriptionEditText.getText().toString());
             jsonObject.put("date", stringDateSelected);
             jsonObject.put("type", gameTypeSelected);
@@ -252,17 +251,9 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
      */
 
     public void onClickGame(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Selecciona juego")
-                .setItems(userGamesName, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        gameSelected = which;
-                        gameNameTextView.setText(userGamesList.get(which).getName());
-                        gameLoad = true;
-                        onTextChanged(descriptionEditText.getText(), 0, 0, 0);
-                    }
-                });
-        builder.show();
+
+        DialogSearchLocalGame dialogSearchLocalGame = DialogSearchLocalGame.newInstance(userGamesList);
+        dialogSearchLocalGame.show(getSupportFragmentManager(), "DialogSearchLocalGame");
     }
 
     public void onClickDateTimeMeeting(View view){
@@ -340,4 +331,11 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
 
     }
 
+    @Override
+    public void selectGame(Game game) {
+        gameSelected = game;
+        gameNameTextView.setText(game.getName());
+        gameLoad = true;
+        onTextChanged(descriptionEditText.getText(), 0, 0, 0);
+    }
 }

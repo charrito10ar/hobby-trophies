@@ -1,10 +1,11 @@
 package com.marbit.hobbytrophies.model.market;
 
 public class Filter {
+    private String text = "";
     private double minPrice;
     private double maxPrice;
     private boolean barter;
-    private int itemType;
+    private int itemCategory;
     private boolean digital;
     private int orderBy;
 
@@ -24,12 +25,12 @@ public class Filter {
         this.barter = barter;
     }
 
-    public int getItemType() {
-        return itemType;
+    public int getItemCategory() {
+        return itemCategory;
     }
 
-    public void setItemType(int itemType) {
-        this.itemType = itemType;
+    public void setItemCategory(int itemCategory) {
+        this.itemCategory = itemCategory;
     }
 
     public boolean isDigital() {
@@ -54,5 +55,13 @@ public class Filter {
 
     public void setOrderBy(int orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

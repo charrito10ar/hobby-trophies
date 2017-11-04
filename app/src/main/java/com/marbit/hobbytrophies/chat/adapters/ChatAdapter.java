@@ -5,19 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.marbit.hobbytrophies.R;
-import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
-import com.marbit.hobbytrophies.overwrite.CircleTransform;
 import com.marbit.hobbytrophies.utilities.Preferences;
-import com.squareup.picasso.Picasso;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -26,11 +25,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final static int MESSAGE_LEFT = 0;
     private final static int MESSAGE_RIGHT = 1;
     private final static int HEADER = 2;
+    private final static int HEADER_DATE = 3;
+    private SimpleDateFormat sdfHour;
+    private SimpleDateFormat sdfDate;
 
     public ChatAdapter(Context context) {
         this.genericList = new ArrayList<>();
         this.context = context;
         this.genericList = new ArrayList<>();
+        this.sdfHour = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+        this.sdfDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
     }
 
     @Override
@@ -48,7 +52,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             default:
                 View itemViewHeaderDate = inflater.inflate(R.layout.list_item_header_date, parent, false);
-                viewHolder = new RightMessageViewHolder(itemViewHeaderDate);
+                viewHolder = new HeaderDateViewHolder(itemViewHeaderDate);
         }
         return viewHolder;
     }
@@ -67,6 +71,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 rightMessageViewHolder.bindMessage((MessageChat) object);
                 break;
             case HEADER:
+                HeaderDateViewHolder headerDateViewHolder = (HeaderDateViewHolder) holder;
+                headerDateViewHolder.bindMessage((Long) object);
                 break;
         }
     }
@@ -91,7 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return genericList.size();
     }
 
-    public void setList(List<MessageChat> list) {
+    public void setList(List<Object> list) {
         this.genericList.addAll(list);
     }
 
@@ -106,31 +112,54 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private class LeftMessageViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewMessage;
-        private ImageView avatar;
+        private TextView textViewHour;
 
         public LeftMessageViewHolder(View itemView) {
             super(itemView);
             this.textViewMessage = (TextView) itemView.findViewById(R.id.text_view_chat_left);
-            this.avatar = (ImageView) itemView.findViewById(R.id.image_view_avatar);
+            this.textViewHour = (TextView) itemView.findViewById(R.id.text_view_hour_chat);
         }
 
         public void bindMessage(MessageChat messageChat) {
             this.textViewMessage.setText(messageChat.getMessage());
-            Picasso.with(context).load(messageChat.getAuthor()).error(R.drawable.avatar).fit().transform(new CircleTransform()).into(avatar);
+            Date date = new Date(messageChat.getdateLong());
+            String formattedTime = sdfHour.format(date);
+            this.textViewHour.setText(formattedTime);
         }
     }
 
     private class RightMessageViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewMessage;
+        private TextView textViewHour;
 
         public RightMessageViewHolder(View itemView) {
             super(itemView);
             this.textViewMessage = (TextView) itemView.findViewById(R.id.text_view_chat_right);
+            this.textViewHour = (TextView) itemView.findViewById(R.id.text_view_hour_chat);
         }
 
         public void bindMessage(MessageChat messageChat){
             this.textViewMessage.setText(messageChat.getMessage());
+            Date date = new Date(messageChat.getdateLong());
+            String formattedTime = sdfHour.format(date);
+            this.textViewHour.setText(formattedTime);
+        }
+    }
+
+    private class HeaderDateViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView textViewDate;
+
+        public HeaderDateViewHolder(View itemView) {
+            super(itemView);
+            this.textViewDate = (TextView) itemView.findViewById(R.id.text_View_date);
+        }
+
+        public void bindMessage(long dateLong){
+            Date date = new Date(dateLong);
+            String formattedTime = sdfDate.format(date);
+            this.textViewDate.setText(formattedTime);
         }
     }
 }

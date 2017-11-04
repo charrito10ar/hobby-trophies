@@ -18,21 +18,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.marbit.hobbytrophies.wishes.dao.WishDAO;
 import com.marbit.hobbytrophies.interfaces.market.FragmentItemDetailPresenterInterface;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
-import com.marbit.hobbytrophies.utilities.Network;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class FragmentItemDetailInteractor {
     private Context context;
@@ -303,18 +300,15 @@ public class FragmentItemDetailInteractor {
     }
 
     public void publishNewItem(Item item) {
-       // if(Network.isNetworkAvailable(context)){
-            StorageMetadata metadata = new StorageMetadata.Builder()
-                .setContentType("image/jpg")
-                .build();
-            String itemId = saveInDataBase(item);
-            for(int i=0; i < item.getImages().size(); i++){
-                Uri image = Uri.fromFile(item.getImages().get(i));
-                saveImageInFirebase(image, itemId, metadata, i);
-            }
+        StorageMetadata metadata = new StorageMetadata.Builder()
+            .setContentType("image/jpg")
+            .build();
+        String itemId = saveInDataBase(item);
+        for(int i=0; i < item.getImages().size(); i++){
+            Uri image = Uri.fromFile(item.getImages().get(i));
+            saveImageInFirebase(image, itemId, metadata, i);
+        }
         presenter.publishItemSuccess(item);
-
-      //  }
     }
 
     @SuppressWarnings("VisibleForTests")
@@ -351,5 +345,9 @@ public class FragmentItemDetailInteractor {
         return itemId;
     }
 
+    public void checkWishesList(Item item) {
+        WishDAO wishDAO = new WishDAO();
+        wishDAO.checkWishesListWithNewItem(context, item);
+    }
 }
 

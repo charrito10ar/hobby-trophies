@@ -28,20 +28,13 @@ public class FragmentItemDetailPresenter implements FragmentItemDetailPresenterI
         interactor.publishNewItem(item);
     }
 
-
     public void openFileBrowser() {
         this.interactor.performFileSearch();
     }
 
-//    public void startActivityForResult(Intent intent) {
-//        this.fragmentItemDetailView.startActivityForResultAccessFiles(intent);
-//    }
-
     public void processFilesSelected(Intent data) {
         this.listFilesItemToSend = interactor.getFilesToSend(data);
         this.fragmentItemDetailView.setPhoto(listFilesItemToSend);
-
-
     }
 
     @Override
@@ -51,6 +44,7 @@ public class FragmentItemDetailPresenter implements FragmentItemDetailPresenterI
 
     @Override
     public void publishItemSuccess(Item item) {
+        this.interactor.checkWishesList(item);
         this.fragmentItemDetailView.publishItemSuccess(item);
     }
 }

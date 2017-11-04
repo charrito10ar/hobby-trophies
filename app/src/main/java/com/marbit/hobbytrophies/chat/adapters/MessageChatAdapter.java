@@ -5,12 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.fragments.MessagesFragment.MessagesFragmentInteractionListener;
 import com.marbit.hobbytrophies.utilities.Preferences;
+import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -22,6 +28,8 @@ import java.util.List;
 public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
 
     private final MessagesFragmentInteractionListener mListener;
+    private final FirebaseStorage firebaseStorage;
+    private final StorageReference storageRef;
     private List<Chat> chatList;
     private Context context;
 
@@ -29,6 +37,8 @@ public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.chatList = new ArrayList<>();
         this.mListener = listener;
         this.context = context;
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageRef = firebaseStorage.getReference();
     }
 
     @Override
@@ -76,7 +86,9 @@ public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private class MessageChatViewHolder extends RecyclerView.ViewHolder {
         View mView;
+        ImageView imageItem;
         TextView lastMessage;
+        TextView itemTitle;
         TextView partnerChat;
         TextView dateLastMessage;
         PrettyTime prettyTime;
@@ -84,7 +96,9 @@ public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         MessageChatViewHolder(View view) {
             super(view);
             mView = view;
+            imageItem = (ImageView) view.findViewById(R.id.image_item);
             lastMessage = (TextView) view.findViewById(R.id.last_message);
+            itemTitle = (TextView) view.findViewById(R.id.text_view_item_title);
             partnerChat = (TextView) view.findViewById(R.id.text_view_chat_partner);
             dateLastMessage = (TextView) view.findViewById(R.id.text_view_date);
             prettyTime = new PrettyTime();
@@ -93,8 +107,18 @@ public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void messageChatBin(Chat chat){
             this.lastMessage.setText(chat.getLastMessage());
             itemView.setOnClickListener(new ClickHeaderChat(chat));
+            itemTitle.setText(chat.getTitleItem());
             partnerChat.setText(chat.getBuyer().equals(Preferences.getUserName(context)) ? chat.getSeller() : chat.getBuyer());
             dateLastMessage.setText(prettyTime.format(new Date(chat.getdateLastMessageLong())));
+            setImage(chat.getItem());
+        }
+
+        private void setImage(String id) {
+            Glide.with(context)
+                    .using(new FirebaseImageLoader())
+                    .load(storageRef.child("/item-images/" + id + "/image_00.jpg"))
+                    .centerCrop()
+                    .into(imageItem);
         }
 
         private class ClickHeaderChat implements View.OnClickListener{

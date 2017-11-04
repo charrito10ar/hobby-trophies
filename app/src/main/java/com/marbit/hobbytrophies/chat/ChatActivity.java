@@ -9,10 +9,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.chat.adapters.ChatAdapter;
@@ -21,25 +22,34 @@ import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
 import com.marbit.hobbytrophies.chat.presenters.ChatActivityPresenter;
 import com.marbit.hobbytrophies.model.User;
-import com.marbit.hobbytrophies.model.market.Item;
+import com.marbit.hobbytrophies.overwrite.CircleTransform;
 import com.marbit.hobbytrophies.utilities.Preferences;
+import com.squareup.picasso.Picasso;
 
-public class ChatActivity extends AppCompatActivity implements ChatActivityView, TextWatcher {
+import java.util.List;
+
+public class ChatActivity extends AppCompatActivity implements ChatActivityView, TextWatcher, View.OnClickListener {
 
     public final static String PARAM_ITEM_ID = "ITEM-ID";
+    public static final String PARAM_ITEM_TITLE = "ITEM-TITLE";
     public final static String PARAM_BUYER = "BUYER";
     public final static String PARAM_SELLER = "SELLER";
+
+    public final static String PARAM_CHAT_ID = "CHAT-ID";
 
     private ChatActivityPresenter presenter;
     private RecyclerView recyclerViewChats;
     private ChatAdapter chatAdapter;
     private Chat chat;
     private String itemId;
+    private String stringTitleItem;
+    private ImageView avatarSeller;
+    private TextView titleItem;
     private ImageButton buttonSend;
+    private ImageView buttonBack;
     private EditText editTextMessage;
     private String buyer;
     private String seller;
-    private Item item;
     private int count;
 
     @Override
@@ -48,6 +58,7 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         setContentView(R.layout.activity_chat);
         this.presenter = new ChatActivityPresenter(getApplicationContext(), this);
         this.itemId = getIntent().getStringExtra(PARAM_ITEM_ID);
+        this.stringTitleItem = getIntent().getStringExtra(PARAM_ITEM_TITLE);
         this.buyer = getIntent().getStringExtra(PARAM_BUYER);
         this.seller = getIntent().getStringExtra(PARAM_SELLER);
         this.presenter = new ChatActivityPresenter(getApplicationContext(), this);
@@ -60,13 +71,22 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         this.editTextMessage.addTextChangedListener(this);
         this.chatAdapter = new ChatAdapter(getApplicationContext());
         this.recyclerViewChats.setAdapter(chatAdapter);
+        this.buttonBack = (ImageView) findViewById(R.id.button_back);
+        this.buttonBack.setOnClickListener(this);
+        this.avatarSeller = (ImageView) findViewById(R.id.ic_avatar_seller);
+        this.titleItem = (TextView) findViewById(R.id.text_view_title_item);
+        this.setTitleItem(stringTitleItem);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         this.count = 0;
-        this.loadChat();
+        if(getIntent().getStringExtra(PARAM_CHAT_ID) != null){
+            this.loadChat(getIntent().getStringExtra(PARAM_CHAT_ID));
+        }else {
+            this.loadChat();
+        }
     }
 
     @Override
@@ -75,9 +95,9 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         super.onPause();
     }
 
-    private void refreshChat(Chat chat) {
+    private void refreshChat(List<Object> genericListMessages) {
         this.chatAdapter.clearAll();
-        this.chatAdapter.setList(chat.getMessages());
+        this.chatAdapter.setList(genericListMessages);
         this.chatAdapter.notifyDataSetChanged();
     }
 
@@ -97,30 +117,21 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
     }
 
     @Override
-    public void showRightMessage(String message) {
-
-    }
-
-    @Override
-    public void showLeftMessage(String message) {
-
-    }
-
-    @Override
-    public void loadChatSuccessful(Chat chat) {
+    public void loadChatSuccessful(Chat chat, List<Object> genericListMessages) {
         this.chat = chat;
-        refreshChat(chat);
+        refreshChat(genericListMessages);
         this.presenter.addListenerAddMessageChat(chat.getId());
         recyclerViewChats.scrollToPosition(chatAdapter.getItemCount() - 1);
-        this.presenter.loadAvatarSeller(chat.getSeller());
+        this.presenter.loadPartnerUserChat(Preferences.getUserName(getApplicationContext()).equals(chat.getSeller()) ? chat.getBuyer() : chat.getSeller());
+        this.presenter.loadItem(chat.getItem());
     }
 
     @Override
     public void loadChat() {
         if(seller == null){
-            this.presenter.loadChat(itemId, buyer, null);
+            this.presenter.loadChat(itemId, stringTitleItem, buyer, null);
         }else {
-            this.presenter.loadChat(itemId, buyer, seller);
+            this.presenter.loadChat(itemId, stringTitleItem, buyer, seller);
         }
     }
 
@@ -142,11 +153,26 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
 
     @Override
     public void loadUserBasicProfileSuccessful(User user) {
-        // Cargar el avatar
+        setAvatarSeller(user.getAvatarUrl());
+    }
+
+    @Override
+    public void setTitleItem(String titleItem) {
+        this.titleItem.setText(titleItem);
+    }
+
+    @Override
+    public void setAvatarSeller(String urlAvatar) {
+        Picasso.with(getApplicationContext()).load(urlAvatar).transform(new CircleTransform()).fit().into(this.avatarSeller);
+    }
+
+    @Override
+    public void loadChat(String chatId) {
+        presenter.loadChat(chatId);
     }
 
     public void clickSendMessage(View view) {
-        presenter.sendMessage(itemId, buyer, seller , Preferences.getUserName(getApplicationContext()), editTextMessage.getText().toString());
+        presenter.sendMessage(chat.getItem(), chat.getTitleItem(), chat.getBuyer(), chat.getSeller(), Preferences.getUserName(getApplicationContext()), editTextMessage.getText().toString());
         editTextMessage.setText("");
     }
 
@@ -170,5 +196,14 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
     @Override
     public void afterTextChanged(Editable s) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button_back:
+                onBackPressed();
+                break;
+        }
     }
 }

@@ -1,16 +1,21 @@
 package com.marbit.hobbytrophies.utilities;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.gson.Gson;
+import com.marbit.hobbytrophies.model.market.Item;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
-
-/**
- * Created by marcelo on 26/12/16.
- */
 
 public class Utilities {
 
@@ -48,5 +53,67 @@ public class Utilities {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static boolean itemIsFavourite(String id) {
+        return false;
+    }
+
+    public static void addFavourite(Context context, Item item) {
+        List favorites = loadFavorites(context);
+        if (favorites == null)
+            favorites = new ArrayList();
+        favorites.add(item);
+        storeFavorites(context, favorites);
+    }
+
+    public static void removeFavorite(Context context, Item item) {
+        ArrayList favorites = loadFavorites(context);
+        if (favorites != null) {
+            favorites.remove(item);
+            storeFavorites(context, favorites);
+        }
+    }
+
+
+    private static void storeFavorites(Context context, List favorites) {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = SP.edit();
+        Gson gson = new Gson();
+        String jsonFavorites = gson.toJson(favorites);
+        editor.putString(Constants.PREFERENCE_FAVORITES_LIST, jsonFavorites);
+        editor.apply();
+    }
+
+    public static ArrayList loadFavorites(Context context) {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        List favorites;
+        if (SP.contains(Constants.PREFERENCE_FAVORITES_LIST)) {
+            String jsonFavorites = SP.getString(Constants.PREFERENCE_FAVORITES_LIST, null);
+            Gson gson = new Gson();
+            Item[] favoriteItems = gson.fromJson(jsonFavorites,Item[].class);
+            favorites = Arrays.asList(favoriteItems);
+            favorites = new ArrayList(favorites);
+        } else
+            return new ArrayList();
+        return (ArrayList) favorites;
+    }
+
+    public static boolean isFavorite(Context context, Item item) {
+        ArrayList favorites = loadFavorites(context);
+        return favorites != null && favorites.contains(item);
+    }
+
+    public static String getItemTypeString(int itemType) {
+        switch (itemType){
+            case Constants.PREFERENCE_ITEM_CATEGORY_GAME:
+                return "Mira este juego que encontré en HobbyTrophies: ";
+            case Constants.PREFERENCE_ITEM_CATEGORY_CONSOLE:
+                return "Mira esta consola que encontré en HobbyTrophies: ";
+            case Constants.PREFERENCE_ITEM_CATEGORY_ACCESSORIES:
+                return "Mira este accesorio que encontré en HobbyTrophies: ";
+            default:
+                return "Mira esto que encontré en HobbyTrophies: ";
+        }
     }
 }

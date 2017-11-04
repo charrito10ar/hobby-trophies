@@ -20,6 +20,7 @@ public class Constants {
     public static final String PREFERENCE_IS_PSN_CODE_OK = "PSN-CODE-OK";
     public static final String PREFERENCE_IS_USER_LOGIN = "IS-USER-LOGIN";
     public static final String PREFERENCE_USER_AVATAR = "USER-AVATAR";
+    public static final String PREFERENCE_USER_PROFILE_JSON = "USER-PROFILE";
 
 
     /** STATS ***/
@@ -42,4 +43,14 @@ public class Constants {
     public final static int PREFERENCE_ITEM_CATEGORY_CONSOLE = 1;
     public final static int PREFERENCE_ITEM_CATEGORY_ACCESSORIES = 2;
     public final static int PREFERENCE_ITEM_CATEGORY_OTHER= 3;
+    public static final String PREFERENCE_DAY_LAST_UPDATE_PROFILE = "TIME_LAST_UPDATE_PROFILE";
+    public static final String PREFERENCE_FAVORITES_LIST = "LOCAL-FAVOURITES-ITEMS";
+
+    public final static int PREFERENCE_CONSOLE_PS = 0;
+    public final static int PREFERENCE_CONSOLE_PSP = 1;
+    public final static int PREFERENCE_CONSOLE_PS2 = 2;
+    public final static int PREFERENCE_CONSOLE_PS3 = 3;
+    public final static int PREFERENCE_CONSOLE_PS4 = 4;
+    public final static int PREFERENCE_CONSOLE_VITA = 5;
+    public final static int PREFERENCE_CONSOLE_VR = 6;
 }

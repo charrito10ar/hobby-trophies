@@ -1,8 +1,5 @@
 package com.marbit.hobbytrophies.firebase;
 
-/**
- * Created by marcelo on 2/03/17.
- */
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,22 +8,24 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.marbit.hobbytrophies.MainActivity;
 import com.marbit.hobbytrophies.MeetingDetailActivity;
 import com.marbit.hobbytrophies.R;
+import com.marbit.hobbytrophies.chat.ChatActivity;
+import com.marbit.hobbytrophies.market.ItemDetailActivity;
 import com.marbit.hobbytrophies.model.Game;
 import com.marbit.hobbytrophies.model.Meeting;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.marbit.hobbytrophies.utilities.Preferences;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
+
 import java.util.Map;
+
+import static com.marbit.hobbytrophies.chat.ChatActivity.PARAM_CHAT_ID;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -34,15 +33,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String MEETING_MESSAGE_NOTIFICATION = "meeting-message";
     private static final String MEETING_IS_COMING_NOTIFICATION = "meeting-is-coming";
 
-    /**
-     * Called when message is received.
-     *
-     * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
-     */
-    // [START receive_message]
+    private static final String MEETING_MESSAGE_CHAT_NOTIFICATION = "message-chat";
+
+    private static final String WISH_MATCH_NOTIFICATION = "wish-match";
+
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> data = remoteMessage.getData();
             String  meetingDescription = data.get("meeting-description");
@@ -68,37 +65,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         e.printStackTrace();
                     }
                     break;
+                case MEETING_MESSAGE_CHAT_NOTIFICATION:
+                    String userSender = data.get("user-sender");
+                    String text = data.get("text");
+                    String chatId = data.get("chatId");
+                    String itemId = data.get("itemId");
+                    String itemTitle = data.get("itemTitle");
+                    sendNotificationMarketChat(userSender, text, chatId, itemId, itemTitle);
+                    break;
+                case WISH_MATCH_NOTIFICATION:
+                    String itemIdMatch = data.get("itemId");
+                    String itemTitleMatch = data.get("itemTitle");
+                    sendNotificationWishMatch(itemIdMatch, itemTitleMatch);
+                    break;
             }
         }
     }
 
-    private void sendNotification(String messageBody, String title) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(title)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-
-    }
-
     private void sendReminderMeetingNotification(String messageBody, String title, Meeting meeting) {
-        Intent intent = new Intent(this, MeetingDetailActivity.class);
-        intent.putExtra("MEETING", meeting);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        Intent intentMeeting = new Intent(this, MeetingDetailActivity.class);
+        intentMeeting.putExtra("MEETING", meeting);
+        intentMeeting.putExtra("FROM", "LOCAL");
+        intentMeeting.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intentMeeting,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -133,6 +122,49 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(meetingDescription)
                 .setContentText(author + " : " +messageBody)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotificationMarketChat(String userSender, String text, String chatId, String itemId, String itemTitle) {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra(PARAM_CHAT_ID, chatId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(itemTitle)
+                .setContentText(userSender + " : " +text)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNotificationWishMatch(String itemId, String itemTitle) {
+        Intent intent = new Intent(this, ItemDetailActivity.class);
+        intent.putExtra("FROM", "DEEP-LINK");
+        intent.putExtra("itemId", itemId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("¡Coincidencia en el mercadillo!")
+                .setContentText("Item: " + itemTitle)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

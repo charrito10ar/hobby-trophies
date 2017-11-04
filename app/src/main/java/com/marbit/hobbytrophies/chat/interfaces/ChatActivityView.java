@@ -4,12 +4,10 @@ import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
 import com.marbit.hobbytrophies.model.User;
 
+import java.util.List;
+
 public interface ChatActivityView {
-    void showRightMessage(String message);
-
-    void showLeftMessage(String message);
-
-    void loadChatSuccessful(Chat chat);
+    void loadChatSuccessful(Chat chat, List<Object> genericListMessages);
 
     void loadChat();
 
@@ -18,4 +16,10 @@ public interface ChatActivityView {
     void addMessageToChat(MessageChat messageChat);
 
     void loadUserBasicProfileSuccessful(User user);
+
+    void setTitleItem(String titleItem);
+
+    void setAvatarSeller(String urlAvatar);
+
+    void loadChat(String chatId);
 }

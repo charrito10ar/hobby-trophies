@@ -57,7 +57,6 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
     private int mColumnCount = 1;
     private MeetingInteractionListener mListener;
     private ArrayList<Object> genericList;
-    private ArrayList<Object> genericListMeetingsMyGames;
     private MeetingAdapter meetingAdapter;
     private TextView headMeeting;
 
@@ -99,7 +98,6 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
         this.layoutMeetingList = (LinearLayout) view.findViewById(R.id.layout_meeting_list);
         this.layoutEmptyList = (LinearLayout) view.findViewById(R.id.layout_empty_list);
         this.genericList = new ArrayList<>();
-        this.genericListMeetingsMyGames = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_meeting);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -223,6 +221,7 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
             meeting.setUserOwnerAvatar(jsonObjectMeeting.getString("avatar"));
             meeting.setDescription((jsonObjectMeeting.getString("description")));
             meeting.setType((jsonObjectMeeting.getInt("type")));
+            meeting.setReserved(jsonObjectMeeting.getInt("reserved"));
             meeting.setLimitMembers(jsonObjectMeeting.getInt("places"));
             meeting.setState(jsonObjectMeeting.getInt("state"));
             meeting.setDate(DateUtils.getInstance().convertToLocalTimeDate(jsonObjectMeeting.getString("date")));
@@ -289,9 +288,7 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
                 genericList.clear();
                 try {
                     genericList = buildListMeeting(Preferences.getUserGamesMeetings(getContext()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
+                } catch (JSONException | ParseException e) {
                     e.printStackTrace();
                 }
                 refreshContent(genericList);

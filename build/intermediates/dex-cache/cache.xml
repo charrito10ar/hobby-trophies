@@ -3,21 +3,30 @@
 
     <item
         is-multidex="true"
-        jar="/home/marcelo/.gradle/caches/modules-2/files-2.1/org.ocpsoft.prettytime/prettytime/4.0.0.Final/72bec9d6b648dd4e0b51d15c5008070205613559/prettytime-4.0.0.Final.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="72bec9d6b648dd4e0b51d15c5008070205613559">
-        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/prettytime-4.0.0.Final_d4a2cf8d251f7dfa7b675f08fa12f3d48af293fd/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.3"
-        sha1="91f7a4074126d99f371fe6248e8c23577ab63228">
+        sha1="5525904c117ff5c61f091450af605266cca66e40">
         <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c98b8ffb61930bd1e24ac1d11947c14af60d983a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife-annotations/8.8.1/bc373fb6bc7bca3035041b924f158fd2b946ee8d/butterknife-annotations-8.8.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bc373fb6bc7bca3035041b924f158fd2b946ee8d">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/butterknife-annotations-8.8.1_5c8d3663b7bbfe675d7841640ec9f3756e37b74f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/marcelo/.android/build-cache/518e3e0fa8deebb67adc3330eba7f4dff93a1fd8/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6a2bcb61342d09fe9acf55c9daf63961c8866cc0">
+        <dex dex="/home/marcelo/AndroidStudioProjects/HobbyTrophies/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_a33b93ca7555f80d9a6b5f62318b390524f65229/classes.dex" />
     </item>
     <item
         is-multidex="true"

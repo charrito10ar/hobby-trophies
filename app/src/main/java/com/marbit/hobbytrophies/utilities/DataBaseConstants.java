@@ -23,6 +23,12 @@ public class DataBaseConstants {
     public final static String COLUMN_CHAT_MESSAGES = "chat-messages";
     public final static String COLUMN_ITEM_CHATS = "item-chats";
     public final static String COLUMN_USER_CHATS = "user-chats";
+    public final static String COLUMN_USER_WISH_LIST = "user-wish-list";
+    public final static String COLUMN_WISH_ITEMS = "wish-list-items";
+
     public static final String CHILD_DATE_LAST_MESSAGE = "dateLastMessage";
 
+    public final static String COLUMN_USER_FB_TOKENS = "user-firebase-tokens";
+
+    public static final String COLUMN_WISH_LIST = "wish-list";
 }

@@ -9,19 +9,17 @@ import com.google.firebase.database.ServerValue;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class Item implements Parcelable{
+    public static final int ON_SALE = 0;
+    public static final int SOLD = 1;
 
     private String id;
     private String userId;
     private String title;
     private String gameId;
     private int consoleId;
-    private int itemType;
     private String description;
     private double price;
     private int itemCategory;
@@ -53,7 +51,6 @@ public class Item implements Parcelable{
         title = in.readString();
         gameId = in.readString();
         consoleId = in.readInt();
-        itemType = in.readInt();
         description = in.readString();
         price = in.readDouble();
         itemCategory = in.readInt();
@@ -135,13 +132,6 @@ public class Item implements Parcelable{
         this.userId = userId;
     }
 
-    public int getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(int itemType) {
-        this.itemType = itemType;
-    }
 
     public boolean isDigital() {
         return isDigital;
@@ -171,7 +161,6 @@ public class Item implements Parcelable{
         dest.writeString(title);
         dest.writeString(gameId);
         dest.writeInt(consoleId);
-        dest.writeInt(itemType);
         dest.writeString(description);
         dest.writeDouble(price);
         dest.writeInt(itemCategory);
@@ -221,5 +210,15 @@ public class Item implements Parcelable{
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object v) {
+        boolean retVal = false;
+        if (v instanceof Item){
+            Item ptr = (Item) v;
+            retVal = ptr.id.equals(this.id);
+        }
+        return retVal;
     }
 }

@@ -19,19 +19,11 @@ import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.adapters.profile.PagerProfileAdapter;
 import com.marbit.hobbytrophies.fragments.profile.ProfileTrophiesFragment;
 import com.marbit.hobbytrophies.interfaces.ProfileFragmentView;
-import com.marbit.hobbytrophies.model.Game;
 import com.marbit.hobbytrophies.model.User;
 import com.marbit.hobbytrophies.overwrite.CircleTransform;
 import com.marbit.hobbytrophies.overwrite.SecondaryMediumTextView;
 import com.marbit.hobbytrophies.utilities.Utilities;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProfileFragment extends Fragment implements ProfileFragmentView, ProfileTrophiesFragment.OnListenerProfileTrophiesFragment {
 
@@ -105,7 +97,8 @@ public class ProfileFragment extends Fragment implements ProfileFragmentView, Pr
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Trofeos"));
-        tabLayout.addTab(tabLayout.newTab().setText("Ventas"));
+        tabLayout.addTab(tabLayout.newTab().setText("En venta"));
+        tabLayout.addTab(tabLayout.newTab().setText("Vendidos"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);

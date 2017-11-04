@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.adapters.profile.GameProfileAdapter;
 import com.marbit.hobbytrophies.model.Game;
@@ -31,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -102,7 +104,40 @@ public class ProfileTrophiesFragment extends Fragment {
         swipeContainer.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    requestQueue.add(stringRequest);
+                                    if(Preferences.isLoadRemoteProfile(getContext()) || !Preferences.getUserName(getContext()).equals(userName)){
+                                        requestQueue.add(stringRequest);
+                                    }else {
+                                        JSONObject jsonObject = null;
+                                        try {
+                                            jsonObject = new JSONObject(Preferences.getString(getContext(), Constants.PREFERENCE_USER_PROFILE_JSON));
+                                            User user = new User();
+                                            user.setPsnId(jsonObject.getString("psn_id"));
+                                            user.setCountry(jsonObject.getString("country"));
+                                            user.setAvatarUrl(jsonObject.getString("avatar"));
+                                            user.setColor(jsonObject.getString("color"));
+                                            if (jsonObject.getString("psnplus").equals("1"))
+                                                user.setPsnPlus(true);
+                                            user.setPoints(jsonObject.getInt("points"));
+                                            user.setLevel(jsonObject.getInt("level"));
+                                            user.setProgress(jsonObject.getInt("progress"));
+                                            user.setPlatinum(jsonObject.getInt("real_platinum"));
+                                            user.setGold(jsonObject.getInt("real_gold"));
+                                            user.setSilver(jsonObject.getInt("real_silver"));
+                                            user.setBronze(jsonObject.getInt("real_bronze"));
+                                            user.setTotal(jsonObject.getInt("real_total"));
+                                            user.setPercentTrophiesCompleted(jsonObject.getDouble("completion_percentage"));
+                                            JSONArray jsonArrayUserGames = jsonObject.getJSONArray("games");
+                                            user.setGamesList(getGameListFromJson(jsonArrayUserGames));
+                                            if(userName.equals(Preferences.getUserName(getContext()))){
+                                                Preferences.saveString(getContext(), Constants.STATS_USER_GAMES, jsonArrayUserGames.toString());
+                                                Preferences.saveString(getContext(), Constants.PREFERENCE_USER_AVATAR, user.getAvatarUrl());
+                                            }
+                                            refreshContentGames(user);
+                                            refreshContentUser(user);
+                                            swipeContainer.setRefreshing(false);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }                                    }
                                 }
                             }
         );
@@ -115,6 +150,12 @@ public class ProfileTrophiesFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        requestQueue.cancelAll(stringRequest);
+    }
+
     private StringRequest getStringRequest(String user){
         return new StringRequest(Request.Method.POST,
                 "http://www.hobbytrophies.com/foros/ps3/class/psnAPI.php?method=psnGetUserGames&sPSNID=" + user,
@@ -124,32 +165,37 @@ public class ProfileTrophiesFragment extends Fragment {
                         JSONObject jsonObject = null;
                         User user = new User();
                         try {
-                            jsonObject = new JSONObject(response);
-                            user.setPsnId(jsonObject.getString("psn_id"));
-                            user.setCountry(jsonObject.getString("country"));
-                            user.setAvatarUrl(jsonObject.getString("avatar"));
-                            user.setColor(jsonObject.getString("color"));
-                            if (jsonObject.getString("psnplus").equals("1"))
-                                user.setPsnPlus(true);
-                            user.setPoints(jsonObject.getInt("points"));
-                            user.setLevel(jsonObject.getInt("level"));
-                            user.setProgress(jsonObject.getInt("progress"));
-                            user.setPlatinum(jsonObject.getInt("real_platinum"));
-                            user.setGold(jsonObject.getInt("real_gold"));
-                            user.setSilver(jsonObject.getInt("real_silver"));
-                            user.setBronze(jsonObject.getInt("real_bronze"));
-                            user.setTotal(jsonObject.getInt("real_total"));
-                            user.setPercentTrophiesCompleted(jsonObject.getDouble("completion_percentage"));
-                            JSONArray jsonArrayUserGames = jsonObject.getJSONArray("games");
-                            user.setGamesList(getGameListFromJson(jsonArrayUserGames));
-                            if(userName.equals(Preferences.getUserName(getContext()))){
-                                Preferences.saveString(getContext(), Constants.STATS_USER_GAMES, jsonArrayUserGames.toString());
-                                Preferences.saveString(getContext(), Constants.PREFERENCE_USER_AVATAR, user.getAvatarUrl());
-                            }
-                            refreshContentGames(user);
-                            refreshContentUser(user);
-                            swipeContainer.setRefreshing(false);
+                            if(getContext() != null) {
+                                Calendar calendar = Calendar.getInstance();
+                                jsonObject = new JSONObject(response);
+                                user.setPsnId(jsonObject.getString("psn_id"));
+                                user.setCountry(jsonObject.getString("country"));
+                                user.setAvatarUrl(jsonObject.getString("avatar"));
+                                user.setColor(jsonObject.getString("color"));
+                                if (jsonObject.getString("psnplus").equals("1"))
+                                    user.setPsnPlus(true);
+                                user.setPoints(jsonObject.getInt("points"));
+                                user.setLevel(jsonObject.getInt("level"));
+                                user.setProgress(jsonObject.getInt("progress"));
+                                user.setPlatinum(jsonObject.getInt("real_platinum"));
+                                user.setGold(jsonObject.getInt("real_gold"));
+                                user.setSilver(jsonObject.getInt("real_silver"));
+                                user.setBronze(jsonObject.getInt("real_bronze"));
+                                user.setTotal(jsonObject.getInt("real_total"));
+                                user.setPercentTrophiesCompleted(jsonObject.getDouble("completion_percentage"));
+                                JSONArray jsonArrayUserGames = jsonObject.getJSONArray("games");
+                                user.setGamesList(getGameListFromJson(jsonArrayUserGames));
+                                if (userName.equals(Preferences.getUserName(getContext()))) {
+                                    Preferences.saveString(getContext(), Constants.STATS_USER_GAMES, jsonArrayUserGames.toString());
+                                    Preferences.saveString(getContext(), Constants.PREFERENCE_USER_AVATAR, user.getAvatarUrl());
+                                    Preferences.saveString(getContext(), Constants.PREFERENCE_USER_PROFILE_JSON, response);
+                                    Preferences.saveLong(getContext(), Constants.PREFERENCE_DAY_LAST_UPDATE_PROFILE, calendar.get(Calendar.DAY_OF_MONTH));
+                                }
 
+                                refreshContentGames(user);
+                                refreshContentUser(user);
+                                swipeContainer.setRefreshing(false);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             swipeContainer.setRefreshing(false);

@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -131,7 +132,11 @@ public class Preferences {
                 Game game = new Game();
                 game.setId(jsonObjectGame.getString("npcommid"));
                 game.setName(jsonObjectGame.getString("title"));
-                game.setImg(jsonObjectGame.getString("image"));
+                game.setImg("http://hobbytrophies.com/i/j/" + jsonObjectGame.getString("npcommid") + ".png");
+                String[] platformsArray = jsonObjectGame.getString("platform").split(",");
+                List<String> platforms = new ArrayList<>();
+                Collections.addAll(platforms, platformsArray);
+                game.setPlatform(platforms);
                 gameArrayList.add(game);
             }
         } catch (JSONException e) {
@@ -182,4 +187,14 @@ public class Preferences {
         }
         return false;
     }
+    public static boolean isLoadRemoteProfile(Context context){
+        Calendar calendar = Calendar.getInstance();
+        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        long lastDayUpdate = Preferences.getLong(context, Constants.PREFERENCE_DAY_LAST_UPDATE_PROFILE);
+        if(currentDayOfMonth != lastDayUpdate || lastDayUpdate == -1){
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -26,6 +26,11 @@ public class ItemDAO implements ItemDAOInterface{
     private ItemDAOEditListener mEditListener;
 
 
+    public ItemDAO(){
+        this.database = FirebaseDatabase.getInstance();
+        this.databaseReference = database.getReference();
+    }
+
     public ItemDAO(ItemDAOListener mListener){
         this.database = FirebaseDatabase.getInstance();
         this.databaseReference = database.getReference();
@@ -59,6 +64,22 @@ public class ItemDAO implements ItemDAOInterface{
     }
 
     @Override
+    public void loadItemById(String itemId, final SingleItemDAOListener singleItemDAOListener) {
+        databaseReference.child(DataBaseConstants.COLUMN_ITEMS).child(itemId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Item item = dataSnapshot.getValue(Item.class);
+                singleItemDAOListener.loadItemByIdSuccess(item);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                singleItemDAOListener.loadItemByIdError(databaseError.getMessage());
+            }
+        });
+    }
+
+    @Override
     public void loadUserItems(String UserId) {
 
     }
@@ -68,17 +89,15 @@ public class ItemDAO implements ItemDAOInterface{
         Query itemFilterQuery = null;
         switch (filter.getOrderBy()){
             case DataBaseConstants.ORDER_BY_MOST_RECENTLY:
-                itemFilterQuery = databaseReference.child(DataBaseConstants.COLUMN_ITEMS).orderByChild(DataBaseConstants.CHILD_DATE).limitToLast(10);
+                itemFilterQuery = databaseReference.child(DataBaseConstants.COLUMN_ITEMS).orderByChild(DataBaseConstants.CHILD_DATE).limitToLast(40);
                 break;
             case DataBaseConstants.ORDER_BY_CHEAPEST:
-                itemFilterQuery = databaseReference.child(DataBaseConstants.COLUMN_ITEMS).orderByChild(DataBaseConstants.CHILD_PRICE).limitToFirst(10);
+                itemFilterQuery = databaseReference.child(DataBaseConstants.COLUMN_ITEMS).orderByChild(DataBaseConstants.CHILD_PRICE).limitToFirst(40);
                 break;
             case DataBaseConstants.ORDER_BY_MOST_EXPENSIVE:
-                itemFilterQuery = databaseReference.child(DataBaseConstants.COLUMN_ITEMS).orderByChild(DataBaseConstants.CHILD_PRICE).limitToLast(10);
+                itemFilterQuery = databaseReference.child(DataBaseConstants.COLUMN_ITEMS).orderByChild(DataBaseConstants.CHILD_PRICE).limitToLast(40);
                 break;
         }
-
-
 
         itemFilterQuery.addValueEventListener(new ValueEventListener() {
             @Override
@@ -86,7 +105,11 @@ public class ItemDAO implements ItemDAOInterface{
                 List<Item> items = new ArrayList<>();
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     Item item = postSnapshot.getValue(Item.class);
-                    items.add(item);
+                    if(item.getStatus() == 0) {// NO ESTA VENDIDO
+                        if(isItemToAdd(item, filter)){
+                            items.add(item);
+                        }
+                    }
                 }
                 if(filter.getOrderBy() == DataBaseConstants.ORDER_BY_MOST_EXPENSIVE || filter.getOrderBy() == DataBaseConstants.ORDER_BY_MOST_RECENTLY){
                     Collections.reverse(items);
@@ -101,9 +124,32 @@ public class ItemDAO implements ItemDAOInterface{
         });
     }
 
+    private boolean isItemToAdd(Item item, Filter filter) {
+        if (filter.getItemCategory() == -1) {
+            if(isTextMatch(item.getTitle(), filter.getText())){
+                return true;
+            }else {
+                return false;
+            }
+        } else {
+            if (item.getItemCategory() + 1 == filter.getItemCategory()) {
+                if(isTextMatch(item.getTitle(), filter.getText())){
+                    return true;
+                }else {
+                    return false;
+                }
+            }else {
+                return false;
+            }
+        }
+    }
+
+    private boolean isTextMatch(String itemTitle, String filterText) {
+        return filterText.equals("") || itemTitle.toLowerCase().contains(filterText);
+    }
+
     public void delete(Item item) {
-        Query applesQuery = databaseReference
-                .child("items").child(item.getId());
+        Query applesQuery = databaseReference.child("items").child(item.getId());
         applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -134,6 +180,16 @@ public class ItemDAO implements ItemDAOInterface{
         mEditListener.unmarkAsSoldSuccess();
     }
 
+    @Override
+    public void addWishList(Item item) {
+
+    }
+
+    @Override
+    public void removeWishList() {
+
+    }
+
     public interface ItemDAOListener{
         void loadItemsByFilterSuccess(List<Item> itemList);
     }
@@ -142,5 +198,10 @@ public class ItemDAO implements ItemDAOInterface{
         void deleteItemSuccess();
         void markAsSoldSuccess();
         void unmarkAsSoldSuccess();
+    }
+
+    public interface SingleItemDAOListener{
+        void loadItemByIdSuccess(Item item);
+        void loadItemByIdError(String message);
     }
 }

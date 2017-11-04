@@ -35,6 +35,7 @@ import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
 import com.marbit.hobbytrophies.dialogs.DialogEditMeeting;
 import com.marbit.hobbytrophies.dialogs.DialogGeneric;
 import com.marbit.hobbytrophies.interfaces.MeetingDetailView;
+import com.marbit.hobbytrophies.model.Game;
 import com.marbit.hobbytrophies.model.Meeting;
 import com.marbit.hobbytrophies.model.MessageMeeting;
 import com.marbit.hobbytrophies.model.Trophy;
@@ -44,6 +45,7 @@ import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.marbit.hobbytrophies.utilities.Network;
 import com.marbit.hobbytrophies.utilities.Preferences;
+import com.marbit.hobbytrophies.utilities.Utilities;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -86,6 +88,7 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
     private ImageButton buttomSend;
     private TextView timer;
     private MeetingDetailPresenter presenter;
+    private String from;
 
 
     @Override
@@ -96,8 +99,8 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.from = getIntent().getStringExtra("FROM");
 
-        this.meeting = getIntent().getParcelableExtra("MEETING");
         this.imageGame = (ImageView) findViewById(R.id.image_meeting_detail);
         this.description = (TextView) findViewById(R.id.text_view_description_meeting_detail);
         this.timer = (TextView) findViewById(R.id.text_view_timer_meeting_detail);
@@ -111,26 +114,50 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
         this.recyclerViewTrophies = (RecyclerView) findViewById(R.id.recycler_view_meeting_trophies);
         this.mLayoutManagerTrophies = new LinearLayoutManager(getApplicationContext());
         this.recyclerViewTrophies.setLayoutManager(mLayoutManagerTrophies);
-        this.setEndList();
 
-        this.trophyAdapter = new TrophyMeetingDetailAdapter(getApplicationContext(), this, meeting);
+        this.trophyAdapter = new TrophyMeetingDetailAdapter(getApplicationContext(), this);
         this.recyclerViewTrophies.setAdapter(trophyAdapter);
 
         this.swipeContainer = (SwipeRefreshLayout) findViewById(R.id.fragment_meeting_swipe_refresh);
 
         this.requestQueue = Volley.newRequestQueue(getApplicationContext());
-        this.stringRequest = this.getStringRequest(meeting.getId());
         this.swipeContainer = (SwipeRefreshLayout) findViewById(R.id.meeting_detail_swipe_refresh);
         this.swipeContainer.setRefreshing(true);
 
+        this.presenter = new MeetingDetailPresenter(getApplicationContext(), this);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        switch (this.from){
+            case "LOCAL":
+                this.meeting = getIntent().getParcelableExtra("MEETING");
+                this.stringRequest = this.getStringRequest(meeting.getId());
+                swipeContainer.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            requestQueue.add(stringRequest);
+                                        }
+                                    }
+                );
+                //this.setInitialData();
+                //loadRemoteItemSuccess(this.meeting);
+                break;
+            case "DEEP-LINK":
+                int meetingId = Integer.valueOf(getIntent().getStringExtra("meetingId"));
+                this.meeting = new Meeting();
+                this.meeting.setId(meetingId);
+                this.stringRequest = this.getStringRequest(meetingId);
+                requestQueue.add(this.stringRequest);
+                break;
+        }
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 requestQueue.add(stringRequest);
             }
         });
-
-        this.presenter = new MeetingDetailPresenter(getApplicationContext(), this);
 
     }
 
@@ -153,19 +180,6 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
             @Override
             public void afterTextChanged(Editable s) { }
         });
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        swipeContainer.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    requestQueue.add(stringRequest);
-                                }
-                            }
-        );
-        this.setInitialData();
     }
 
     private void setInitialData() {
@@ -199,11 +213,7 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
             return true;
         }
         if (id == R.id.action_share_meeting) {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a Hobby Trophies: https://play.google.com/store/apps/details?id=com.marbit.hobbytrophies&hl=es" );
-            sendIntent.setType("text/plain");
-            startActivityForResult(Intent.createChooser(sendIntent, "Comparte la meeting"), 55);
+            presenter.shareMeeting(meeting);
             return true;
         }
         if (item.getItemId() == android.R.id.home) {
@@ -266,6 +276,9 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
                             jsonObject = new JSONObject(response);
                             JSONObject jsonObjectMeeting = jsonObject.getJSONObject("meeting");
                             meeting.setDescription(jsonObjectMeeting.getString("description"));
+                            Game game = new Game();
+                            game.setId(jsonObjectMeeting.getString("gameId"));
+                            meeting.setGame(game);
                             meeting.setType(jsonObjectMeeting.getInt("type"));
                             meeting.setLimitMembers(jsonObjectMeeting.getInt("places"));
                             meeting.setDate(DateUtils.getInstance().convertToLocalTimeDate(jsonObjectMeeting.getString("date")));
@@ -321,6 +334,7 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
 
     private void refreshContent(List listTrophies, List listPlayers, Meeting meeting) {
         this.trophyAdapter.clearAll();
+        this.trophyAdapter.setMeeting(meeting);
         this.trophyAdapter.setList(listTrophies);
         this.trophyAdapter.clearAllPlayers();
         this.trophyAdapter.setListPlayers(listPlayers);
@@ -329,6 +343,8 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
         this.presenter.start(meeting);
         this.setStatePlayer();
         this.setMainAction();
+        this.setInitialData();
+        this.setEndList();
     }
 
     private void sendRequestJoinMeeting() {
@@ -609,6 +625,15 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
         Intent intent = new Intent(this, EditMeetingActivity.class);
         intent.putExtra("MEETING", this.meeting);
         startActivity(intent);
+    }
+
+    @Override
+    public void shareMeetingLink(Meeting meeting, String longMeetingLink) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Unámosnos a esta quedada en Hobby Trophies: " + longMeetingLink);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Elija aplicación"));
     }
 
     @Override

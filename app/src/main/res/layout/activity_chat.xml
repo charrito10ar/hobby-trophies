@@ -4,11 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <RelativeLayout
+        android:id="@+id/layout_header"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:padding="8dp"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back_button"/>
+
+        <ImageView
+            android:id="@+id/ic_avatar_seller"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/avatar"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/button_back"/>
+
+        <TextView
+            android:id="@+id/text_view_title_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ic_avatar_seller"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/material_white"
+            android:text="Titulo del item"/>
+
+    </RelativeLayout>
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/layout_header"
         android:layout_above="@+id/send_message_layout"
+        android:background="@color/background_chat"
         tools:context="com.marbit.hobbytrophies.chat.ChatActivity">
 
         <android.support.v7.widget.RecyclerView

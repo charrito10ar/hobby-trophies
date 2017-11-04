@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -42,9 +43,12 @@ import com.marbit.hobbytrophies.utilities.Preferences;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import id.zelory.compressor.Compressor;
 
 public class FragmentItemDetail extends Fragment implements View.OnClickListener, FragmentItemDetailView, DialogSearchGame.DialogSearchGameListener, AdapterView.OnItemClickListener {
 
@@ -184,7 +188,6 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
                     this.item.setImageAmount(photosList.size());
                     Map<String, Object> value = new HashMap<>();
                     value.put("timestamp", ServerValue.TIMESTAMP);
-                    //this.item.setDate(value);
                     this.setItem();
                     this.showLoading();
                     this.presenter.publishNewItem(item);
@@ -221,7 +224,7 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
         }else {
             if(itemType == Constants.PREFERENCE_ITEM_CATEGORY_CONSOLE){
                 item.setTitle(titleItemConsole.getSelectedItem().toString());
-                item.setConsoleId(titleItemConsole.getSelectedItemPosition());
+                item.setConsoleId(titleItemConsole.getSelectedItemPosition() - 1);
             }else {
                 this.item.setTitle(titleItemOthers.getText().toString());
             }
@@ -315,18 +318,49 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
 
     @Override
     public void setPhoto(ArrayList<File> listFilesItemToSend) {
+        File compressedImageFileThumbnail;
         switch (PHOTO_POSITION){
             case 1:
                 Picasso.with(getContext()).load(listFilesItemToSend.get(0)).fit().centerCrop().error(R.drawable.avatar).into(firstPhoto);
-                this.photosList.add(0, listFilesItemToSend.get(0));
+                try {
+                    compressedImageFileThumbnail = new Compressor(getContext())
+                            .setMaxWidth(640)
+                            .setMaxHeight(480)
+                            .setQuality(75)
+                            .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                            .compressToFile(listFilesItemToSend.get(0));
+                    this.photosList.add(0, compressedImageFileThumbnail);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case 2:
                 Picasso.with(getContext()).load(listFilesItemToSend.get(0)).fit().centerCrop().into(secondPhoto);
-                this.photosList.add(1, listFilesItemToSend.get(0));
+                try {
+                    compressedImageFileThumbnail = new Compressor(getContext())
+                            .setMaxWidth(640)
+                            .setMaxHeight(480)
+                            .setQuality(75)
+                            .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                            .compressToFile(listFilesItemToSend.get(0));
+                    this.photosList.add(1, compressedImageFileThumbnail);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case 3:
                 Picasso.with(getContext()).load(listFilesItemToSend.get(0)).fit().centerCrop().into(thirdPhoto);
-                this.photosList.add(2, listFilesItemToSend.get(0));
+                try {
+                    compressedImageFileThumbnail = new Compressor(getContext())
+                            .setMaxWidth(640)
+                            .setMaxHeight(480)
+                            .setQuality(75)
+                            .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                            .compressToFile(listFilesItemToSend.get(0));
+                    this.photosList.add(2, compressedImageFileThumbnail);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
     }
 

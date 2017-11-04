@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.adapters.RankingAdapter;
-import com.marbit.hobbytrophies.dialogs.DialogFilterMeeting;
 import com.marbit.hobbytrophies.dialogs.DialogGeneric;
 import com.marbit.hobbytrophies.interfaces.RankingFragmentView;
 import com.marbit.hobbytrophies.model.User;
@@ -28,19 +27,23 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class RankingFragment extends Fragment implements RankingFragmentView{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private RankingFragmentPresenter presenter;
-    private RecyclerView recyclerView;
+    @BindView(R.id.recycler_view_ranking) RecyclerView recyclerView;
     private RankingAdapter rankingAdapter;
-    private ImageView imageLastWinner;
-    private ImageView imageSecond;
-    private ImageView imageThird;
-    private ProgressBar progressBar;
+    @BindView(R.id.image_last_winner) ImageView imageLastWinner;
+    @BindView(R.id.image_second) ImageView imageSecond;
+    @BindView(R.id.image_third) ImageView imageThird;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
     private String[] months;
-
+    private Unbinder unbinder;
 
     private String mParam1;
     private String mParam2;
@@ -73,16 +76,12 @@ public class RankingFragment extends Fragment implements RankingFragmentView{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking, container, false);
+        unbinder = ButterKnife.bind(this, view);
         this.presenter = new RankingFragmentPresenter(getContext(), this);
-        this.recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_ranking);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         this.rankingAdapter = new RankingAdapter(getContext());
         recyclerView.setAdapter(this.rankingAdapter);
-        this.progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        this.imageLastWinner = (ImageView) view.findViewById(R.id.image_last_winner);
-        this.imageSecond = (ImageView) view.findViewById(R.id.image_second);
-        this.imageThird = (ImageView) view.findViewById(R.id.image_third);
         if(Preferences.isLoadRemoteRanking(getContext())){
             this.presenter.loadRemoteRanking();
         }else {
@@ -95,6 +94,11 @@ public class RankingFragment extends Fragment implements RankingFragmentView{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
@@ -111,13 +115,6 @@ public class RankingFragment extends Fragment implements RankingFragmentView{
             helpDialog.show(getFragmentManager(), "dialogHelp");
         }
         return true;
-    }
-
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override

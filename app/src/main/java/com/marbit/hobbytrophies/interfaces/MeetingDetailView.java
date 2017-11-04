@@ -1,8 +1,6 @@
 package com.marbit.hobbytrophies.interfaces;
 
-/**
- * Created by marcelo on 20/03/17.
- */
+import com.marbit.hobbytrophies.model.Meeting;
 
 public interface MeetingDetailView{
 
@@ -11,4 +9,6 @@ public interface MeetingDetailView{
     void setTimerMeeting(long days, long hours, long minutes, long seconds);
 
     void openEditMeeting();
+
+    void shareMeetingLink(Meeting meeting, String longMeetingLink);
 }

@@ -2,7 +2,6 @@ package com.marbit.hobbytrophies.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,8 +15,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
-import com.marbit.hobbytrophies.NewItemActivity;
+import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
+import com.marbit.hobbytrophies.market.ItemDetailActivity;
+import com.marbit.hobbytrophies.market.NewItemActivity;
+import com.marbit.hobbytrophies.wishes.NewWishActivity;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.adapters.profile.ItemProfileSalesAdapter;
 import com.marbit.hobbytrophies.dialogs.DialogFilterItemsMarket;
@@ -25,12 +29,12 @@ import com.marbit.hobbytrophies.interfaces.market.MarketFragmentView;
 import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.presenters.market.MarketFragmentPresenter;
+import com.marbit.hobbytrophies.utilities.Constants;
+import com.marbit.hobbytrophies.utilities.Preferences;
 
 import java.util.List;
 
-public class MarketFragment extends Fragment implements MarketFragmentView, View.OnClickListener, DialogFilterItemsMarket.OnDialogFilterItemsInteractionListener {
-    private static final String ARG_PARAM1 = "param1";
-    private String mParam1;
+public class MarketFragment extends Fragment implements MarketFragmentView, View.OnClickListener, DialogFilterItemsMarket.OnDialogFilterItemsInteractionListener, ItemProfileSalesAdapter.ItemDetailAdapterListener {
 
     private OnMarketFragmentInteractionListener mListener;
     private MarketFragmentPresenter presenter;
@@ -39,25 +43,21 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     private SwipeRefreshLayout swipeContainer;
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private FloatingActionButton fabNewItem;
+    private FrameLayout buttonAddWishList;
+    private RelativeLayout layoutEmptyList;
+    private boolean isFilter;
 
     public MarketFragment() {
         this.presenter = new MarketFragmentPresenter(getContext(), this);
     }
 
-    public static MarketFragment newInstance(String param1, String param2) {
-        MarketFragment fragment = new MarketFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
+    public static MarketFragment newInstance() {
+        return new MarketFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
     }
 
     @Override
@@ -65,6 +65,7 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         this.recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_profile_sales);
+        this.layoutEmptyList = (RelativeLayout) view.findViewById(R.id.layout_empty_list);
         this.swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.fragment_profile_sales_swipe_refresh);
         this.swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -72,7 +73,7 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
                 presenter.loadItems();
             }
         });
-        this.itemProfileSalesAdapter = new ItemProfileSalesAdapter(getContext());
+        this.itemProfileSalesAdapter = new ItemProfileSalesAdapter(getContext(), this);
         gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         gaggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
@@ -80,6 +81,8 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
         recyclerView.setAdapter(itemProfileSalesAdapter);
         this.fabNewItem = (FloatingActionButton) view.findViewById(R.id.fab_new_item);
         this.fabNewItem.setOnClickListener(this);
+        this.buttonAddWishList = (FrameLayout) view.findViewById(R.id.button_add_wish_list);
+        this.buttonAddWishList.setOnClickListener(this);
         return view;
     }
 
@@ -89,17 +92,10 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
         setHasOptionsMenu(true);
     }
 
-
     @Override
     public void onResume(){
         super.onResume();
         presenter.loadItems();
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction();
-        }
     }
 
     @Override
@@ -130,19 +126,57 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
 
     @Override
     public void loadItemSuccess(List<Item> items) {
+        checkEmptyList(items);
         itemProfileSalesAdapter.clearAll();
         itemProfileSalesAdapter.setItemList(items);
         itemProfileSalesAdapter.notifyDataSetChanged();
+        checkButtonWishList();
+    }
+
+    private void checkEmptyList(List<Item> items) {
+        if(items.size()<= 0){
+            showEmptyLayout();
+        }else {
+            hideEmptyLayout();
+        }
+    }
+
+    @Override
+    public void checkButtonWishList() {
+        if(isFilter){
+            buttonAddWishList.setVisibility(View.VISIBLE);
+            isFilter = false;
+        }else{
+            buttonAddWishList.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyLayout() {
+        layoutEmptyList.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideEmptyLayout() {
+        layoutEmptyList.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.fab_new_item:
-                startActivity(new Intent(getContext(), NewItemActivity.class));
+        if(Preferences.getBoolean(getContext(), Constants.PREFERENCE_IS_USER_LOGIN)){
+            switch (v.getId()){
+                case R.id.fab_new_item:
+                    startActivity(new Intent(getContext(), NewItemActivity.class));
+                    break;
+                case R.id.button_add_wish_list:
+                    startActivity(new Intent(getContext(), NewWishActivity.class));
+                    break;
+            }
+        }else {
+            DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
+            dialogAlertLogin.show(getFragmentManager(), "dialogAlertLogin");
         }
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -154,7 +188,7 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_search:
-                DialogFilterItemsMarket dialogFilterItemsMarket = DialogFilterItemsMarket.newInstance(1);
+                DialogFilterItemsMarket dialogFilterItemsMarket = DialogFilterItemsMarket.newInstance();
                 dialogFilterItemsMarket.setTargetFragment(this, 10);
                 dialogFilterItemsMarket.show(getFragmentManager(), "DialogFilterItemsMarket");
         }
@@ -164,6 +198,15 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     @Override
     public void applyFilter(Filter filter) {
         presenter.applyFilter(filter);
+        this.isFilter = true;
+    }
+
+    @Override
+    public void openDetailActivity(Item item, String from) {
+        Intent itemIntent = new Intent(getContext(), ItemDetailActivity.class);
+        itemIntent.putExtra("ITEM", item);
+        itemIntent.putExtra("FROM", from);
+        startActivity(itemIntent);
     }
 
 

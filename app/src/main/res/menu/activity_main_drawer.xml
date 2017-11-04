@@ -3,10 +3,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_profile"
-            android:title="Perfil" />
-        <item
             android:id="@+id/nav_all_games"
             android:icon="@drawable/ic_all_games"
             android:title="Todos los juegos" />
@@ -27,6 +23,16 @@
             android:id="@+id/nav_messages"
             android:icon="@drawable/ic_chat"
             android:title="Mensajes" />
+
+        <item
+            android:id="@+id/nav_favourites"
+            android:icon="@drawable/ic_favourites"
+            android:title="Favoritos" />
+
+        <item
+            android:id="@+id/nav_wish_list"
+            android:icon="@drawable/ic_wish_list"
+            android:title="Lista de deseos" />
 
     </group>
 

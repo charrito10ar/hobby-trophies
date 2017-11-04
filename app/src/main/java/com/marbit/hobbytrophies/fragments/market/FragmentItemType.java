@@ -105,7 +105,6 @@ public class FragmentItemType extends Fragment implements View.OnClickListener, 
     @Override
     public void selectType(int itemType) {
        mListener.onSelectType(itemType);
-
     }
 
     public interface OnFragmentItemTypeInteractionListener {

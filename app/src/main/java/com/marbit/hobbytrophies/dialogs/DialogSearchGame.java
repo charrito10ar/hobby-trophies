@@ -132,11 +132,15 @@ public class DialogSearchGame extends DialogFragment implements View.OnClickList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (getTargetFragment() instanceof DialogSearchGameListener) {
-            mListener = (DialogSearchGameListener) getTargetFragment();
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement DialogSearchGameListener");
+        if(context instanceof DialogSearchGameListener){
+            mListener = (DialogSearchGameListener) context;
+        }else {
+            if (getTargetFragment() instanceof DialogSearchGameListener) {
+                mListener = (DialogSearchGameListener) getTargetFragment();
+            } else {
+                throw new RuntimeException(context.toString()
+                        + " must implement DialogSearchGameListener");
+            }
         }
     }
 

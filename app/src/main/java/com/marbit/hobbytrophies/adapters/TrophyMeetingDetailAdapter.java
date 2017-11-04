@@ -46,14 +46,13 @@ public class TrophyMeetingDetailAdapter extends RecyclerView.Adapter<RecyclerVie
     private boolean loading = true;
     private Meeting meeting;
 
-    public TrophyMeetingDetailAdapter(Context context, OnListenerEndListMessage onListenerEndListMessage, Meeting meeting) {
+    public TrophyMeetingDetailAdapter(Context context, OnListenerEndListMessage onListenerEndListMessage) {
         this.trophyList = new ArrayList<>();
         this.playerList = new ArrayList<>();
         this.messageMeetingList = new ArrayList<>();
         this.context = context;
         this.listenerEndListMessage = onListenerEndListMessage;
         this.messageAmount = 0;
-        this.meeting = meeting;
     }
 
     @Override
@@ -145,6 +144,10 @@ public class TrophyMeetingDetailAdapter extends RecyclerView.Adapter<RecyclerVie
     public void addMessage(MessageMeeting messageMeeting) {
         this.messageAmount++;
         this.messageMeetingList.add(0, messageMeeting);
+    }
+
+    public void setMeeting(Meeting meeting) {
+        this.meeting = meeting;
     }
 
     private class TrophyViewHolder extends RecyclerView.ViewHolder {

@@ -1,11 +1,7 @@
 package com.marbit.hobbytrophies.adapters.profile;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.marbit.hobbytrophies.R;
-import com.marbit.hobbytrophies.market.ItemDetailActivity;
 import com.marbit.hobbytrophies.model.market.Item;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +21,12 @@ import java.util.List;
 public class ItemProfileSalesAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Item> itemList;
     private Context context;
+    private ItemDetailAdapterListener mListener;
 
-    public ItemProfileSalesAdapter(Context context) {
+    public ItemProfileSalesAdapter(Context context, ItemDetailAdapterListener mListener) {
         this.context = context;
         this.itemList = new ArrayList<>();
+        this.mListener = mListener;
     }
 
     @Override
@@ -72,11 +66,13 @@ public class ItemProfileSalesAdapter  extends RecyclerView.Adapter<RecyclerView.
         private TextView priceItem;
         private ImageView mainImage;
         private String image;
+        private TextView soldLabel;
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         StorageReference storageRef = firebaseStorage.getReference();
 
         private ItemViewHolder(View itemView) {
             super(itemView);
+            this.soldLabel = (TextView) itemView.findViewById(R.id.sold_label);
             this.titleItem = (TextView) itemView.findViewById(R.id.text_view_item_title);
             this.descriptionItem = (TextView) itemView.findViewById(R.id.text_view_item_description);
             this.priceItem = (TextView) itemView.findViewById(R.id.text_view_item_price);
@@ -91,11 +87,14 @@ public class ItemProfileSalesAdapter  extends RecyclerView.Adapter<RecyclerView.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent itemIntent = new Intent(context, ItemDetailActivity.class);
-                    itemIntent.putExtra("ITEM", item);
-                    context.startActivity(itemIntent);
+                    mListener.openDetailActivity(item, "LOCAL");
                 }
             });
+            if(item.getStatus() == 1){
+                soldLabel.setVisibility(View.VISIBLE);
+            }else {
+                soldLabel.setVisibility(View.GONE);
+            }
         }
 
         private void setImage(String id) {
@@ -105,6 +104,9 @@ public class ItemProfileSalesAdapter  extends RecyclerView.Adapter<RecyclerView.
                     .centerCrop()
                     .into(mainImage);
         }
+    }
 
+    public interface ItemDetailAdapterListener{
+        void openDetailActivity(Item item, String from);
     }
 }

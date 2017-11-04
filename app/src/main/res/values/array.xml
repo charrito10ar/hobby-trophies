@@ -55,11 +55,12 @@
     <string-array name="consoles">
         <item>@string/select_console</item>
         <item>@string/console_ps</item>
-        <item>@string/console_ps2</item>
         <item>@string/console_psp</item>
+        <item>@string/console_ps2</item>
         <item>@string/console_ps3</item>
-        <item>@string/console_vita</item>
         <item>@string/console_ps4</item>
+        <item>@string/console_vita</item>
+        <item>@string/console_vr</item>
     </string-array>
 
     <string-array name="order_by">
@@ -67,4 +68,5 @@
         <item>@string/order_by_price_up</item>
         <item>@string/order_by_price_down</item>
     </string-array>
+    <string name="console_vr">VR</string>
 </resources>

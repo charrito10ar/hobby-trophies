@@ -9,6 +9,8 @@ import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
 import com.marbit.hobbytrophies.model.User;
 
+import java.util.List;
+
 
 public class ChatActivityPresenter implements ChatActivityPresenterInterface {
     private Context context;
@@ -21,13 +23,13 @@ public class ChatActivityPresenter implements ChatActivityPresenterInterface {
         this.interactor = new ChatActivityInteractor(applicationContext, this);
     }
 
-    public void loadChat(String itemId, String buyer, String seller) {
-        interactor.loadChat(itemId, buyer, seller);
+    public void loadChat(String itemId, String titleItem, String buyer, String seller) {
+        interactor.loadChat(itemId, titleItem, buyer, seller);
     }
 
     @Override
-    public void loadChatSuccessful(Chat chat) {
-        chatActivityView.loadChatSuccessful(chat);
+    public void loadChatSuccessful(Chat chat, List<Object> genericListMessages) {
+        chatActivityView.loadChatSuccessful(chat, genericListMessages);
     }
 
 
@@ -46,8 +48,8 @@ public class ChatActivityPresenter implements ChatActivityPresenterInterface {
         chatActivityView.loadUserBasicProfileSuccessful(user);
     }
 
-    public void sendMessage(String itemId, String buyer, String seller, String author, String message) {
-        this.interactor.sendMessage(itemId, buyer, seller, author, message);
+    public void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message) {
+        this.interactor.sendMessage(itemId, titleItem, buyer, seller, author, message);
     }
 
     public void removeListenerAddMessageChat() {
@@ -58,7 +60,15 @@ public class ChatActivityPresenter implements ChatActivityPresenterInterface {
         this.interactor.addListenerAddMessageChat(chatId);
     }
 
-    public void loadAvatarSeller(String seller) {
-        interactor.loadAvatarSeller(seller);
+    public void loadPartnerUserChat(String partnerUserChat) {
+        interactor.loadPartnerUserChat(partnerUserChat);
+    }
+
+    public void loadItem(String item) {
+
+    }
+
+    public void loadChat(String chatId) {
+        interactor.loadChat(chatId);
     }
 }

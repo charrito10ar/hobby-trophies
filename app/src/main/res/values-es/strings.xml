@@ -104,4 +104,6 @@
     <string name="console_ps3">PS3</string>
     <string name="console_vita">VITA</string>
     <string name="console_ps4">PS4</string>
+    <string name="action_add_favourite">Favorito</string>
+    <string name="share_txt">Compartir</string>
 </resources>

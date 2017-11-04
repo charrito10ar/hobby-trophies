@@ -125,7 +125,7 @@ public class MeetingAdapter extends RecyclerView.Adapter{
         public void bindMeeting(final Meeting meeting) throws ParseException {
             this.description.setText(meeting.getDescription());
             this.time.setText(meeting.getTime());
-            this.textViewAmountPlayers.setText(String.valueOf(meeting.getLimitMembers()));
+            this.textViewAmountPlayers.setText(meeting.getReserved() + "/" + meeting.getLimitMembers());
             String[] gamesTypeArray = context.getResources().getStringArray(R.array.games_type);
             this.textViewType.setText(gamesTypeArray[meeting.getType()]);
 
@@ -137,6 +137,7 @@ public class MeetingAdapter extends RecyclerView.Adapter{
                 public void onClick(View v) {
                     Intent intentMeeting = new Intent(context, MeetingDetailActivity.class);
                     intentMeeting.putExtra("MEETING", meeting);
+                    intentMeeting.putExtra("FROM", "LOCAL");
                     context.startActivity(intentMeeting);
                 }
             });
