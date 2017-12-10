@@ -8,9 +8,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.marbit.hobbytrophies.chat.dao.ChatDAO;
+import com.marbit.hobbytrophies.market.model.UserMarket;
 import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -169,26 +173,54 @@ public class ItemDAO implements ItemDAOInterface{
         Map<String, Object> map = new HashMap<>();
         map.put("status", item.getStatus());
         databaseReference.child("items").child(item.getId()).updateChildren(map);
-        mEditListener.markAsSoldSuccess();
     }
 
     @Override
-    public void unmarkAsSold(Item item) {
+    public void markSold(@NotNull Item item, @NotNull UserMarket userMarket) {
         Map<String, Object> map = new HashMap<>();
         map.put("status", item.getStatus());
         databaseReference.child("items").child(item.getId()).updateChildren(map);
-        mEditListener.unmarkAsSoldSuccess();
+        // Update Message Chat
+        ChatDAO chatDAO = new ChatDAO();
+        chatDAO.insertItemSoldMessage(userMarket.getChatId(), userMarket.getId());
+        databaseReference.child(DataBaseConstants.COLUMN_CHAT_MESSAGES).child(item.getId()).updateChildren(map);
+    }
+
+
+    @Override
+    public void updateItem(Item item, EditItemDAOListener mListener) {
+        databaseReference.child(DataBaseConstants.COLUMN_ITEMS).child(item.getId()).child(DataBaseConstants.CHILD_DESCRIPTION).setValue(item.getDescription());
+        databaseReference.child(DataBaseConstants.COLUMN_ITEMS).child(item.getId()).child(DataBaseConstants.CHILD_PRICE).setValue(item.getPrice());
+        databaseReference.child(DataBaseConstants.COLUMN_ITEMS).child(item.getId()).child(DataBaseConstants.CHILD_BARTER).setValue(item.isBarter());
+        databaseReference.child(DataBaseConstants.COLUMN_ITEMS).child(item.getId()).child(DataBaseConstants.CHILD_DIGITAL).setValue(item.isDigital());
+        mListener.editItemSuccess();
     }
 
     @Override
-    public void addWishList(Item item) {
+    public void loadPossiblesBuyers(String itemId, final ItemSoldDAOListener mListener) {
+        databaseReference.child(DataBaseConstants.COLUMN_ITEM_CHATS).child(itemId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot != null){
+                    List<UserMarket> userMarkets = new ArrayList<>();
+                    for (DataSnapshot possibleBuyer :dataSnapshot.getChildren()) {
+                        UserMarket userMarket = new UserMarket();
+                        userMarket.setId(possibleBuyer.getKey());
+                        userMarket.setName(possibleBuyer.getKey());
+                        userMarket.setChatId(possibleBuyer.getValue().toString());
+                        userMarkets.add(userMarket);
+                    }
+                    mListener.loadPossiblesBuyersSuccessful(userMarkets);
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
-    @Override
-    public void removeWishList() {
-
-    }
 
     public interface ItemDAOListener{
         void loadItemsByFilterSuccess(List<Item> itemList);
@@ -196,12 +228,19 @@ public class ItemDAO implements ItemDAOInterface{
 
     public interface ItemDAOEditListener{
         void deleteItemSuccess();
-        void markAsSoldSuccess();
-        void unmarkAsSoldSuccess();
     }
 
     public interface SingleItemDAOListener{
         void loadItemByIdSuccess(Item item);
         void loadItemByIdError(String message);
+    }
+
+    public interface EditItemDAOListener{
+        void editItemSuccess();
+        void editItemError(String message);
+    }
+
+    public interface ItemSoldDAOListener{
+        void loadPossiblesBuyersSuccessful(List<UserMarket> userMarketList);
     }
 }

@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.marbit.hobbytrophies.R;
-import com.marbit.hobbytrophies.SignUpActivity;
+import com.marbit.hobbytrophies.login.SignUpActivity;
 
 public class DialogAlertLogin extends DialogFragment {
 
@@ -29,9 +29,9 @@ public class DialogAlertLogin extends DialogFragment {
         builder.setView(view)
                 .setTitle("Debes loguearte")
 
-                .setMessage("Para poder realizar esta acción debes loguearte.")
+                .setMessage("Para poder realizar esta acción debes loguearte con tu usuario de PSN.")
 
-                .setPositiveButton("Realizar Login", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Realizar Login PSN", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startActivity(new Intent(getContext(), SignUpActivity.class));
                     }

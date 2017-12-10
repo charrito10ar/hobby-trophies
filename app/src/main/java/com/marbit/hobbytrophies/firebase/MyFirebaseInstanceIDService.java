@@ -24,6 +24,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private void sendRegistrationToServer(String token) {
         FirebaseNotificationDAO firebaseNotificationDAO = new FirebaseNotificationDAO();
-        firebaseNotificationDAO.registerToken(Preferences.getUserName(getApplicationContext()), token);
+        firebaseNotificationDAO.registerToken(Preferences.getUserId(getApplicationContext()), token);
     }
 }

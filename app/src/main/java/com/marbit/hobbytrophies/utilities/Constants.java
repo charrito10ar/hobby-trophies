@@ -53,4 +53,5 @@ public class Constants {
     public final static int PREFERENCE_CONSOLE_PS4 = 4;
     public final static int PREFERENCE_CONSOLE_VITA = 5;
     public final static int PREFERENCE_CONSOLE_VR = 6;
+    public static final String PREFERENCE_USER_ID = "USER-ID";
 }

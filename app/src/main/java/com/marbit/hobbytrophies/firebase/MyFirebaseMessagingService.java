@@ -47,7 +47,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 case MEETING_MESSAGE_NOTIFICATION:
                     String message = data.get("message");
                     String author = data.get("author");
-                    if (!author.equals(Preferences.getUserName(getApplicationContext()))) {
+                    if (!author.equals(Preferences.getUserId(getApplicationContext()))) {
                         sendNotification(message, author, meetingDescription);
                     }
                     break;

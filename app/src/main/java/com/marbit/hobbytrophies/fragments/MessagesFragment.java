@@ -63,7 +63,7 @@ public class MessagesFragment extends Fragment implements MessagesFragmentView{
     public void onResume(){
         super.onResume();
         this.count = 0;
-        this.presenter.loadChatsHeaders(Preferences.getUserName(getContext()));
+        this.presenter.loadChatsHeaders(Preferences.getUserId(getContext()));
     }
 
     @Override
@@ -96,7 +96,7 @@ public class MessagesFragment extends Fragment implements MessagesFragmentView{
         messageChatAdapter.clearAll();
         messageChatAdapter.setList(chatList);
         messageChatAdapter.notifyDataSetChanged();
-        this.presenter.addListenerAddHeaderChat(Preferences.getUserName(getContext()));
+        this.presenter.addListenerAddHeaderChat(Preferences.getUserId(getContext()));
     }
 
     @Override

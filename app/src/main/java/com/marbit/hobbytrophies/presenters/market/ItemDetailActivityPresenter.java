@@ -19,11 +19,7 @@ public class ItemDetailActivityPresenter implements ItemDetailActivityPresenterI
     }
 
     public void markAsSold(Item item) {
-        interactor.markAsSold(item);
-    }
-
-    public void unmarkAsSold(Item item) {
-        interactor.unmarkAsSold(item);
+        itemDetailActivityView.openItemSoldActivity();
     }
 
     public void delete(Item item) {
@@ -38,11 +34,6 @@ public class ItemDetailActivityPresenter implements ItemDetailActivityPresenterI
     @Override
     public void markAsSoldSuccess() {
         itemDetailActivityView.markAsSold();
-    }
-
-    @Override
-    public void unmarkAsSoldSuccess() {
-        itemDetailActivityView.unmarkAsSold();
     }
 
     @Override

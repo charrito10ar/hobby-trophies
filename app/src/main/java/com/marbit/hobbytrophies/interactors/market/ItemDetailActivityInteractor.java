@@ -1,10 +1,7 @@
 package com.marbit.hobbytrophies.interactors.market;
 
 import android.content.Context;
-import android.net.Uri;
 
-import com.google.firebase.dynamiclinks.DynamicLink;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.marbit.hobbytrophies.dao.ItemDAO;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.utilities.Utilities;
@@ -21,18 +18,6 @@ public class ItemDetailActivityInteractor implements ItemDAO.ItemDAOEditListener
         this.presenterInterface = presenterInterface;
     }
 
-    public void markAsSold(Item item) {
-        item.setStatus(1);
-        ItemDAO itemDAO = new ItemDAO(this);
-        itemDAO.markSold(item);
-    }
-
-    public void unmarkAsSold(Item item) {
-        item.setStatus(0);
-        ItemDAO itemDAO = new ItemDAO(this);
-        itemDAO.unmarkAsSold(item);
-    }
-
     public void delete(Item item) {
         ItemDAO itemDAO = new ItemDAO(this);
         itemDAO.delete(item);
@@ -41,16 +26,6 @@ public class ItemDetailActivityInteractor implements ItemDAO.ItemDAOEditListener
     @Override
     public void deleteItemSuccess() {
         this.presenterInterface.deleteItemSuccess();
-    }
-
-    @Override
-    public void markAsSoldSuccess() {
-        this.presenterInterface.markAsSoldSuccess();
-    }
-
-    @Override
-    public void unmarkAsSoldSuccess() {
-        this.presenterInterface.unmarkAsSoldSuccess();
     }
 
     public void addFavourite(Item item) {
@@ -79,12 +54,10 @@ public class ItemDetailActivityInteractor implements ItemDAO.ItemDAOEditListener
             public void loadItemByIdSuccess(Item item) {
                 presenterInterface.loadRemoteItemSuccess(item);
             }
-
             @Override
             public void loadItemByIdError(String message) {
                 presenterInterface.loadRemoteItemError(message);
             }
         });
-
     }
 }

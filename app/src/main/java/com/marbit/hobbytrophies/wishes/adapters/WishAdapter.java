@@ -87,6 +87,7 @@ public class WishAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bindWish(final Wish wish) {
             this.textViewNameWish.setText(wish.getName());
+
             textViewPrice.setText("Precio: " + wish.getMinPrice() + " - " + wish.getMaxPrice() + " euros");
             if(wish.isBarter()){
                 textViewBarter.setVisibility(View.VISIBLE);

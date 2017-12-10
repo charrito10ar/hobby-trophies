@@ -15,6 +15,6 @@ public class NewItemActivityInteractor {
 
     public void addWish(Wish wish) {
         WishDAO wishDAO = new WishDAO();
-        wishDAO.addWish(Preferences.getUserName(context), wish);
+        wishDAO.addWish(Preferences.getUserId(context), wish);
     }
 }

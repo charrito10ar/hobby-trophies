@@ -4,7 +4,6 @@ import com.marbit.hobbytrophies.model.market.Item;
 
 public interface ItemDetailActivityView {
     void markAsSold();
-    void unmarkAsSold();
     void markFavourite();
     void unmarkFavourite();
     void setStatus();
@@ -17,4 +16,6 @@ public interface ItemDetailActivityView {
     void loadRemoteItemError(String message);
 
     void loadRemoteItemSuccess(Item item);
+
+    void openItemSoldActivity();
 }

@@ -44,7 +44,7 @@ public class NewWishActivity extends AppCompatActivity implements NewWishActivit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_wish);
         this.wish = new Wish();
-        this.wish.setUserId(Preferences.getUserName(getApplicationContext()));
+        this.wish.setUserId(Preferences.getUserId(getApplicationContext()));
         this.presenter = new NewWishActivityPresenter(getApplicationContext(), this);
         this.consolesArray  = getResources().getStringArray(R.array.consoles);
         this.checkBoxDigital = (CheckBox) findViewById(R.id.checkbox_digital);
@@ -105,7 +105,7 @@ public class NewWishActivity extends AppCompatActivity implements NewWishActivit
                     return false;
                 }
             default:
-                if(wish.getConsoleId() != 0){
+                if(wish.getConsoleId() != -1){
                     return true;
                 }
                 return false;
@@ -124,7 +124,7 @@ public class NewWishActivity extends AppCompatActivity implements NewWishActivit
     @Override
     public void selectGame(Game game) {
         wish.setGameId(game.getId());
-        wish.setName(game.getName());
+        wish.setName(game.getName() + " " + game.getPlatform());
         this.setGameSelected(game.getName());
     }
 

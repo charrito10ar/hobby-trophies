@@ -33,7 +33,7 @@ public class ProfileSalesFragmentInteractor {
     }
 
     public void loadItems() {
-        Query recentPostsQuery = databaseReference.orderByChild(DataBaseConstants.CHILD_USER_NAME).equalTo(Preferences.getUserName(context));
+        Query recentPostsQuery = databaseReference.orderByChild(DataBaseConstants.CHILD_USER_NAME).equalTo(Preferences.getUserId(context));
         recentPostsQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {

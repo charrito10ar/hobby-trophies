@@ -5,15 +5,15 @@ public interface ChatDAOInterface {
 
     void addListenerAddHeaderChat(String userName);
 
-    void loadChat(String itemId, String titleItem, String buyer, String seller);
+    void loadChat(String itemId, String titleItem, String buyer, String seller, String buyerName, String sellerName);
 
-    void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message);
+    void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message, String buyerName, String sellerName);
 
     void removeListenerAddMessageChat();
 
     void removeListenerUpdateHeadersChat();
 
-    String createChat(String itemId, String titleItem, String buyer, String seller);
+    String createChat(String itemId, String titleItem, String buyer, String seller, String buyerName, String sellerName);
 
     void loadChat(String chatId);
 }

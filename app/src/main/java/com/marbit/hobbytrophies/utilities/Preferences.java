@@ -15,11 +15,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by marcelo on 14/12/16.
- */
-
-
 public class Preferences {
 
     public static void saveString(Context context, String preferenceName, String preferenceValue) {
@@ -79,9 +74,23 @@ public class Preferences {
 
     /** USER **/
 
+    public static void saveUserName(Context context, String userName) {
+        saveString(context, Constants.PREFERENCE_USER_NAME, userName);
+    }
+
     public static String getUserName(Context context) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
         String userName = SP.getString(Constants.PREFERENCE_USER_NAME, "Invitado");
+        return userName;
+    }
+
+    public static void saveUserId(Context context, String userId) {
+        saveString(context, Constants.PREFERENCE_USER_ID, userId);
+    }
+
+    public static String getUserId(Context context) {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        String userName = SP.getString(Constants.PREFERENCE_USER_ID, "null");
         return userName;
     }
 

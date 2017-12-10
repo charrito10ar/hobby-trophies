@@ -7,8 +7,6 @@ public interface ItemDetailActivityPresenterInterface {
 
     void markAsSoldSuccess();
 
-    void unmarkAsSoldSuccess();
-
     void markFavourite();
 
     void deleteFavourite();

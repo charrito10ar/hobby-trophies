@@ -23,8 +23,8 @@ public class ChatActivityPresenter implements ChatActivityPresenterInterface {
         this.interactor = new ChatActivityInteractor(applicationContext, this);
     }
 
-    public void loadChat(String itemId, String titleItem, String buyer, String seller) {
-        interactor.loadChat(itemId, titleItem, buyer, seller);
+    public void loadChat(String itemId, String titleItem, String buyer, String seller, String buyerName, String sellerName) {
+        interactor.loadChat(itemId, titleItem, buyer, seller, buyerName, sellerName);
     }
 
     @Override
@@ -48,8 +48,8 @@ public class ChatActivityPresenter implements ChatActivityPresenterInterface {
         chatActivityView.loadUserBasicProfileSuccessful(user);
     }
 
-    public void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message) {
-        this.interactor.sendMessage(itemId, titleItem, buyer, seller, author, message);
+    public void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message, String buyerName, String sellerName) {
+        this.interactor.sendMessage(itemId, titleItem, buyer, seller, author, message, buyerName, sellerName);
     }
 
     public void removeListenerAddMessageChat() {

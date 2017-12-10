@@ -103,7 +103,7 @@ public class EditMeetingActivity extends AppCompatActivity implements TimePicker
         layoutStepTwo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestQueue.add(getStringRequestTrophies(Preferences.getUserName(getApplicationContext()), meeting.getGame().getId()));
+                requestQueue.add(getStringRequestTrophies(Preferences.getUserId(getApplicationContext()), meeting.getGame().getId()));
             }
         });
     }
@@ -218,7 +218,7 @@ public class EditMeetingActivity extends AppCompatActivity implements TimePicker
         if (id == R.id.action_send_meeting) {
             if(this.step == 1){
                 this.layoutStepTwo.setRefreshing(true);
-                this.requestQueue.add(getStringRequestTrophies(Preferences.getUserName(getApplicationContext()), meeting.getGame().getId()));
+                this.requestQueue.add(getStringRequestTrophies(Preferences.getUserId(getApplicationContext()), meeting.getGame().getId()));
                 this.step = 2;
                 YoYo.with(Techniques.FadeOutLeft)
                         .duration(600)

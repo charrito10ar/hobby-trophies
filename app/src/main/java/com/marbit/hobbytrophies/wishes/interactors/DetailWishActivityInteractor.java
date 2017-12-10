@@ -32,7 +32,7 @@ public class DetailWishActivityInteractor {
 
     public void deleteWish(Wish wish) {
         WishDAO wishDAO = new WishDAO();
-        wishDAO.deleteWish(Preferences.getUserName(context), wish, new WishDAO.WishDAODeleteListener() {
+        wishDAO.deleteWish(Preferences.getUserId(context), wish, new WishDAO.WishDAODeleteListener() {
             @Override
             public void deleteWishSuccessful() {
                 presenterInterface.deleteWishSuccessful();

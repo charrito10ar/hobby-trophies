@@ -17,6 +17,7 @@ public class Item implements Parcelable{
 
     private String id;
     private String userId;
+    private String userName;
     private String title;
     private String gameId;
     private int consoleId;
@@ -30,8 +31,9 @@ public class Item implements Parcelable{
     private Object date;
     private int status;
 
-    public Item(String userId, String description, int itemCategory, String price, boolean isDigital, boolean isBarter) {
+    public Item(String userId, String userName, String description, int itemCategory, String price, boolean isDigital, boolean isBarter) {
         this.userId = userId;
+        this.userName = userName;
         this.description = description;
         this.itemCategory = itemCategory;
         this.price = Double.valueOf(price);
@@ -47,6 +49,7 @@ public class Item implements Parcelable{
 
     protected Item(Parcel in) {
         id = in.readString();
+        userName = in.readString();
         userId = in.readString();
         title = in.readString();
         gameId = in.readString();
@@ -157,6 +160,7 @@ public class Item implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
+        dest.writeString(userName);
         dest.writeString(userId);
         dest.writeString(title);
         dest.writeString(gameId);
@@ -220,5 +224,15 @@ public class Item implements Parcelable{
             retVal = ptr.id.equals(this.id);
         }
         return retVal;
+    }
+
+    public String getUserName() {
+        if(userName != null)
+            return userName;
+        return userId;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

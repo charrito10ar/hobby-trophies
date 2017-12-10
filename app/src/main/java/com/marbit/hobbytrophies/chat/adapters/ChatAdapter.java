@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.marbit.hobbytrophies.R;
@@ -25,6 +26,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final static int MESSAGE_LEFT = 0;
     private final static int MESSAGE_RIGHT = 1;
     private final static int HEADER = 2;
+    private final static int MESSAGE_ITEM_SOLD = 4;
     private final static int HEADER_DATE = 3;
     private SimpleDateFormat sdfHour;
     private SimpleDateFormat sdfDate;
@@ -50,6 +52,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 View itemViewChatRight = inflater.inflate(R.layout.list_item_chat_right, parent, false);
                 viewHolder = new RightMessageViewHolder(itemViewChatRight);
                 break;
+            case MESSAGE_ITEM_SOLD:
+                View itemViewChatItemSold = inflater.inflate(R.layout.list_item_sold, parent, false);
+                viewHolder = new ItemSoldViewHolder(itemViewChatItemSold);
+                break;
             default:
                 View itemViewHeaderDate = inflater.inflate(R.layout.list_item_header_date, parent, false);
                 viewHolder = new HeaderDateViewHolder(itemViewHeaderDate);
@@ -74,6 +80,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 HeaderDateViewHolder headerDateViewHolder = (HeaderDateViewHolder) holder;
                 headerDateViewHolder.bindMessage((Long) object);
                 break;
+            case MESSAGE_ITEM_SOLD:
+//                RightMessageViewHolder rightMessageViewHolder = (RightMessageViewHolder) holder;
+//                rightMessageViewHolder.bindMessage((MessageChat) object);
+                break;
+
         }
     }
 
@@ -82,10 +93,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Object object = this.genericList.get(position);
         if (MessageChat.class.isInstance(object)) {
             MessageChat chat = (MessageChat) object;
-            if(Preferences.getUserName(context).equals(chat.getAuthor())){
-                return MESSAGE_RIGHT;
+            if(chat.getType().equals(MessageChat.NORMAL_MESSAGE)){
+                if(Preferences.getUserId(context).equals(chat.getAuthor())){
+                    return MESSAGE_RIGHT;
+                }else {
+                    return MESSAGE_LEFT;
+                }
             }else {
-                return MESSAGE_LEFT;
+                return MESSAGE_ITEM_SOLD;
             }
         }else {
             return HEADER;
@@ -160,6 +175,26 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Date date = new Date(dateLong);
             String formattedTime = sdfDate.format(date);
             this.textViewDate.setText(formattedTime);
+        }
+    }
+
+
+    private class ItemSoldViewHolder extends RecyclerView.ViewHolder {
+
+        private Button buttonRateSeller;
+
+        public ItemSoldViewHolder(View itemView) {
+            super(itemView);
+            this.buttonRateSeller = (Button) itemView.findViewById(R.id.button_rate_seller);
+        }
+
+        public void bindItemSold(){
+            this.buttonRateSeller.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 }

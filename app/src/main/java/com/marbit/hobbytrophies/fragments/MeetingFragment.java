@@ -127,7 +127,8 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
         this.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Preferences.getBoolean(getContext(), Constants.PREFERENCE_IS_USER_LOGIN)){
+                if(Preferences.getBoolean(getContext(), Constants.PREFERENCE_IS_USER_LOGIN) &&
+                        Preferences.getBoolean(getContext(), Constants.PREFERENCE_IS_PSN_CODE_OK)){
                     mSheetLayout.expandFab();
                 }else {
                     DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
@@ -173,7 +174,7 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
     private StringRequest getStringRequest(final int typeRequest){
         String url = "http://www.hobbytrophies.com/foros/ps3/get-meetings.php";
         if(typeRequest == DialogFilterMeeting.MY_MEETINGS){
-            url = url + "?psnId=" + Preferences.getUserName(getContext());
+            url = url + "?psnId=" + Preferences.getUserId(getContext());
         }
         return new StringRequest(Request.Method.GET,
                 url,

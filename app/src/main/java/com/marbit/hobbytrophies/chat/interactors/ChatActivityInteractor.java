@@ -27,16 +27,16 @@ public class ChatActivityInteractor implements ChatDAO.ChatDAOListener {
         this.context = applicationContext;
     }
 
-    public void loadChat(String itemId, String titleItem, String buyer, String seller) {
-        chatDAO.loadChat(itemId, titleItem, buyer, seller);
+    public void loadChat(String itemId, String titleItem, String buyer, String seller, String buyerName, String sellerName) {
+        chatDAO.loadChat(itemId, titleItem, buyer, seller, buyerName, sellerName);
     }
 
     public void loadChat(String chatId) {
         chatDAO.loadChat(chatId);
     }
 
-    public void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message) {
-        chatDAO.sendMessage(itemId, titleItem, buyer, seller, author, message);
+    public void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message, String buyerName, String sellerName) {
+        chatDAO.sendMessage(itemId, titleItem, buyer, seller, author, message, buyerName, sellerName);
     }
 
     @Override
@@ -76,7 +76,5 @@ public class ChatActivityInteractor implements ChatDAO.ChatDAOListener {
                 presenter.loadUserBasicProfileSuccessful(user);
             }
         });
-
     }
-
 }

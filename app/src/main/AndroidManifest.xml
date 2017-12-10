@@ -39,7 +39,7 @@
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".login.SignUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentWindow" />
         <activity
@@ -139,12 +139,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marbit.hobbytrophies.MainActivity" />
         </activity>
-        <activity android:name=".wishes.DetailWishActivity"
+        <activity
+            android:name=".wishes.DetailWishActivity"
             android:label="Detalle del deseo"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marbit.hobbytrophies.MainActivity" />
+        </activity>
+        <activity
+            android:name=".market.ItemSoldActivity"
+            android:label=""
+            android:parentActivityName=".market.ItemDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marbit.hobbytrophies.market.ItemDetailActivity" />
         </activity>
     </application>
 

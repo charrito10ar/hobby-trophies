@@ -36,6 +36,8 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
     public final static String PARAM_SELLER = "SELLER";
 
     public final static String PARAM_CHAT_ID = "CHAT-ID";
+    public static final String PARAM_BUYER_NAME = "BUYER-NAME";
+    public static final String PARAM_SELLER_NAME = "SELLER-NAME";
 
     private ChatActivityPresenter presenter;
     private RecyclerView recyclerViewChats;
@@ -46,10 +48,11 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
     private ImageView avatarSeller;
     private TextView titleItem;
     private ImageButton buttonSend;
-    private ImageView buttonBack;
     private EditText editTextMessage;
     private String buyer;
     private String seller;
+    private String buyerName;
+    private String sellerName;
     private int count;
 
     @Override
@@ -61,6 +64,8 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         this.stringTitleItem = getIntent().getStringExtra(PARAM_ITEM_TITLE);
         this.buyer = getIntent().getStringExtra(PARAM_BUYER);
         this.seller = getIntent().getStringExtra(PARAM_SELLER);
+        this.buyerName = getIntent().getStringExtra(PARAM_BUYER_NAME);
+        this.sellerName = getIntent().getStringExtra(PARAM_SELLER_NAME);
         this.presenter = new ChatActivityPresenter(getApplicationContext(), this);
         this.recyclerViewChats = (RecyclerView) findViewById(R.id.recycler_view_chats);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -71,8 +76,8 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         this.editTextMessage.addTextChangedListener(this);
         this.chatAdapter = new ChatAdapter(getApplicationContext());
         this.recyclerViewChats.setAdapter(chatAdapter);
-        this.buttonBack = (ImageView) findViewById(R.id.button_back);
-        this.buttonBack.setOnClickListener(this);
+        ImageView buttonBack = (ImageView) findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(this);
         this.avatarSeller = (ImageView) findViewById(R.id.ic_avatar_seller);
         this.titleItem = (TextView) findViewById(R.id.text_view_title_item);
         this.setTitleItem(stringTitleItem);
@@ -122,17 +127,13 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         refreshChat(genericListMessages);
         this.presenter.addListenerAddMessageChat(chat.getId());
         recyclerViewChats.scrollToPosition(chatAdapter.getItemCount() - 1);
-        this.presenter.loadPartnerUserChat(Preferences.getUserName(getApplicationContext()).equals(chat.getSeller()) ? chat.getBuyer() : chat.getSeller());
+        this.presenter.loadPartnerUserChat(Preferences.getUserId(getApplicationContext()).equals(chat.getSeller()) ? chat.getBuyer() : chat.getSeller());
         this.presenter.loadItem(chat.getItem());
     }
 
     @Override
     public void loadChat() {
-        if(seller == null){
-            this.presenter.loadChat(itemId, stringTitleItem, buyer, null);
-        }else {
-            this.presenter.loadChat(itemId, stringTitleItem, buyer, seller);
-        }
+        this.presenter.loadChat(itemId, stringTitleItem, buyer, seller, buyerName, sellerName);
     }
 
     @Override
@@ -172,14 +173,12 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
     }
 
     public void clickSendMessage(View view) {
-        presenter.sendMessage(chat.getItem(), chat.getTitleItem(), chat.getBuyer(), chat.getSeller(), Preferences.getUserName(getApplicationContext()), editTextMessage.getText().toString());
+        presenter.sendMessage(chat.getItem(), chat.getTitleItem(), chat.getBuyer(), chat.getSeller(), Preferences.getUserId(getApplicationContext()), editTextMessage.getText().toString(), buyerName, sellerName);
         editTextMessage.setText("");
     }
 
-
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override
@@ -195,7 +194,6 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
 
     @Override
     public void afterTextChanged(Editable s) {
-
     }
 
     @Override

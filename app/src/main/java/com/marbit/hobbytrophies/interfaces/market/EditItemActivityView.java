@@ -8,4 +8,7 @@ public interface EditItemActivityView {
     void setDigital(boolean digital);
     void setBarter(boolean barter);
     void setCategory(int category);
+    void setPhotos(String itemId);
+
+    void editItemSuccess();
 }

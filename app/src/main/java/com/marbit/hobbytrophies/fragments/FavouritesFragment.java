@@ -2,7 +2,6 @@ package com.marbit.hobbytrophies.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,6 +10,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.adapters.profile.ItemProfileSalesAdapter;
@@ -29,6 +30,7 @@ public class FavouritesFragment extends Fragment implements FavouritesFragmentVi
 
     private FavouritesFragmentListener mListener;
     @BindView(R.id.recycler_view_favourites) RecyclerView recyclerView;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private ItemProfileSalesAdapter itemProfileSalesAdapter;
     private FavouritesPresenter presenter;
@@ -49,7 +51,6 @@ public class FavouritesFragment extends Fragment implements FavouritesFragmentVi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -100,6 +101,21 @@ public class FavouritesFragment extends Fragment implements FavouritesFragmentVi
         itemProfileSalesAdapter.clearAll();
         itemProfileSalesAdapter.setItemList(list);
         itemProfileSalesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void loadFavouritesError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

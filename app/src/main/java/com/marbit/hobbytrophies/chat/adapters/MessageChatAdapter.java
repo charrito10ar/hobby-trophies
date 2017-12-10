@@ -14,9 +14,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.chat.model.Chat;
+import com.marbit.hobbytrophies.chat.model.MessageChat;
 import com.marbit.hobbytrophies.fragments.MessagesFragment.MessagesFragmentInteractionListener;
 import com.marbit.hobbytrophies.utilities.Preferences;
-import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -53,6 +53,7 @@ public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Chat chat = chatList.get(position);
         messageChatViewHolder.messageChatBin(chat);
     }
+
 
     @Override
     public int getItemCount() {
@@ -108,7 +109,7 @@ public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.lastMessage.setText(chat.getLastMessage());
             itemView.setOnClickListener(new ClickHeaderChat(chat));
             itemTitle.setText(chat.getTitleItem());
-            partnerChat.setText(chat.getBuyer().equals(Preferences.getUserName(context)) ? chat.getSeller() : chat.getBuyer());
+            partnerChat.setText(chat.getBuyer().equals(Preferences.getUserId(context)) ? chat.getSellerName() : chat.getBuyerName());
             dateLastMessage.setText(prettyTime.format(new Date(chat.getdateLastMessageLong())));
             setImage(chat.getItem());
         }

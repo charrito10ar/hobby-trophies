@@ -10,6 +10,7 @@ import java.util.List;
 public class User implements Parcelable {
 
     private String id;
+    private String name;
     private String psnId;
     private String email;
     private String country;

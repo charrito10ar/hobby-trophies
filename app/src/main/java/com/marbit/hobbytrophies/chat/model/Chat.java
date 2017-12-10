@@ -14,6 +14,8 @@ public class Chat implements Comparable<Chat>{
     private String id;
     private String seller;
     private String buyer;
+    private String sellerName;
+    private String buyerName;
     private String item;
     private String titleItem;
     private String lastMessage;
@@ -115,5 +117,25 @@ public class Chat implements Comparable<Chat>{
 
     public void setTitleItem(String titleItem) {
         this.titleItem = titleItem;
+    }
+
+    public String getSellerName() {
+        if(sellerName != null)
+            return sellerName;
+        return seller;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getBuyerName() {
+        if(buyerName != null)
+            return buyerName;
+        return buyer;
+    }
+
+    public void setBuyerName(String buyerName) {
+        this.buyerName = buyerName;
     }
 }

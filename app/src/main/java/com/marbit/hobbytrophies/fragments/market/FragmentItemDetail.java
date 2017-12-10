@@ -182,7 +182,7 @@ public class FragmentItemDetail extends Fragment implements View.OnClickListener
         switch (v.getId()){
             case R.id.button_send_item:
                 if(validItem()){
-                    this.item = new Item(Preferences.getUserName(getContext() ), descriptionItem.getText().toString(), itemType,
+                    this.item = new Item(Preferences.getUserId(getContext() ), Preferences.getUserName(getContext()), descriptionItem.getText().toString(), itemType,
                             priceItem.getText().toString(), checkBoxDigitalVersion.isChecked(), checkBoxSaleType.isChecked());
                     this.item.setImages(photosList);
                     this.item.setImageAmount(photosList.size());

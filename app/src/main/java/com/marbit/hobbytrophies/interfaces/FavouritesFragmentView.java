@@ -6,4 +6,10 @@ import java.util.List;
 
 public interface FavouritesFragmentView {
     void loadFavouritesSuccessful(List<Item> list);
+
+    void loadFavouritesError(String message);
+
+    void showProgressBar();
+
+    void hideProgressBar();
 }

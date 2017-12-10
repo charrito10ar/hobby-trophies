@@ -3,12 +3,12 @@ package com.marbit.hobbytrophies;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.marbit.hobbytrophies.login.SignUpActivity;
 import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.Preferences;
 

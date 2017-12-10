@@ -35,6 +35,7 @@ import com.marbit.hobbytrophies.fragments.ProfileFragment;
 import com.marbit.hobbytrophies.fragments.RankingFragment;
 import com.marbit.hobbytrophies.fragments.WishListFragment;
 import com.marbit.hobbytrophies.interfaces.MainActivityView;
+import com.marbit.hobbytrophies.login.SignUpActivity;
 import com.marbit.hobbytrophies.market.ItemDetailActivity;
 import com.marbit.hobbytrophies.model.Meeting;
 import com.marbit.hobbytrophies.overwrite.CircleTransform;
@@ -104,8 +105,9 @@ public class MainActivity extends BaseActivity
         Fragment fragment;
         String title;
         String fragmentTag;
-        if (Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN)) {
-            fragment = ProfileFragment.newInstance(Preferences.getString(getApplicationContext(), Constants.PREFERENCE_USER_NAME));
+        if (Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN) &&
+                Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_PSN_CODE_OK)) {
+            fragment = ProfileFragment.newInstance(Preferences.getUserName(getApplicationContext()));
             title = "Perfil";
             fragmentTag = "Profile";
         }else {
@@ -242,7 +244,7 @@ public class MainActivity extends BaseActivity
         FirebaseNotificationDAO firebaseNotificationDAO = new FirebaseNotificationDAO();
         String token = FirebaseInstanceId.getInstance().getToken();
         if(token != null) {
-            firebaseNotificationDAO.unregisterToken(Preferences.getUserName(getApplicationContext()), token);
+            firebaseNotificationDAO.unregisterToken(Preferences.getUserId(getApplicationContext()), token);
         }
     }
 
@@ -263,6 +265,8 @@ public class MainActivity extends BaseActivity
         intentChat.putExtra(ChatActivity.PARAM_ITEM_TITLE, chat.getTitleItem());
         intentChat.putExtra(ChatActivity.PARAM_SELLER, chat.getSeller());
         intentChat.putExtra(ChatActivity.PARAM_BUYER, chat.getBuyer());
+        intentChat.putExtra(ChatActivity.PARAM_BUYER_NAME, chat.getBuyerName());
+        intentChat.putExtra(ChatActivity.PARAM_SELLER_NAME, chat.getSellerName());
         startActivity(intentChat);
     }
 
@@ -273,8 +277,9 @@ public class MainActivity extends BaseActivity
                 Fragment fragment = null;
                 String title = getString(R.string.app_name);
                 String fragmentTag = "";
-                if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN)){
-                    fragment = ProfileFragment.newInstance(Preferences.getString(getApplicationContext(), Constants.PREFERENCE_USER_NAME));
+                if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN) &&
+                        Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_PSN_CODE_OK)){
+                    fragment = ProfileFragment.newInstance(Preferences.getUserName(getApplicationContext()));
                     title = "Perfil";
                     fragmentTag = "Profile";
                 }else {

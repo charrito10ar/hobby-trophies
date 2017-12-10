@@ -18,12 +18,13 @@ import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.marbit.hobbytrophies.utilities.Preferences;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class ChatDAO implements ChatDAOInterface {
+public class    ChatDAO implements ChatDAOInterface {
 
     private ChatDAOListener chatDAOListener;
     private ChatDAOHeadersListener chatDAOHeadersListener;
@@ -60,6 +61,10 @@ public class ChatDAO implements ChatDAOInterface {
         public void onCancelled(DatabaseError databaseError) {        }
     };
 
+    public ChatDAO() {
+
+    }
+
     @Override
     public void removeListenerAddMessageChat(){
         if(addMessageReference != null)
@@ -95,7 +100,7 @@ public class ChatDAO implements ChatDAOInterface {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             //Aquí manejo el primer item, ya que es un insert
             Chat chat = dataSnapshot.getValue(Chat.class);
-            if(chat.getSeller().equals(Preferences.getUserName(context)) || chat.getBuyer().equals(Preferences.getUserName(context))){
+            if(chat.getSeller().equals(Preferences.getUserId(context)) || chat.getBuyer().equals(Preferences.getUserId(context))){
                 chatDAOHeadersListener.insertNewHeaderChat(chat);
             }
         }
@@ -137,7 +142,7 @@ public class ChatDAO implements ChatDAOInterface {
     }
 
     @Override
-    public void loadChat(final String itemId, final String titleItem, final String buyer, final String seller) {
+    public void loadChat(final String itemId, final String titleItem, final String buyer, final String seller, final String buyerName, final String sellerName) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DataBaseConstants.COLUMN_ITEM_CHATS).child(itemId).child(buyer);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -145,8 +150,11 @@ public class ChatDAO implements ChatDAOInterface {
                 final String chatId = (String) dataSnapshot.getValue();
                 if(chatId == null){
                     //Creo un chat y le pongo una lista de mensajes vacía. Cargo un chat vacío. Tal vez aquí hay que crear el chat
-                    String chatIdCreate = createChat(itemId, titleItem, buyer, seller);
-                    chatDAOListener.loadChatSuccessful(new Chat(chatIdCreate, itemId, buyer, seller, new ArrayList<MessageChat>()),new ArrayList<>());
+                    String chatIdCreate = createChat(itemId, titleItem, buyer, seller, buyerName, sellerName);
+                    Chat chat = new Chat(chatIdCreate, itemId, buyer, seller, new ArrayList<MessageChat>());
+                    chat.setBuyerName(buyerName);
+                    chat.setSellerName(sellerName);
+                    chatDAOListener.loadChatSuccessful(chat, new ArrayList<>());
                 }else {
                     final ArrayList<MessageChat> messageChatList = new ArrayList<MessageChat>();
                     final ArrayList<Object> resultList = new ArrayList<>();
@@ -168,7 +176,10 @@ public class ChatDAO implements ChatDAOInterface {
                                 resultList.add(messageChat);
                                 aux++;
                             }
-                            chatDAOListener.loadChatSuccessful(new Chat(chatId, itemId, buyer, seller, messageChatList), resultList);
+                            Chat chat = new Chat(chatId, itemId, buyer, seller, messageChatList);
+                            chat.setBuyerName(buyerName);
+                            chat.setSellerName(sellerName);
+                            chatDAOListener.loadChatSuccessful(chat, resultList);
                         }
 
                         @Override
@@ -231,7 +242,7 @@ public class ChatDAO implements ChatDAOInterface {
     }
 
     @Override
-    public void sendMessage(final String itemId, final String titleItem, final String buyer, final String seller, final String author, final String message) {
+    public void sendMessage(final String itemId, final String titleItem, final String buyer, final String seller, final String author, final String message, final String buyerName, final String sellerName) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DataBaseConstants.COLUMN_ITEM_CHATS).child(itemId).child(buyer);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -239,7 +250,7 @@ public class ChatDAO implements ChatDAOInterface {
                 String chatId = (String) dataSnapshot.getValue();
                 if(chatId == null){
                     // No debeía nunca ser null. Por las dudas Creo el chat efectivamente, ya que no existía
-                    chatId = createChat(itemId, titleItem, buyer, seller);
+                    chatId = createChat(itemId, titleItem, buyer, seller, buyerName, sellerName);
                 }
                 String messageId = insertMessage(chatId, author, message);
                 chatDAOListener.sendMessageSuccessful(chatId,author.equals(buyer)?seller : buyer, titleItem, messageId, author, message, itemId);
@@ -252,16 +263,18 @@ public class ChatDAO implements ChatDAOInterface {
     }
 
     @Override
-    public String createChat(String itemId, String titleItem, String buyer, String seller) {
+    public String createChat(String itemId, String titleItem, String buyer, String seller, String buyerName, String sellerName) {
         // -Crear DB CHATS
         // -Crear DB MEMBERS
         // -Crear DB ITEM-CHATS
         // -Crear DB USER-CHATS
         Chat chat = new Chat();
         chat.setBuyer(buyer);
+        chat.setBuyerName(buyerName);
         chat.setItem(itemId);
         chat.setTitleItem(titleItem);
         chat.setSeller(seller);
+        chat.setSellerName(sellerName);
         chat.setLastMessage("");
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DataBaseConstants.COLUMN_CHATS).push();
         chat.setId(mDatabase.getKey());
@@ -277,8 +290,20 @@ public class ChatDAO implements ChatDAOInterface {
         String messageId = mDatabase.getKey();
         MessageChat messageChat = new MessageChat(author, message);
         messageChat.setId(messageId);
+        messageChat.setType(MessageChat.NORMAL_MESSAGE);
         mDatabase.setValue(messageChat);
         updateChatLastMessage(chatId, message);
+        return messageId;
+    }
+
+    public String insertItemSoldMessage(String chatId, String author) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DataBaseConstants.COLUMN_CHAT_MESSAGES).child(chatId).push();
+        String messageId = mDatabase.getKey();
+        MessageChat messageChat = new MessageChat(author, "Califica al vendedor");
+        messageChat.setId(messageId);
+        messageChat.setType(MessageChat.SOLD_MESSAGE);
+        mDatabase.setValue(messageChat);
+        updateChatLastMessage(chatId, "Califica al vendedor");
         return messageId;
     }
 
@@ -332,6 +357,7 @@ public class ChatDAO implements ChatDAOInterface {
                             Chat chat = dataSnapshot.getValue(Chat.class);
                             chatList.add(chat);
                             if(sizeList == chatList.size()){
+                                //Collections.sort(chatList);
                                 chatDAOHeadersListener.loadChatHeadersSuccessful(chatList);
                             }
                         }

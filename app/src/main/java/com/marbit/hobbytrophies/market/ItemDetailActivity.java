@@ -1,5 +1,6 @@
 package com.marbit.hobbytrophies.market;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -24,6 +25,8 @@ import com.marbit.hobbytrophies.utilities.Preferences;
 import com.marbit.hobbytrophies.utilities.Utilities;
 
 public class ItemDetailActivity extends AppCompatActivity implements ItemDetailActivityView {
+    private static final int REQUEST_CODE_EDIT_ITEM = 11;
+    private static final int REQUEST_CODE_MARK_AS_SOLD = 99;
     private Item item;
     private ViewPager viewPager;
     private ImagesItemPagerAdapter imagesItemPageAdapter;
@@ -56,12 +59,6 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
 
         this.presenter = new ItemDetailActivityPresenter(getApplicationContext(), this);
         this.from = getIntent().getStringExtra("FROM");
-
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
         switch (this.from){
             case "LOCAL":
                 this.item = getIntent().getParcelableExtra("ITEM");
@@ -73,8 +70,33 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case REQUEST_CODE_EDIT_ITEM: {
+                if (resultCode == Activity.RESULT_OK) {
+                    Item item = data.getParcelableExtra("ITEM");
+                    loadRemoteItemSuccess(item);
+                }
+                break;
+            }
+            case REQUEST_CODE_MARK_AS_SOLD:
+                if (resultCode == Activity.RESULT_OK) {
+                    markAsSold();
+                }
+                break;
+        }
+    }
+
     private void setButtonChat() { // Si no soy el dueño y esta aún en venta, muestro el boton de chat.
-        if(!Preferences.getUserName(getApplicationContext()).equals(item.getUserId()) && item.getStatus() == 0){
+        if(!Preferences.getUserId(getApplicationContext()).equals(item.getUserId()) && item.getStatus() == 0){
             showButtonChat();
         }
     }
@@ -84,7 +106,7 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
         getMenuInflater().inflate(R.menu.menu_item_detail, menu);
         this.menu = menu;
         if(item != null){
-            if(!item.getUserId().equals(Preferences.getUserName(getApplication()))){
+            if(!item.getUserId().equals(Preferences.getUserId(getApplication()))){
                 this.menu.findItem(R.id.action_edit_item).setVisible(false);
                 this.menu.findItem(R.id.action_delete).setVisible(false);
             }else {
@@ -112,13 +134,10 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
             case R.id.action_edit_item:
                 Intent intent = new Intent(getApplicationContext(), EditItemActivity.class);
                 intent.putExtra("ITEM", this.item);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_EDIT_ITEM);
                 return true;
             case R.id.action_sold:
                 this.presenter.markAsSold(this.item);
-                return true;
-            case R.id.action_unmark_sold:
-                this.presenter.unmarkAsSold(this.item);
                 return true;
             case R.id.action_delete:
                 this.presenter.delete(this.item);
@@ -135,8 +154,10 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
             Intent intentChat = new Intent(getApplicationContext(), ChatActivity.class);
             intentChat.putExtra(ChatActivity.PARAM_ITEM_ID, item.getId());
             intentChat.putExtra(ChatActivity.PARAM_SELLER, item.getUserId());
+            intentChat.putExtra(ChatActivity.PARAM_SELLER_NAME, item.getUserName());
             intentChat.putExtra(ChatActivity.PARAM_ITEM_TITLE, item.getTitle());
-            intentChat.putExtra(ChatActivity.PARAM_BUYER, Preferences.getUserName(getApplicationContext()));
+            intentChat.putExtra(ChatActivity.PARAM_BUYER, Preferences.getUserId(getApplicationContext()));
+            intentChat.putExtra(ChatActivity.PARAM_BUYER_NAME, Preferences.getUserName(getApplicationContext()));
             startActivity(intentChat);
         }else {
             DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
@@ -147,16 +168,9 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
     @Override
     public void markAsSold() {
         this.menu.findItem(R.id.action_sold).setVisible(false);
-        this.menu.findItem(R.id.action_unmark_sold).setVisible(true);
         this.labelSold.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void unmarkAsSold() {
-        this.menu.findItem(R.id.action_sold).setVisible(true);
-        this.menu.findItem(R.id.action_unmark_sold).setVisible(false);
-        this.labelSold.setVisibility(View.INVISIBLE);
-    }
 
     @Override
     public void markFavourite() {
@@ -172,18 +186,16 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
 
     @Override
     public void setStatus() {
-        if(item.getUserId().equals(Preferences.getUserName(getApplication()))) {
+        if(item.getUserId().equals(Preferences.getUserId(getApplication()))) {
             if(item.getStatus() == 1){
                 markAsSold();
-            }else {
-                unmarkAsSold();
             }
         }
     }
 
     @Override
     public void setFavourite() {
-        if(!item.getUserId().equals(Preferences.getUserName(getApplication()))) {
+        if(!item.getUserId().equals(Preferences.getUserId(getApplication()))) {
             if (Utilities.isFavorite(getApplicationContext(), item)) {
                 markFavourite();
             } else {
@@ -235,5 +247,10 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
         this.setButtonChat();
     }
 
-
+    @Override
+    public void openItemSoldActivity() {
+        Intent intent = new Intent(getApplicationContext(), ItemSoldActivity.class);
+        intent.putExtra("ITEM", item);
+        startActivityForResult(intent, REQUEST_CODE_MARK_AS_SOLD);
+    }
 }
