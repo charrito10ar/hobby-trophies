@@ -153,6 +153,7 @@ public class SignUpActivity extends BaseActivity implements DialogGeneric.OnDial
             Preferences.saveUserId(getApplicationContext(), user.getUid());
             Preferences.saveString(getApplicationContext(), Constants.PREFERENCE_USER_AVATAR, user.getPhotoUrl().getPath());
             Preferences.saveBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN, true);
+            registerTokenNotification(user.getUid());
             this.goToMainActivity();
         }else {
             Toast.makeText(getApplicationContext(), "No se pudo iniciar sesión", Toast.LENGTH_LONG).show();

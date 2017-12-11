@@ -129,6 +129,7 @@
             android:text="Iniciar sesión con Google"
             android:onClick="clickGoogleButton"/>
 
+
     </RelativeLayout>
 
     <RelativeLayout

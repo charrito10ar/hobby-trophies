@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.chat.adapters.ChatAdapter;
@@ -28,7 +30,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ChatActivity extends AppCompatActivity implements ChatActivityView, TextWatcher, View.OnClickListener {
+public class ChatActivity extends AppCompatActivity implements ChatActivityView, TextWatcher, View.OnClickListener, ChatAdapter.ChatAdapterListener {
 
     public final static String PARAM_ITEM_ID = "ITEM-ID";
     public static final String PARAM_ITEM_TITLE = "ITEM-TITLE";
@@ -74,7 +76,7 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         this.buttonSend.setEnabled(false);
         this.editTextMessage = (EditText) findViewById(R.id.edit_text_message);
         this.editTextMessage.addTextChangedListener(this);
-        this.chatAdapter = new ChatAdapter(getApplicationContext());
+        this.chatAdapter = new ChatAdapter(getApplicationContext(), this);
         this.recyclerViewChats.setAdapter(chatAdapter);
         ImageView buttonBack = (ImageView) findViewById(R.id.button_back);
         buttonBack.setOnClickListener(this);
@@ -124,6 +126,7 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
     @Override
     public void loadChatSuccessful(Chat chat, List<Object> genericListMessages) {
         this.chat = chat;
+        this.chat.setTitleItem(stringTitleItem);
         refreshChat(genericListMessages);
         this.presenter.addListenerAddMessageChat(chat.getId());
         recyclerViewChats.scrollToPosition(chatAdapter.getItemCount() - 1);
@@ -203,5 +206,15 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
                 onBackPressed();
                 break;
         }
+    }
+
+    @Override
+    public void clickRateSeller() {
+        Toast.makeText(getApplication(), "Calificar al vendedor", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void itemSoldSendMessageDisable() {
+        editTextMessage.setEnabled(false);
     }
 }

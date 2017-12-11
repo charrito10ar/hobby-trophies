@@ -3,6 +3,7 @@ package com.marbit.hobbytrophies;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.marbit.hobbytrophies.chat.ChatActivity;
 import com.marbit.hobbytrophies.chat.model.Chat;
@@ -236,6 +238,8 @@ public class MainActivity extends BaseActivity
             case DialogCodes.DIALOG_ACTION_LOG_OUT:
                 unregisterFirebaseToken();
                 Preferences.logOut(getApplicationContext());
+                FirebaseAuth.getInstance().signOut();
+                GoogleSignInApi.
                 startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
         }
     }

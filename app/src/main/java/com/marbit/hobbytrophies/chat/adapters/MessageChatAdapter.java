@@ -14,7 +14,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.chat.model.Chat;
-import com.marbit.hobbytrophies.chat.model.MessageChat;
 import com.marbit.hobbytrophies.fragments.MessagesFragment.MessagesFragmentInteractionListener;
 import com.marbit.hobbytrophies.utilities.Preferences;
 

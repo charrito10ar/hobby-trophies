@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.marbit.hobbytrophies.R;
@@ -30,13 +31,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final static int HEADER_DATE = 3;
     private SimpleDateFormat sdfHour;
     private SimpleDateFormat sdfDate;
+    private ChatAdapterListener chatAdapterListener;
 
-    public ChatAdapter(Context context) {
+    public ChatAdapter(Context context, ChatAdapterListener chatAdapterListener) {
         this.genericList = new ArrayList<>();
         this.context = context;
         this.genericList = new ArrayList<>();
         this.sdfHour = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
         this.sdfDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        this.chatAdapterListener = chatAdapterListener;
     }
 
     @Override
@@ -81,8 +84,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 headerDateViewHolder.bindMessage((Long) object);
                 break;
             case MESSAGE_ITEM_SOLD:
-//                RightMessageViewHolder rightMessageViewHolder = (RightMessageViewHolder) holder;
-//                rightMessageViewHolder.bindMessage((MessageChat) object);
+                ItemSoldViewHolder itemSoldViewHolder = (ItemSoldViewHolder) holder;
+                itemSoldViewHolder.bindItemSold((MessageChat) object);
                 break;
 
         }
@@ -166,12 +169,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private TextView textViewDate;
 
-        public HeaderDateViewHolder(View itemView) {
+        private HeaderDateViewHolder(View itemView) {
             super(itemView);
             this.textViewDate = (TextView) itemView.findViewById(R.id.text_View_date);
         }
 
-        public void bindMessage(long dateLong){
+        private void bindMessage(long dateLong){
             Date date = new Date(dateLong);
             String formattedTime = sdfDate.format(date);
             this.textViewDate.setText(formattedTime);
@@ -182,20 +185,37 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private class ItemSoldViewHolder extends RecyclerView.ViewHolder {
 
         private Button buttonRateSeller;
+        private LinearLayout itemBought;
+        private TextView itemSold;
 
-        public ItemSoldViewHolder(View itemView) {
+        private ItemSoldViewHolder(View itemView) {
             super(itemView);
             this.buttonRateSeller = (Button) itemView.findViewById(R.id.button_rate_seller);
+            this.itemBought = (LinearLayout) itemView.findViewById(R.id.item_bought);
+            this.itemSold = (TextView) itemView.findViewById(R.id.item_sold);
         }
 
-        public void bindItemSold(){
+        private void bindItemSold(MessageChat messageChat){
+            if(messageChat.getAuthor().equals(Preferences.getUserId(context))){
+                this.itemSold.setVisibility(View.GONE);
+                this.itemBought.setVisibility(View.VISIBLE);
+            }else {
+                this.itemSold.setVisibility(View.VISIBLE);
+                this.itemBought.setVisibility(View.GONE);
+            }
+            chatAdapterListener.itemSoldSendMessageDisable();
             this.buttonRateSeller.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    chatAdapterListener.clickRateSeller();
                 }
             });
         }
+    }
+
+    public interface ChatAdapterListener{
+        void clickRateSeller();
+        void itemSoldSendMessageDisable();
     }
 }
 

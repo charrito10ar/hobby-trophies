@@ -3,20 +3,36 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:padding="16dp"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/item_bought"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:text="Has comprado este artículo. Por favor califica al vendedor."/>
+
+        <Button
+            android:id="@+id/button_rate_seller"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Calificar al vendedor"/>
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/item_sold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textAlignment="center"
         android:layout_gravity="center_horizontal"
-        android:text="Has comprado este artoículo. Por favor califica al vendedor."/>
-
-    <Button
-        android:id="@+id/button_rate_seller"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Calificar al vendedor"/>
+        android:text="Has vendido este articulo"/>
 </LinearLayout>

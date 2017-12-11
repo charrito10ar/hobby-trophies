@@ -253,7 +253,7 @@ public class    ChatDAO implements ChatDAOInterface {
                     chatId = createChat(itemId, titleItem, buyer, seller, buyerName, sellerName);
                 }
                 String messageId = insertMessage(chatId, author, message);
-                chatDAOListener.sendMessageSuccessful(chatId,author.equals(buyer)?seller : buyer, titleItem, messageId, author, message, itemId);
+                chatDAOListener.sendMessageSuccessful(chatId,author.equals(buyer)?seller : buyer, titleItem, messageId, author.equals(buyer)?buyerName : sellerName, message, itemId);
             }
 
             @Override
@@ -299,11 +299,11 @@ public class    ChatDAO implements ChatDAOInterface {
     public String insertItemSoldMessage(String chatId, String author) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DataBaseConstants.COLUMN_CHAT_MESSAGES).child(chatId).push();
         String messageId = mDatabase.getKey();
-        MessageChat messageChat = new MessageChat(author, "Califica al vendedor");
+        MessageChat messageChat = new MessageChat(author, "Artículo vendido");
         messageChat.setId(messageId);
         messageChat.setType(MessageChat.SOLD_MESSAGE);
         mDatabase.setValue(messageChat);
-        updateChatLastMessage(chatId, "Califica al vendedor");
+        updateChatLastMessage(chatId, "Artículo vendido");
         return messageId;
     }
 
