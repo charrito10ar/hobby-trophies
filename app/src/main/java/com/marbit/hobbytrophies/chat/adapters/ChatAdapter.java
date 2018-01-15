@@ -27,7 +27,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final static int MESSAGE_LEFT = 0;
     private final static int MESSAGE_RIGHT = 1;
     private final static int HEADER = 2;
-    private final static int MESSAGE_ITEM_SOLD = 4;
+    private final static int MESSAGE_ITEM_SOLD_TO_RATE = 4;
+    private final static int MESSAGE_ITEM_SOLD_RATED = 5;
     private final static int HEADER_DATE = 3;
     private SimpleDateFormat sdfHour;
     private SimpleDateFormat sdfDate;
@@ -55,7 +56,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 View itemViewChatRight = inflater.inflate(R.layout.list_item_chat_right, parent, false);
                 viewHolder = new RightMessageViewHolder(itemViewChatRight);
                 break;
-            case MESSAGE_ITEM_SOLD:
+            case MESSAGE_ITEM_SOLD_TO_RATE:
                 View itemViewChatItemSold = inflater.inflate(R.layout.list_item_sold, parent, false);
                 viewHolder = new ItemSoldViewHolder(itemViewChatItemSold);
                 break;
@@ -83,7 +84,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 HeaderDateViewHolder headerDateViewHolder = (HeaderDateViewHolder) holder;
                 headerDateViewHolder.bindMessage((Long) object);
                 break;
-            case MESSAGE_ITEM_SOLD:
+            case MESSAGE_ITEM_SOLD_TO_RATE:
                 ItemSoldViewHolder itemSoldViewHolder = (ItemSoldViewHolder) holder;
                 itemSoldViewHolder.bindItemSold((MessageChat) object);
                 break;
@@ -103,7 +104,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     return MESSAGE_LEFT;
                 }
             }else {
-                return MESSAGE_ITEM_SOLD;
+                return MESSAGE_ITEM_SOLD_TO_RATE;
             }
         }else {
             return HEADER;
@@ -134,8 +135,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public LeftMessageViewHolder(View itemView) {
             super(itemView);
-            this.textViewMessage = (TextView) itemView.findViewById(R.id.text_view_chat_left);
-            this.textViewHour = (TextView) itemView.findViewById(R.id.text_view_hour_chat);
+            this.textViewMessage = itemView.findViewById(R.id.text_view_chat_left);
+            this.textViewHour = itemView.findViewById(R.id.text_view_hour_chat);
         }
 
         public void bindMessage(MessageChat messageChat) {
@@ -153,8 +154,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public RightMessageViewHolder(View itemView) {
             super(itemView);
-            this.textViewMessage = (TextView) itemView.findViewById(R.id.text_view_chat_right);
-            this.textViewHour = (TextView) itemView.findViewById(R.id.text_view_hour_chat);
+            this.textViewMessage = itemView.findViewById(R.id.text_view_chat_right);
+            this.textViewHour = itemView.findViewById(R.id.text_view_hour_chat);
         }
 
         public void bindMessage(MessageChat messageChat){
@@ -171,7 +172,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private HeaderDateViewHolder(View itemView) {
             super(itemView);
-            this.textViewDate = (TextView) itemView.findViewById(R.id.text_View_date);
+            this.textViewDate = itemView.findViewById(R.id.text_View_date);
         }
 
         private void bindMessage(long dateLong){
@@ -187,29 +188,38 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private Button buttonRateSeller;
         private LinearLayout itemBought;
         private TextView itemSold;
+        private TextView itemBoughtTitle;
 
         private ItemSoldViewHolder(View itemView) {
             super(itemView);
-            this.buttonRateSeller = (Button) itemView.findViewById(R.id.button_rate_seller);
-            this.itemBought = (LinearLayout) itemView.findViewById(R.id.item_bought);
-            this.itemSold = (TextView) itemView.findViewById(R.id.item_sold);
+            this.buttonRateSeller = itemView.findViewById(R.id.button_rate_seller);
+            this.itemBought = itemView.findViewById(R.id.item_bought);
+            this.itemSold = itemView.findViewById(R.id.item_sold);
+            this.itemBoughtTitle = itemView.findViewById(R.id.item_bought_title);
         }
 
         private void bindItemSold(MessageChat messageChat){
-            if(messageChat.getAuthor().equals(Preferences.getUserId(context))){
-                this.itemSold.setVisibility(View.GONE);
-                this.itemBought.setVisibility(View.VISIBLE);
+            if(messageChat.getType().equals("SOLD_MESSAGE_RATED")){
+                buttonRateSeller.setVisibility(View.INVISIBLE);
+                itemSold.setVisibility(View.INVISIBLE);
+                itemBoughtTitle.setText("Has comprado este artículo");
             }else {
-                this.itemSold.setVisibility(View.VISIBLE);
-                this.itemBought.setVisibility(View.GONE);
-            }
-            chatAdapterListener.itemSoldSendMessageDisable();
-            this.buttonRateSeller.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    chatAdapterListener.clickRateSeller();
+                if(messageChat.getAuthor().equals(Preferences.getUserId(context))){
+                    this.itemSold.setVisibility(View.GONE);
+                    this.itemBought.setVisibility(View.VISIBLE);
+                }else {
+                    this.itemSold.setVisibility(View.VISIBLE);
+                    this.itemBought.setVisibility(View.GONE);
                 }
-            });
+                chatAdapterListener.itemSoldSendMessageDisable();
+                this.buttonRateSeller.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chatAdapterListener.clickRateSeller();
+                    }
+                });
+            }
+
         }
     }
 

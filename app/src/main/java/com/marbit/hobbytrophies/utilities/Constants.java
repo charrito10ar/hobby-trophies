@@ -54,4 +54,6 @@ public class Constants {
     public final static int PREFERENCE_CONSOLE_VITA = 5;
     public final static int PREFERENCE_CONSOLE_VR = 6;
     public static final String PREFERENCE_USER_ID = "USER-ID";
+    public static final String BUY_TYPE = "BUYER";
+    public static final String SELL_TYPE = "SELLER";
 }

@@ -1,7 +1,6 @@
 <resources>
     <!-- Bug cuando eliges tus quedadas-->
     <string name="app_name">HobbyTrophies PSN</string>
-    <string name="main_banner_ad_unit_id">ca-app-pub-8211299087542513/1176201187</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

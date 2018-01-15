@@ -6,4 +6,5 @@ interface ItemSoldPresenterInterface {
 
     fun loadPossiblesBuyers(itemId: String)
     fun loadPossiblesBuyerSuccessful(userMarketList: List<UserMarket>)
+    fun soldInHobbySuccess()
 }

@@ -49,7 +49,7 @@ public class EditItemActivity extends AppCompatActivity implements EditItemActiv
         this.item = getIntent().getParcelableExtra("ITEM");
         this.itemCategories = getResources().getStringArray(R.array.item_types);
         this.presenter = new EditItemActivityPresenter(getApplicationContext(), this);
-        this.checkBoxDigital = (CheckBox) findViewById(R.id.checkbox_digital_version);
+        this.checkBoxDigital = findViewById(R.id.checkbox_digital_version);
         this.checkBoxBarter = (CheckBox) findViewById(R.id.checkbox_is_barter);
         this.titleGame = (TextView) findViewById(R.id.title_item_game);
         this.titleGame.setOnClickListener(this);

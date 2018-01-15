@@ -44,30 +44,32 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("");
-        this.viewPager = (ViewPager) findViewById(R.id.pager_images_item);
-        this.textViewBarter = (TextView) findViewById(R.id.text_view_barter);
-        this.labelSold = (FrameLayout) findViewById(R.id.label_sold);
-        this.buttonChat = (Button) findViewById(R.id.button_chat);
+        this.viewPager = findViewById(R.id.pager_images_item);
+        this.textViewBarter = findViewById(R.id.text_view_barter);
+        this.labelSold = findViewById(R.id.label_sold);
+        this.buttonChat = findViewById(R.id.button_chat);
 
-        this.price = (TextView) findViewById(R.id.item_detail_price);
-        this.title = (TextView) findViewById(R.id.text_view_item_detail_title);
-        this.description = (TextView) findViewById(R.id.text_view_item_detail_description);
+        this.price = findViewById(R.id.item_detail_price);
+        this.title = findViewById(R.id.text_view_item_detail_title);
+        this.description = findViewById(R.id.text_view_item_detail_description);
 
         this.presenter = new ItemDetailActivityPresenter(getApplicationContext(), this);
         this.from = getIntent().getStringExtra("FROM");
-        switch (this.from){
-            case "LOCAL":
-                this.item = getIntent().getParcelableExtra("ITEM");
-                loadRemoteItemSuccess(this.item);
-                break;
-            case "DEEP-LINK":
-                presenter.loadRemoteItem(getIntent().getStringExtra("itemId"));
-                break;
-        }
+        if(from != null)
+            switch (this.from){
+                case "LOCAL":
+                    this.item = getIntent().getParcelableExtra("ITEM");
+                    loadRemoteItemSuccess(this.item);
+                    break;
+                case "DEEP-LINK":
+                    presenter.loadRemoteItem(getIntent().getStringExtra("itemId"));
+                    break;
+            }
+
     }
 
     @Override
@@ -90,6 +92,9 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
             case REQUEST_CODE_MARK_AS_SOLD:
                 if (resultCode == Activity.RESULT_OK) {
                     markAsSold();
+                }else {
+                    Item item = data.getParcelableExtra("ITEM");
+                    loadRemoteItemSuccess(item);
                 }
                 break;
         }
@@ -108,9 +113,11 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
         if(item != null){
             if(!item.getUserId().equals(Preferences.getUserId(getApplication()))){
                 this.menu.findItem(R.id.action_edit_item).setVisible(false);
+                this.menu.findItem(R.id.action_sold).setVisible(false);
                 this.menu.findItem(R.id.action_delete).setVisible(false);
             }else {
                 this.menu.findItem(R.id.action_edit_item).setVisible(true);
+                this.menu.findItem(R.id.action_sold).setVisible(true);
                 this.menu.findItem(R.id.action_delete).setVisible(true);
             }
             this.setFavourite();
@@ -168,6 +175,8 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
     @Override
     public void markAsSold() {
         this.menu.findItem(R.id.action_sold).setVisible(false);
+        this.menu.findItem(R.id.action_edit_item).setVisible(false);
+        this.menu.findItem(R.id.action_delete).setVisible(false);
         this.labelSold.setVisibility(View.VISIBLE);
     }
 

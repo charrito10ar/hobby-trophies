@@ -13,6 +13,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
+import com.marbit.hobbytrophies.market.model.Rate;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.marbit.hobbytrophies.utilities.Preferences;
@@ -303,8 +304,35 @@ public class    ChatDAO implements ChatDAOInterface {
         messageChat.setId(messageId);
         messageChat.setType(MessageChat.SOLD_MESSAGE);
         mDatabase.setValue(messageChat);
-        updateChatLastMessage(chatId, "Artículo vendido");
+        updateChatLastMessage(chatId, "Artículo vendido. Califique al vendedor por favor.");
         return messageId;
+    }
+
+    public void insertItemSoldMessageRated(final String chatId) {
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        Query lastQuery = databaseReference.child(DataBaseConstants.COLUMN_CHAT_MESSAGES).child(chatId).orderByKey().limitToLast(1);
+        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                MessageChat messageChat = dataSnapshot.getChildren().iterator().next().getValue(MessageChat.class);
+                FirebaseDatabase.getInstance().getReference().child(DataBaseConstants.COLUMN_CHAT_MESSAGES).child(chatId)
+                        .child(messageChat.getId()).child("type").setValue("SOLD_MESSAGE_RATED");
+                updateChatLastMessage(chatId, "Artículo vendido. Gracias por usar Hobby Trophies");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Handle possible errors.
+            }
+        });
+//
+//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(DataBaseConstants.COLUMN_CHAT_MESSAGES).child(chatId).push();
+//        String messageId = mDatabase.getKey();
+//        MessageChat messageChat = new MessageChat(author, "Artículo vendido");
+//        messageChat.setId(messageId);
+//        messageChat.setType(MessageChat.SOLD_MESSAGE_RATED);
+//        mDatabase.setValue(messageChat);
+//        updateChatLastMessage(chatId, "Artículo vendido");
     }
 
     private void updateChatLastMessage(String chatId, String message) {

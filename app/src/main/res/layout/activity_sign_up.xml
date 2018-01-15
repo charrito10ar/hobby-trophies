@@ -20,24 +20,16 @@
         android:layout_height="wrap_content"
         android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/login_tittle"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_logo"
-            android:layout_marginBottom="24dp"/>
-
         <TextView
             android:id="@+id/login_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¡Bienvenido a Hobby Trophies! Ingresa tu nombre de usuario PSN"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:textColor="@color/material_white"
-            android:layout_below="@+id/login_tittle"
             android:gravity="center"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="50dp" />
 
         <RelativeLayout
@@ -94,6 +86,7 @@
               android:textAlignment="center"
               android:layout_centerInParent="true"
               android:textAllCaps="true"
+              android:textSize="16sp"
               android:text="Obtener Código"
               android:textColor="@color/material_grey_400"/>
 
@@ -115,6 +108,7 @@
             android:layout_below="@+id/button_sign_up_accept"
             android:textColor="@color/material_white"
             android:layout_margin="16dp"
+            android:textSize="16sp"
             android:layout_centerHorizontal="true"
             android:text="Otras opciones:"/>
 
@@ -128,6 +122,16 @@
             android:background="@drawable/background_login_button_google"
             android:text="Iniciar sesión con Google"
             android:onClick="clickGoogleButton"/>
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/sign_in_button_facebook"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/sign_in_button_google"
+            android:layout_marginTop="30dp"
+            />
 
 
     </RelativeLayout>

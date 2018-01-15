@@ -1,5 +1,6 @@
 package com.marbit.hobbytrophies.chat;
 
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.chat.adapters.ChatAdapter;
@@ -23,8 +22,10 @@ import com.marbit.hobbytrophies.chat.interfaces.ChatActivityView;
 import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
 import com.marbit.hobbytrophies.chat.presenters.ChatActivityPresenter;
+import com.marbit.hobbytrophies.market.RateUserActivity;
 import com.marbit.hobbytrophies.model.User;
 import com.marbit.hobbytrophies.overwrite.CircleTransform;
+import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.Preferences;
 import com.squareup.picasso.Picasso;
 
@@ -69,19 +70,19 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         this.buyerName = getIntent().getStringExtra(PARAM_BUYER_NAME);
         this.sellerName = getIntent().getStringExtra(PARAM_SELLER_NAME);
         this.presenter = new ChatActivityPresenter(getApplicationContext(), this);
-        this.recyclerViewChats = (RecyclerView) findViewById(R.id.recycler_view_chats);
+        this.recyclerViewChats = findViewById(R.id.recycler_view_chats);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         this.recyclerViewChats.setLayoutManager(mLayoutManager);
-        this.buttonSend = (ImageButton) findViewById(R.id.button_send_message);
+        this.buttonSend = findViewById(R.id.button_send_message);
         this.buttonSend.setEnabled(false);
-        this.editTextMessage = (EditText) findViewById(R.id.edit_text_message);
+        this.editTextMessage = findViewById(R.id.edit_text_message);
         this.editTextMessage.addTextChangedListener(this);
         this.chatAdapter = new ChatAdapter(getApplicationContext(), this);
         this.recyclerViewChats.setAdapter(chatAdapter);
-        ImageView buttonBack = (ImageView) findViewById(R.id.button_back);
+        ImageView buttonBack = findViewById(R.id.button_back);
         buttonBack.setOnClickListener(this);
-        this.avatarSeller = (ImageView) findViewById(R.id.ic_avatar_seller);
-        this.titleItem = (TextView) findViewById(R.id.text_view_title_item);
+        this.avatarSeller = findViewById(R.id.ic_avatar_seller);
+        this.titleItem = findViewById(R.id.text_view_title_item);
         this.setTitleItem(stringTitleItem);
     }
 
@@ -210,7 +211,13 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
 
     @Override
     public void clickRateSeller() {
-        Toast.makeText(getApplication(), "Calificar al vendedor", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(), RateUserActivity.class);
+        intent.putExtra("ITEM-ID", itemId);
+        intent.putExtra("RATE-RECEIVER-NAME", sellerName);
+        intent.putExtra("RATE-RECEIVER-ID", seller);
+        intent.putExtra("RATE-TYPE", Constants.SELL_TYPE);
+        intent.putExtra("CHAT-ID", chat.getId());
+        startActivity(intent);
     }
 
     @Override

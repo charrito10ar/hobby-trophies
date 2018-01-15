@@ -137,9 +137,11 @@ public class RankingFragment extends Fragment implements RankingFragmentView{
     @Override
     public void setLastWinner(List<User> lastPodium) {
         this.progressBar.setVisibility(View.GONE);
-        Picasso.with(getContext()).load(lastPodium.get(0).getAvatarUrl()).placeholder(R.drawable.avatar).transform(new CircleTransform()).into(this.imageLastWinner);
-        Picasso.with(getContext()).load(lastPodium.get(1).getAvatarUrl()).placeholder(R.drawable.avatar).transform(new CircleTransform()).into(this.imageSecond);
-        Picasso.with(getContext()).load(lastPodium.get(2).getAvatarUrl()).placeholder(R.drawable.avatar).transform(new CircleTransform()).into(this.imageThird);
+        if(lastPodium.size() > 2){
+            Picasso.with(getContext()).load(lastPodium.get(0).getAvatarUrl()).placeholder(R.drawable.avatar).transform(new CircleTransform()).into(this.imageLastWinner);
+            Picasso.with(getContext()).load(lastPodium.get(1).getAvatarUrl()).placeholder(R.drawable.avatar).transform(new CircleTransform()).into(this.imageSecond);
+            Picasso.with(getContext()).load(lastPodium.get(2).getAvatarUrl()).placeholder(R.drawable.avatar).transform(new CircleTransform()).into(this.imageThird);
+        }
     }
 
     @Override

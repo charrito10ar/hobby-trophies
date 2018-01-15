@@ -96,11 +96,11 @@ public class MessageChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         MessageChatViewHolder(View view) {
             super(view);
             mView = view;
-            imageItem = (ImageView) view.findViewById(R.id.image_item);
-            lastMessage = (TextView) view.findViewById(R.id.last_message);
-            itemTitle = (TextView) view.findViewById(R.id.text_view_item_title);
-            partnerChat = (TextView) view.findViewById(R.id.text_view_chat_partner);
-            dateLastMessage = (TextView) view.findViewById(R.id.text_view_date);
+            imageItem = view.findViewById(R.id.image_item);
+            lastMessage = view.findViewById(R.id.last_message);
+            itemTitle = view.findViewById(R.id.text_view_item_title);
+            partnerChat = view.findViewById(R.id.text_view_chat_partner);
+            dateLastMessage = view.findViewById(R.id.text_view_date);
             prettyTime = new PrettyTime();
         }
 

@@ -8,6 +8,7 @@ import java.util.Map;
 public class MessageChat {
     public static final String SOLD_MESSAGE = "SOLD_MESSAGE";
     public static final String NORMAL_MESSAGE = "NORMAL_MESSAGE";
+    public static final String SOLD_MESSAGE_RATED = "SOLD_MESSAGE_RATED";
 
     private String id;
     private String message;

@@ -3,6 +3,7 @@ package com.marbit.hobbytrophies.utilities;
 public class DataBaseConstants {
     public static final String CHILD_BARTER = "barter";
     public static final String CHILD_DIGITAL = "digital";
+    public static final String COLUMN_USER_RATES = "user-rates";
 
     public static String COLUMN_ITEMS = "items";
 

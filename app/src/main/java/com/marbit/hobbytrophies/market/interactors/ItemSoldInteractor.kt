@@ -2,7 +2,9 @@ package com.marbit.hobbytrophies.market.interactors
 
 import android.content.Context
 import com.marbit.hobbytrophies.dao.ItemDAO
+import com.marbit.hobbytrophies.dao.RateDAO
 import com.marbit.hobbytrophies.market.interfaces.ItemSoldPresenterInterface
+import com.marbit.hobbytrophies.market.model.Rate
 import com.marbit.hobbytrophies.market.model.UserMarket
 import com.marbit.hobbytrophies.model.market.Item
 
@@ -14,10 +16,14 @@ class ItemSoldInteractor constructor(context: Context, private val presenterList
         itemDao.loadPossiblesBuyers(itemId, { presenterListener.loadPossiblesBuyerSuccessful(it) })
     }
 
-    fun soldInHobby(item: Item, userMarket: UserMarket) {
+    fun soldInHobby(rate: Rate, item: Item, userMarket: UserMarket) {
         item.status = 1
-        val itemDao = ItemDAO()
-        itemDao.markSold(item, userMarket)
+        val rateDAO = RateDAO()
+        rateDAO.insertRate(rate, RateDAO.RateListener {
+            val itemDao = ItemDAO()
+            itemDao.markSold(item, userMarket)
+            presenterListener.soldInHobbySuccess()
+        })
     }
 
     fun soldOutHobby(item: Item) {

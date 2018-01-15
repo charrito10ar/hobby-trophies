@@ -11,10 +11,6 @@ import android.view.View;
 
 import com.marbit.hobbytrophies.R;
 
-/**
- * Created by marcelo on 21/12/16.
- */
-
 public class DialogGeneric extends DialogFragment {
 
 

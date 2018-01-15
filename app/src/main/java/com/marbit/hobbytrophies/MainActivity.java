@@ -3,7 +3,6 @@ package com.marbit.hobbytrophies;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -39,6 +38,7 @@ import com.marbit.hobbytrophies.fragments.WishListFragment;
 import com.marbit.hobbytrophies.interfaces.MainActivityView;
 import com.marbit.hobbytrophies.login.SignUpActivity;
 import com.marbit.hobbytrophies.market.ItemDetailActivity;
+import com.marbit.hobbytrophies.market.MarketProfileActivity;
 import com.marbit.hobbytrophies.model.Meeting;
 import com.marbit.hobbytrophies.overwrite.CircleTransform;
 import com.marbit.hobbytrophies.presenters.MainActivityPresenter;
@@ -53,14 +53,13 @@ import java.util.Calendar;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AllGamesFragment.OnAllGamesFragmentInteractionListener, ProfileFragment.ProfileOnFragmentInteractionListener,
         DialogGeneric.OnDialogGenericInteractionListener, MeetingFragment.MeetingInteractionListener, RankingFragment.OnRankingFragmentInteractionListener,
-        MarketFragment.OnMarketFragmentInteractionListener, MessagesFragment.MessagesFragmentInteractionListener, View.OnClickListener,
+        MarketFragment.OnMarketFragmentInteractionListener, MessagesFragment.MessagesFragmentInteractionListener,
         FavouritesFragment.FavouritesFragmentListener, MainActivityView{
 
     private TextView userNameNav;
     private ImageView avatarNav;
     private String[] months;
     private int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-    private LinearLayout headerMenuLeft;
     private MainActivityPresenter presenter;
 
     @Override
@@ -69,26 +68,25 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         this.presenter = new MainActivityPresenter(getApplicationContext(), this);
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-8211299087542513~8699467989");
-        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("2843E996E3E48320E27B16741947CF56").build();
         mAdView.loadAd(adRequest);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
          navigationView.setNavigationItemSelectedListener(this);
 
-        this.userNameNav = (TextView) navigationView.getHeaderView(0).findViewById(R.id.text_view_nav_user_name);
-        this.avatarNav = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ic_nav_avatar);
-        this.headerMenuLeft = (LinearLayout) navigationView.getHeaderView(0).findViewById(R.id.header_menu_left);
-        this.headerMenuLeft.setOnClickListener(this);
+        this.userNameNav = navigationView.getHeaderView(0).findViewById(R.id.text_view_nav_user_name);
+        this.avatarNav = navigationView.getHeaderView(0).findViewById(R.id.ic_nav_avatar);
+        this.avatarNav = navigationView.getHeaderView(0).findViewById(R.id.ic_nav_avatar);
 
         this.setSection();
 
@@ -122,7 +120,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -200,7 +198,7 @@ public class MainActivity extends BaseActivity
 
         this.setFragment(fragment, fragmentTag, title);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -239,7 +237,6 @@ public class MainActivity extends BaseActivity
                 unregisterFirebaseToken();
                 Preferences.logOut(getApplicationContext());
                 FirebaseAuth.getInstance().signOut();
-                GoogleSignInApi.
                 startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
         }
     }
@@ -275,30 +272,6 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.header_menu_left:
-                Fragment fragment = null;
-                String title = getString(R.string.app_name);
-                String fragmentTag = "";
-                if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN) &&
-                        Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_PSN_CODE_OK)){
-                    fragment = ProfileFragment.newInstance(Preferences.getUserName(getApplicationContext()));
-                    title = "Perfil";
-                    fragmentTag = "Profile";
-                }else {
-                    DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
-                    dialogAlertLogin.show(getSupportFragmentManager(), "dialogAlertLogin");
-                }
-                this.setFragment(fragment, fragmentTag, title);
-
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-                break;
-        }
-    }
-
-    @Override
     public void openActivityItemDetail(String itemId) {
         Intent itemIntent = new Intent(getApplicationContext(), ItemDetailActivity.class);
         itemIntent.putExtra("FROM", "DEEP-LINK");
@@ -311,6 +284,30 @@ public class MainActivity extends BaseActivity
         Intent itemIntent = new Intent(getApplicationContext(), MeetingDetailActivity.class);
         itemIntent.putExtra("FROM", "DEEP-LINK");
         itemIntent.putExtra("meetingId", meetingId);
+        startActivity(itemIntent);
+    }
+
+    public void openPsnProfile(View view){
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
+        String fragmentTag = "";
+        if(Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_USER_LOGIN) &&
+                Preferences.getBoolean(getApplicationContext(), Constants.PREFERENCE_IS_PSN_CODE_OK)){
+            fragment = ProfileFragment.newInstance(Preferences.getUserName(getApplicationContext()));
+            title = "Perfil";
+            fragmentTag = "Profile";
+        }else {
+            DialogAlertLogin dialogAlertLogin = DialogAlertLogin.newInstance();
+            dialogAlertLogin.show(getSupportFragmentManager(), "dialogAlertLogin");
+        }
+        this.setFragment(fragment, fragmentTag, title);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+    public void openMarketProfile(View view){
+        Intent itemIntent = new Intent(getApplicationContext(), MarketProfileActivity.class);
         startActivity(itemIntent);
     }
 }
