@@ -1,5 +1,6 @@
 package com.marbit.hobbytrophies.dao;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -9,10 +10,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.marbit.hobbytrophies.chat.dao.ChatDAO;
+import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.market.model.UserMarket;
 import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
+import com.marbit.hobbytrophies.model.meeting.Location;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
+import com.marbit.hobbytrophies.utilities.Preferences;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,12 +72,24 @@ public class ItemDAO implements ItemDAOInterface{
     }
 
     @Override
-    public void loadItemById(String itemId, final SingleItemDAOListener singleItemDAOListener) {
+    public void loadItemById(final Context context, String itemId, final SingleItemDAOListener singleItemDAOListener) {
         databaseReference.child(DataBaseConstants.COLUMN_ITEMS).child(itemId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Item item = dataSnapshot.getValue(Item.class);
-                singleItemDAOListener.loadItemByIdSuccess(item);
+                final Item item = dataSnapshot.getValue(Item.class);
+                UserDAO userDAO = new UserDAO(context);
+                userDAO.getUserLocation(Preferences.getUserId(context), new UserDAO.ListenerUserLocationDAO() {
+                    @Override
+                    public void loadUserLocationSuccessful(LocationUser location) {
+                        item.setLocation(location);
+                        singleItemDAOListener.loadItemByIdSuccess(item);
+                    }
+
+                    @Override
+                    public void loadUserLocationError(String errorMessage) {
+                        singleItemDAOListener.loadItemByIdError(errorMessage);
+                    }
+                });
             }
 
             @Override

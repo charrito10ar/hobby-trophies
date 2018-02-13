@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
+import com.marbit.hobbytrophies.dao.bodies.LocationUser;
+import com.marbit.hobbytrophies.model.meeting.Location;
 
 import java.io.File;
 import java.io.Serializable;
@@ -30,6 +32,7 @@ public class Item implements Parcelable{
     private boolean isBarter;
     private Object date;
     private int status;
+    private LocationUser location;
 
     public Item(String userId, String userName, String description, int itemCategory, String price, boolean isDigital, boolean isBarter) {
         this.userId = userId;
@@ -63,6 +66,7 @@ public class Item implements Parcelable{
         imageAmount = in.readInt();
         date = in.readValue(Object.class.getClassLoader());
         status = in.readInt();
+        location = in.readParcelable(Location.class.getClassLoader());
     }
 
     public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -168,12 +172,13 @@ public class Item implements Parcelable{
         dest.writeString(description);
         dest.writeDouble(price);
         dest.writeInt(itemCategory);
-        dest.writeSerializable((Serializable) images);
+        dest.writeSerializable(images);
         dest.writeByte((byte) (isDigital ? 1 : 0));
         dest.writeByte((byte) (isBarter ? 1 : 0));
         dest.writeInt(imageAmount);
         dest.writeValue(date);
         dest.writeInt(status);
+        dest.writeParcelable(location, flags);
     }
 
     public int getImageAmount() {
@@ -234,5 +239,13 @@ public class Item implements Parcelable{
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public LocationUser getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationUser location) {
+        this.location = location;
     }
 }

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.model.Game;
+import com.marbit.hobbytrophies.model.meeting.Location;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +42,13 @@ public class Preferences {
     public static int getInt(Context context, String preferenceName) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
         return SP.getInt(preferenceName, -1);
+    }
+
+    private static void saveDouble(Context context, double preferenceValue, String preferenceName) {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putString(preferenceName, String.valueOf(preferenceValue));
+        editor.apply();
     }
 
     public static void saveLong(Context context, String preferenceName, long preferenceValue) {
@@ -206,4 +215,19 @@ public class Preferences {
         return false;
     }
 
+    public static void saveUserLocation(Context context, LocationUser locationUser) {
+        Preferences.saveString(context, locationUser.getLocality(), Constants.PREFERENCE_USER_LOCALITY);
+        Preferences.saveDouble(context, locationUser.getLatitud(), Constants.PREFERENCE_USER_LATITUDE);
+        Preferences.saveDouble(context, locationUser.getLongitud(), Constants.PREFERENCE_USER_LONGITUDE);
+    }
+
+    public static Location getUserLocation(Context context){
+        if(!Preferences.getString(context, Constants.PREFERENCE_USER_LATITUDE).equals("null")){
+            return new Location(Preferences.getString(context, Constants.PREFERENCE_USER_LOCALITY),
+                    Double.valueOf(Preferences.getString(context, Constants.PREFERENCE_USER_LATITUDE)),
+                    Double.valueOf(Preferences.getString(context, Constants.PREFERENCE_USER_LONGITUDE)));
+        }else {
+            return new Location("Sin ubicación", 0, 0);
+        }
+    }
 }

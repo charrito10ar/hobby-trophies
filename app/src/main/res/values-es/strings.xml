@@ -56,6 +56,7 @@
     <string name="just_for_fun">Diversión</string>
     <string name="cooperative">Cooperativo</string>
     <string name="share_play">Compartir juego</string>
+    <string name="physical_play">Juntarse en casa</string>
     <string name="title_activity_meeting_detail">MeetingDetailActivity</string>
     <string name="action_edit">Editar</string>
     <string name="action_join">Unirse</string>
@@ -105,4 +106,7 @@
     <string name="console_ps4">PS4</string>
     <string name="action_add_favourite">Favorito</string>
     <string name="share_txt">Compartir</string>
+    <string name="permission_rationale_title">Permiso de ubicación</string>
+    <string name="permission_rationale_message">Necesita otorgar el permiso de ubicación para poder brindarle mejores quedadas y productos del mercadillo cercanos</string>
+    <string name="address_meeting_txt">¿Dónde?: %s</string>
 </resources>

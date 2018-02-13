@@ -21,7 +21,7 @@ public class DetailWishActivityInteractor {
     }
 
     public void loadItemsByWish(Wish wish) {
-        WishDAO wishDAO = new WishDAO();
+        WishDAO wishDAO = new WishDAO(context);
         wishDAO.loadItemsByWish(wish, new WishDAO.WishDAOItemsListener() {
             @Override
             public void loadItemsByWishSuccessful(List<Item> itemList) {
@@ -31,7 +31,7 @@ public class DetailWishActivityInteractor {
     }
 
     public void deleteWish(Wish wish) {
-        WishDAO wishDAO = new WishDAO();
+        WishDAO wishDAO = new WishDAO(context);
         wishDAO.deleteWish(Preferences.getUserId(context), wish, new WishDAO.WishDAODeleteListener() {
             @Override
             public void deleteWishSuccessful() {

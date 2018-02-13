@@ -18,7 +18,7 @@ public class NewItemActivity extends AppCompatActivity implements FragmentItemTy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
-        setFirstFragment(FragmentItemType.newInstance("",""));
+        setFirstFragment(FragmentItemType.newInstance());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.marbit.hobbytrophies.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +13,7 @@ import android.widget.TextView;
 import com.marbit.hobbytrophies.MeetingDetailActivity;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.fragments.MeetingFragment.MeetingInteractionListener;
-import com.marbit.hobbytrophies.model.HeaderListTrophy;
 import com.marbit.hobbytrophies.model.Meeting;
-import com.marbit.hobbytrophies.model.Trophy;
 import com.marbit.hobbytrophies.overwrite.CircleTransform;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -104,23 +101,23 @@ public class MeetingAdapter extends RecyclerView.Adapter{
         private TextView time;
         private TextView textViewAmountPlayers;
         private TextView textViewType;
+        private TextView address;
         private ImageView imageGame;
         private ImageView imageAvatarAuthor;
         private FrameLayout layoutMeetingFinished;
 
-
         public MeetingViewHolder(View view) {
             super(view);
             mView = view;
-            this.description = (TextView) view.findViewById(R.id.description_meeting);
-            this.imageGame = (ImageView) view.findViewById(R.id.meeting_game_img);
-            this.time = (TextView) view.findViewById(R.id.meeting_time);
-            this.textViewAmountPlayers = (TextView) view.findViewById(R.id.text_view_amount_players);
-            this.textViewType = (TextView) view.findViewById(R.id.text_view_type_meeting);
-            this.imageAvatarAuthor = (ImageView) view.findViewById(R.id.image_avatar);
-            this.layoutMeetingFinished = (FrameLayout) view.findViewById(R.id.layout_meeting_finished);
+            this.description = view.findViewById(R.id.description_meeting);
+            this.imageGame = view.findViewById(R.id.meeting_game_img);
+            this.time = view.findViewById(R.id.meeting_time);
+            this.textViewAmountPlayers = view.findViewById(R.id.text_view_amount_players);
+            this.textViewType = view.findViewById(R.id.text_view_type_meeting);
+            this.address = view.findViewById(R.id.text_view_address);
+            this.imageAvatarAuthor = view.findViewById(R.id.image_avatar);
+            this.layoutMeetingFinished = view.findViewById(R.id.layout_meeting_finished);
         }
-
 
         public void bindMeeting(final Meeting meeting) throws ParseException {
             this.description.setText(meeting.getDescription());
@@ -147,25 +144,23 @@ public class MeetingAdapter extends RecyclerView.Adapter{
             }else {
                 this.layoutMeetingFinished.setVisibility(View.GONE);
             }
+            if(meeting.getType() == 5){
+                address.setVisibility(View.VISIBLE);
+                address.setText(mView.getContext().getString(R.string.address_meeting_txt, meeting.getLocation().getDescription()));
+            }else {
+                address.setVisibility(View.GONE);
+            }
         }
     }
 
-
     private class HeaderMeetingViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewDate;
-        private View view;
-
         public HeaderMeetingViewHolder(View itemView) {
             super(itemView);
-            this.view = itemView;
-            this.textViewDate = (TextView) itemView.findViewById(R.id.text_view_header_meeting_date);
-
+            this.textViewDate = itemView.findViewById(R.id.text_view_header_meeting_date);
         }
-
         public void bindHeader(String date) {
             this.textViewDate.setText(date);
         }
     }
-
-
 }

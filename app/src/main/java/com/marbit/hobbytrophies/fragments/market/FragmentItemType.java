@@ -33,11 +33,9 @@ public class FragmentItemType extends Fragment implements View.OnClickListener, 
     public FragmentItemType() {
     }
 
-    public static FragmentItemType newInstance(String param1, String param2) {
+    public static FragmentItemType newInstance() {
         FragmentItemType fragment = new FragmentItemType();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,13 +54,13 @@ public class FragmentItemType extends Fragment implements View.OnClickListener, 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_item_type, container, false);
         this.presenter = new FragmentItemTypePresenter(getContext(), this);
-        this.gameLayout = (RelativeLayout) view.findViewById(R.id.layout_item_game);
+        this.gameLayout = view.findViewById(R.id.layout_item_game);
         this.gameLayout.setOnClickListener(this);
-        this.consoleLayout= (RelativeLayout) view.findViewById(R.id.layout_item_console);
+        this.consoleLayout= view.findViewById(R.id.layout_item_console);
         this.consoleLayout.setOnClickListener(this);
-        this.accesoriesLayout= (RelativeLayout) view.findViewById(R.id.layout_item_accesories);
+        this.accesoriesLayout= view.findViewById(R.id.layout_item_accesories);
         this.accesoriesLayout.setOnClickListener(this);
-        this.othersLayout = (RelativeLayout) view.findViewById(R.id.layout_item_others);
+        this.othersLayout = view.findViewById(R.id.layout_item_others);
         this.othersLayout.setOnClickListener(this);
         return view;
     }

@@ -18,7 +18,7 @@ public class MarketFragmentPresenter implements MarketFragmentPresenterInterface
     public MarketFragmentPresenter(Context context, MarketFragmentView marketFragment) {
         this.context = context;
         this.marketFragmentView = marketFragment;
-        this.interactor = new MarketFragmentInteractor(context, this);
+        this.interactor = new MarketFragmentInteractor(this.context, this);
     }
 
     public void loadItems() {

@@ -3,7 +3,11 @@ package com.marbit.hobbytrophies.interactors.market;
 import android.content.Context;
 
 import com.marbit.hobbytrophies.dao.ItemDAO;
+import com.marbit.hobbytrophies.dao.UserDAO;
+import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.model.market.Item;
+import com.marbit.hobbytrophies.model.meeting.Location;
+import com.marbit.hobbytrophies.utilities.Preferences;
 import com.marbit.hobbytrophies.utilities.Utilities;
 
 import java.io.UnsupportedEncodingException;
@@ -49,10 +53,22 @@ public class ItemDetailActivityInteractor implements ItemDAO.ItemDAOEditListener
 
     public void loadRemoteItem(String itemId) {
         ItemDAO itemDAO = new ItemDAO();
-        itemDAO.loadItemById(itemId, new ItemDAO.SingleItemDAOListener() {
+        itemDAO.loadItemById(context, itemId, new ItemDAO.SingleItemDAOListener() {
             @Override
-            public void loadItemByIdSuccess(Item item) {
-                presenterInterface.loadRemoteItemSuccess(item);
+            public void loadItemByIdSuccess(final Item item) {
+                UserDAO userDAO = new UserDAO(context);
+                userDAO.getUserLocation(Preferences.getUserId(context), new UserDAO.ListenerUserLocationDAO() {
+                    @Override
+                    public void loadUserLocationSuccessful(LocationUser location) {
+                        item.setLocation(location);
+                        presenterInterface.loadRemoteItemSuccess(item);
+                    }
+
+                    @Override
+                    public void loadUserLocationError(String errorMessage) {
+                        presenterInterface.loadRemoteItemError(errorMessage);
+                    }
+                });
             }
             @Override
             public void loadItemByIdError(String message) {

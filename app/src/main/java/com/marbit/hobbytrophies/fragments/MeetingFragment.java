@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,7 @@ import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
 import com.marbit.hobbytrophies.dialogs.DialogFilterMeeting;
 import com.marbit.hobbytrophies.model.Game;
 import com.marbit.hobbytrophies.model.Meeting;
+import com.marbit.hobbytrophies.model.meeting.Location;
 import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.marbit.hobbytrophies.utilities.Network;
@@ -45,7 +47,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
@@ -53,38 +60,28 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
 
 
     private static final String ARG_COLUMN_COUNT = "column-count";
-
+    @BindView(R.id.head_meeting) TextView  headMeeting;
+    @BindView(R.id.layout_meeting_list) LinearLayout layoutMeetingList;
+    @BindView(R.id.layout_empty_list) LinearLayout layoutEmptyList;
+    private  SwipeRefreshLayout swipeContainer;
+    private SheetLayout mSheetLayout;
     private int mColumnCount = 1;
     private MeetingInteractionListener mListener;
     private ArrayList<Object> genericList;
     private MeetingAdapter meetingAdapter;
-    private TextView headMeeting;
-
-    private SheetLayout mSheetLayout;
-    private FloatingActionButton floatingActionButton;
     private static final int REQUEST_CODE = 1;
-
-    private SwipeRefreshLayout swipeContainer;
     private RequestQueue requestQueue;
     private int typeRequest = DialogFilterMeeting.ALL_MEETINGS;;
-    private LinearLayout layoutMeetingList;
-    private LinearLayout layoutEmptyList;
+    private FloatingActionButton floatingActionButton;
+    private Unbinder unbinder;
+    private ArrayList<Object> meetingListNearby;
 
     public MeetingFragment() {
-    }
-
-    public static MeetingFragment newInstance(int columnCount) {
-        MeetingFragment fragment = new MeetingFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -93,12 +90,10 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting, container, false);
-
-        this.headMeeting = (TextView) view.findViewById(R.id.head_meeting);
-        this.layoutMeetingList = (LinearLayout) view.findViewById(R.id.layout_meeting_list);
-        this.layoutEmptyList = (LinearLayout) view.findViewById(R.id.layout_empty_list);
+        unbinder = ButterKnife.bind(this, view);
         this.genericList = new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_meeting);
+        this.meetingListNearby = new ArrayList<>();
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_meeting);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         this.meetingAdapter = new MeetingAdapter(mListener, getContext());
@@ -119,11 +114,7 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
                 }
             }
         });
-
-        this.mSheetLayout = (SheetLayout) view.findViewById(R.id.bottom_sheet);
-
-
-        this.floatingActionButton = (FloatingActionButton) view.findViewById(R.id.floatin_action_new_meeting);
+        this.floatingActionButton = view.findViewById(R.id.floatin_action_new_meeting);
         this.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,13 +127,11 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
                 }
             }
         });
+        this.mSheetLayout = view.findViewById(R.id.bottom_sheet);
         this.mSheetLayout.setFab(this.floatingActionButton);
         this.mSheetLayout.setFabAnimationEndListener(this);
-
-        this.swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.fragment_meeting_swipe_refresh);
-
         this.requestQueue = Volley.newRequestQueue(getContext());
-
+        this.swipeContainer = view.findViewById(R.id.fragment_meeting_swipe_refresh);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -165,6 +154,10 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
         );
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -209,6 +202,7 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
     private ArrayList<Object> buildListMeeting(String response) throws JSONException, ParseException {
         if(typeRequest == DialogFilterMeeting.ALL_MEETINGS){
             Preferences.saveString(getContext(), Constants.STATS_MEETINGS, response);
+            meetingListNearby.clear();
         }
         ArrayList<Object> list = new ArrayList();
         JSONObject jsonObject;
@@ -227,6 +221,8 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
             meeting.setState(jsonObjectMeeting.getInt("state"));
             meeting.setDate(DateUtils.getInstance().convertToLocalTimeDate(jsonObjectMeeting.getString("date")));
             meeting.setGame(new Game(jsonObjectMeeting.getString("game_id")));
+            Location location = new Location(jsonObjectMeeting.getString("address"), jsonObjectMeeting.getDouble("latitud"), jsonObjectMeeting.getDouble("longitud"));
+            meeting.setLocation(location);
             if(i>0){
                 DateFormat formatDay = new SimpleDateFormat("dd",Locale.ENGLISH);
                 String currentDayString = formatDay.format(meeting.getDate());
@@ -235,10 +231,23 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
                 if(!currentDayString.equals(previousDatString)){
                     list.add(meeting.getDate(getContext()));
                 }
+            }if(meeting.getType() == 5 && typeRequest == DialogFilterMeeting.ALL_MEETINGS){
+                if(meetingIsNear(meeting.getLocation())){
+                    meetingListNearby.add(meeting);
+                }
             }
             list.add(meeting);
         }
         return list;
+    }
+
+    private boolean meetingIsNear(Location location) {
+        float[] results = new float[1];
+        Location userLocation = Preferences.getUserLocation(getContext());
+        android.location.Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                userLocation.getLatitude(), userLocation.getLongitude(),
+                results);
+         return results[0] < Constants.TEN_KM;
     }
 
     private void refreshContent(ArrayList<Object> genericList) {
@@ -297,6 +306,10 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
             case DialogFilterMeeting.MY_MEETINGS:
                 typeRequest = DialogFilterMeeting.MY_MEETINGS;
                 requestQueue.add(getStringRequest(DialogFilterMeeting.MY_MEETINGS));
+                break;
+            case DialogFilterMeeting.NEARBY_MEETINGS:
+                typeRequest = DialogFilterMeeting.NEARBY_MEETINGS;
+                refreshContent(meetingListNearby);
         }
     }
 

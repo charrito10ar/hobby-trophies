@@ -11,10 +11,17 @@ class MarketProfilePresenter(applicationContext: Context, marketProfileView: Mar
     val interactor: MarketProfileInteractor = MarketProfileInteractor(applicationContext, this)
 
     override fun loadRatesSuccessful(rateList: List<Rate>, reputation: Float) {
-        view.loadRatesSuccessful(rateList, reputation)
+        view.hideProgressBar()
+        if(rateList.isNotEmpty()) {
+            view.hideProgressBar()
+            view.loadRatesSuccessful(rateList, reputation)
+        }else{
+            view.showEmptyView()
+        }         
     }
 
     fun loadRates(userId: String?) {
+        view.showProgressBar()
         interactor.loadRates(userId)
     }
 }

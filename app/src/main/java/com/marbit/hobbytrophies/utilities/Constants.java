@@ -56,4 +56,8 @@ public class Constants {
     public static final String PREFERENCE_USER_ID = "USER-ID";
     public static final String BUY_TYPE = "BUYER";
     public static final String SELL_TYPE = "SELLER";
+    public static final String PREFERENCE_USER_LOCALITY = "LOCALITY";
+    public static final String PREFERENCE_USER_LATITUDE = "LATITUDE";
+    public static final String PREFERENCE_USER_LONGITUDE = "LONGITUDE";
+    public static final float TEN_KM = 10000;
 }

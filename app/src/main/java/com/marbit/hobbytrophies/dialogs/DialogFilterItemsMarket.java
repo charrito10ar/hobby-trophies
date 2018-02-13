@@ -68,10 +68,10 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_filer_items_market, null);
         this.filter = new Filter();
-        this.editTextSearch = (EditText) view.findViewById(R.id.edit_text_search);
+        this.editTextSearch = view.findViewById(R.id.edit_text_search);
         this.editTextSearch.addTextChangedListener(this);
-        this.spinnerCategory = (Spinner) view.findViewById(R.id.spinner_category);
-        this.spinnerOrderBy = (Spinner) view.findViewById(R.id.spinner_order_by);
+        this.spinnerCategory = view.findViewById(R.id.spinner_category);
+        this.spinnerOrderBy = view.findViewById(R.id.spinner_order_by);
         this.itemTypes = getResources().getStringArray(R.array.item_types);
         this.orderByArray = getResources().getStringArray(R.array.order_by);
         ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.spinner_item, itemTypes);

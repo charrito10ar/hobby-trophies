@@ -346,7 +346,7 @@ public class FragmentItemDetailInteractor {
     }
 
     public void checkWishesList(Item item) {
-        WishDAO wishDAO = new WishDAO();
+        WishDAO wishDAO = new WishDAO(context);
         wishDAO.checkWishesListWithNewItem(context, item);
     }
 }

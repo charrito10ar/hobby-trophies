@@ -12,7 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.adapters.ImagesItemPagerAdapter;
 import com.marbit.hobbytrophies.chat.ChatActivity;
@@ -24,39 +31,36 @@ import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.Preferences;
 import com.marbit.hobbytrophies.utilities.Utilities;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ItemDetailActivity extends AppCompatActivity implements ItemDetailActivityView {
     private static final int REQUEST_CODE_EDIT_ITEM = 11;
     private static final int REQUEST_CODE_MARK_AS_SOLD = 99;
     private Item item;
-    private ViewPager viewPager;
+    @BindView(R.id.pager_images_item) ViewPager viewPager;
     private ImagesItemPagerAdapter imagesItemPageAdapter;
-    private TextView price;
-    private TextView title;
-    private TextView description;
-    private TextView textViewBarter;
+    @BindView(R.id.item_detail_price) TextView price;
+    @BindView(R.id.text_view_item_detail_title) TextView title;
+    @BindView(R.id.text_view_item_detail_description) TextView description;
+    @BindView(R.id.text_view_barter) TextView textViewBarter;
     private Menu menu;
-    private FrameLayout labelSold;
-    private Button buttonChat;
+    @BindView(R.id.label_sold) FrameLayout labelSold;
+    @BindView(R.id.button_chat) Button buttonChat;
     private ItemDetailActivityPresenter presenter;
     private String from;
+    @BindView(R.id.map_view) MapView mMapView;
+    private LatLng LOCATION_ITEM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
+        ButterKnife.bind(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("");
-        this.viewPager = findViewById(R.id.pager_images_item);
-        this.textViewBarter = findViewById(R.id.text_view_barter);
-        this.labelSold = findViewById(R.id.label_sold);
-        this.buttonChat = findViewById(R.id.button_chat);
-
-        this.price = findViewById(R.id.item_detail_price);
-        this.title = findViewById(R.id.text_view_item_detail_title);
-        this.description = findViewById(R.id.text_view_item_detail_description);
-
         this.presenter = new ItemDetailActivityPresenter(getApplicationContext(), this);
         this.from = getIntent().getStringExtra("FROM");
         if(from != null)
@@ -69,13 +73,30 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
                     presenter.loadRemoteItem(getIntent().getStringExtra("itemId"));
                     break;
             }
-
+        mMapView.onCreate(Bundle.EMPTY);
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        mMapView.onResume();
+    }
 
+    @Override
+    protected void onPause() {
+        mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMapView.onDestroy();
+        super.onDestroy();
+    }
+    @Override
+    public void onLowMemory() {
+        mMapView.onLowMemory();
+        super.onLowMemory();
     }
 
     @Override
@@ -240,7 +261,7 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
 
     @Override
     public void loadRemoteItemError(String message) {
-
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -254,6 +275,7 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
         this.description.setText(item.getDescription());
         if(!item.isBarter()) this.textViewBarter.setVisibility(View.INVISIBLE);
         this.setButtonChat();
+        this.setLocation();
     }
 
     @Override
@@ -261,5 +283,20 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
         Intent intent = new Intent(getApplicationContext(), ItemSoldActivity.class);
         intent.putExtra("ITEM", item);
         startActivityForResult(intent, REQUEST_CODE_MARK_AS_SOLD);
+    }
+
+    private void setLocation() {
+        if(item.getLocation() != null && !item.getLocation().getLocality().equals("")){
+            LOCATION_ITEM = new LatLng(item.getLocation().getLatitud(), item.getLocation().getLongitud());
+            mMapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    googleMap.addMarker(new MarkerOptions().position(LOCATION_ITEM));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LOCATION_ITEM, 13f));
+                }
+            });
+        }else {
+            mMapView.setVisibility(View.GONE);
+        }
     }
 }

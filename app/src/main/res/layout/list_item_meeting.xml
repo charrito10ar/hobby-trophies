@@ -90,6 +90,13 @@
                 android:layout_below="@+id/layout_time"
                 android:text="Solo por diversión"/>
 
+            <TextView
+                android:id="@+id/text_view_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_type_meeting"
+                android:text="@string/address_meeting_txt"/>
+
 
             <ImageView
                 android:id="@+id/meeting_game_img"

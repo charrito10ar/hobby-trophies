@@ -48,7 +48,7 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     private boolean isFilter;
 
     public MarketFragment() {
-        this.presenter = new MarketFragmentPresenter(getContext(), this);
+
     }
 
     public static MarketFragment newInstance() {
@@ -64,9 +64,10 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_market, container, false);
-        this.recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_profile_sales);
-        this.layoutEmptyList = (RelativeLayout) view.findViewById(R.id.layout_empty_list);
-        this.swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.fragment_profile_sales_swipe_refresh);
+        this.presenter = new MarketFragmentPresenter(getContext(), this);
+        this.recyclerView = view.findViewById(R.id.recycler_view_profile_sales);
+        this.layoutEmptyList = view.findViewById(R.id.layout_empty_list);
+        this.swipeContainer = view.findViewById(R.id.fragment_profile_sales_swipe_refresh);
         this.swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -79,9 +80,9 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(itemProfileSalesAdapter);
-        this.fabNewItem = (FloatingActionButton) view.findViewById(R.id.fab_new_item);
+        this.fabNewItem = view.findViewById(R.id.fab_new_item);
         this.fabNewItem.setOnClickListener(this);
-        this.buttonAddWishList = (FrameLayout) view.findViewById(R.id.button_add_wish_list);
+        this.buttonAddWishList = view.findViewById(R.id.button_add_wish_list);
         this.buttonAddWishList.setOnClickListener(this);
         return view;
     }

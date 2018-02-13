@@ -10,9 +10,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.marbit.hobbytrophies.dao.ItemDAO;
+import com.marbit.hobbytrophies.dao.UserDAO;
+import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.interfaces.market.MarketFragmentPresenterInterface;
 import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
+import com.marbit.hobbytrophies.model.meeting.Location;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
 
 import java.util.ArrayList;
@@ -38,12 +41,27 @@ public class MarketFragmentInteractor implements ItemDAO.ItemDAOListener {
         recentPostsQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                List<Item> items = new ArrayList<>();
+                final List<Item> items = new ArrayList<>();
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    Item item = postSnapshot.getValue(Item.class);
-                    items.add(item);
+                    final long sizeList = snapshot.getChildrenCount();
+                    final Item item = postSnapshot.getValue(Item.class);
+                    UserDAO userDAO = new UserDAO(context);
+                    userDAO.getUserLocation(item.getUserId(), new UserDAO.ListenerUserLocationDAO() {
+                        @Override
+                        public void loadUserLocationSuccessful(LocationUser location) {
+                            item.setLocation(location);
+                            items.add(item);
+                            if(sizeList == items.size()){
+                                presenterInterface.loadItemsSuccess(items);
+                            }
+                        }
+
+                        @Override
+                        public void loadUserLocationError(String errorMessage) {
+
+                        }
+                    });
                 }
-                presenterInterface.loadItemsSuccess(items);
             }
 
             @Override

@@ -34,10 +34,12 @@ public class WishDAO implements WishDAOInterface{
     private final FirebaseDatabase database;
     private final DatabaseReference databaseReference;
     private WishDAOListener mListener;
+    private Context context;
 
-    public WishDAO(){
+    public WishDAO(Context context){
         this.database = FirebaseDatabase.getInstance();
         this.databaseReference = database.getReference();
+        this.context = context;
     }
 
     @Override
@@ -167,7 +169,7 @@ public class WishDAO implements WishDAOInterface{
                 final long itemListSize = dataSnapshot.getChildrenCount();
                 for (DataSnapshot itemKey :dataSnapshot.getChildren()){
                     ItemDAO itemDAO = new ItemDAO();
-                    itemDAO.loadItemById(itemKey.getKey(), new ItemDAO.SingleItemDAOListener() {
+                    itemDAO.loadItemById(context, itemKey.getKey(), new ItemDAO.SingleItemDAOListener() {
                         @Override
                         public void loadItemByIdSuccess(Item item) {
                             itemList.add(item);

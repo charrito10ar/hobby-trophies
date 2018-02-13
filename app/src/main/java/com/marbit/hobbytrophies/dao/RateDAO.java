@@ -8,8 +8,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.marbit.hobbytrophies.market.model.Rate;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +45,7 @@ public class RateDAO implements RateDAOInterface{
                 }
                 float reputation = 0;
                 if(rateList.size()>0){
-                    reputation = reputationSum/rateList.size();
+                        reputation = reputationSum/rateList.size();
                 }
                 loadRateListener.loadRateSuccessful(rateList, reputation);
             }

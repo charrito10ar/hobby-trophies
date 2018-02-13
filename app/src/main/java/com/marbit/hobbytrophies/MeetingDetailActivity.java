@@ -29,7 +29,18 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.marbit.hobbytrophies.adapters.TrophyMeetingDetailAdapter;
 import com.marbit.hobbytrophies.dialogs.DialogAlertLogin;
 import com.marbit.hobbytrophies.dialogs.DialogEditMeeting;
@@ -40,6 +51,7 @@ import com.marbit.hobbytrophies.model.Meeting;
 import com.marbit.hobbytrophies.model.MessageMeeting;
 import com.marbit.hobbytrophies.model.Trophy;
 import com.marbit.hobbytrophies.model.User;
+import com.marbit.hobbytrophies.model.meeting.Location;
 import com.marbit.hobbytrophies.presenters.MeetingDetailPresenter;
 import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DateUtils;
@@ -56,6 +68,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MeetingDetailActivity extends AppCompatActivity implements DialogEditMeeting.OnDialogEditMeetingInteractionListener, TrophyMeetingDetailAdapter.OnListenerEndListMessage,
         MeetingDetailView, DialogGeneric.OnDialogGenericInteractionListener {
 
@@ -64,19 +79,19 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
     private static final int NOT_PLAYER = 2;
     private static int STATE_PLAYER = 2;
     private Meeting meeting;
-    private SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.meeting_detail_swipe_refresh) SwipeRefreshLayout swipeContainer;
     private RequestQueue requestQueue;
     private StringRequest stringRequest;
     private List<User> listPlayers;
     private List<Trophy> listTrophies;
-    private ImageView imageGame;
-    private TextView description;
+    @BindView(R.id.image_meeting_detail) ImageView imageGame;
+    @BindView(R.id.text_view_description_meeting_detail) TextView description;
 
     private TrophyMeetingDetailAdapter trophyAdapter;
-    private RecyclerView recyclerViewTrophies;
+    @BindView(R.id.recycler_view_meeting_trophies) RecyclerView recyclerViewTrophies;
     private Menu menu;
     private boolean isPlayerNotOwner;
-    private EditText editTextMessage;
+    @BindView(R.id.edit_text_comment) EditText editTextMessage;
 
     private LinearLayoutManager mLayoutManagerTrophies;
     private List<Object> messageMeetingList;
@@ -85,51 +100,42 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     private boolean firstTime = true;
-    private ImageButton buttomSend;
-    private TextView timer;
+    @BindView(R.id.button_send_comment) ImageButton buttomSend;
+    @BindView(R.id.text_view_timer_meeting_detail) TextView timer;
     private MeetingDetailPresenter presenter;
     private String from;
-
+    @BindView(R.id.map_view) MapView mMapView;
+    private LatLng LOCATION_MEETING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.from = getIntent().getStringExtra("FROM");
-
-        this.imageGame = (ImageView) findViewById(R.id.image_meeting_detail);
-        this.description = (TextView) findViewById(R.id.text_view_description_meeting_detail);
-        this.timer = (TextView) findViewById(R.id.text_view_timer_meeting_detail);
-        this.editTextMessage = (EditText) findViewById(R.id.edit_text_comment);
-        this.buttomSend = (ImageButton) findViewById(R.id.button_send_comment);
         this.buttomSend.setEnabled(false);
         this.setupEditTextMessage();
         this.listPlayers = new ArrayList<>();
         this.listTrophies = new ArrayList<>();
         this.messageMeetingList = new ArrayList<>();
-        this.recyclerViewTrophies = (RecyclerView) findViewById(R.id.recycler_view_meeting_trophies);
         this.mLayoutManagerTrophies = new LinearLayoutManager(getApplicationContext());
         this.recyclerViewTrophies.setLayoutManager(mLayoutManagerTrophies);
-
         this.trophyAdapter = new TrophyMeetingDetailAdapter(getApplicationContext(), this);
         this.recyclerViewTrophies.setAdapter(trophyAdapter);
-
-        this.swipeContainer = (SwipeRefreshLayout) findViewById(R.id.fragment_meeting_swipe_refresh);
-
         this.requestQueue = Volley.newRequestQueue(getApplicationContext());
-        this.swipeContainer = (SwipeRefreshLayout) findViewById(R.id.meeting_detail_swipe_refresh);
         this.swipeContainer.setRefreshing(true);
-
         this.presenter = new MeetingDetailPresenter(getApplicationContext(), this);
+        mMapView.onCreate(Bundle.EMPTY);
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        mMapView.onResume();
         switch (this.from){
             case "LOCAL":
                 this.meeting = getIntent().getParcelableExtra("MEETING");
@@ -158,7 +164,24 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
                 requestQueue.add(stringRequest);
             }
         });
+    }
 
+    @Override
+    protected void onPause() {
+        mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMapView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        mMapView.onLowMemory();
+        super.onLowMemory();
     }
 
     private void setupEditTextMessage() {
@@ -280,6 +303,14 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
                             game.setId(jsonObjectMeeting.getString("gameId"));
                             meeting.setGame(game);
                             meeting.setType(jsonObjectMeeting.getInt("type"));
+                            if(meeting.getType() == 5){
+                                mMapView.setVisibility(View.VISIBLE);
+                                JSONObject jsonObjectLocation = jsonObjectMeeting.getJSONObject("location");
+                                Location location = new Location(jsonObjectLocation.getString("description"), Double.valueOf(jsonObjectLocation.getString("latitud")), Double.valueOf(jsonObjectLocation.getString("longitud")));
+                                LOCATION_MEETING = new LatLng(location.getLatitude(), location.getLongitude());
+                                meeting.setLocation(location);
+                                setLocation();
+                            }
                             meeting.setLimitMembers(jsonObjectMeeting.getInt("places"));
                             meeting.setDate(DateUtils.getInstance().convertToLocalTimeDate(jsonObjectMeeting.getString("date")));
                             JSONArray jsonArrayPlayers = jsonObjectMeeting.getJSONArray("players");
@@ -345,6 +376,16 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
         this.setMainAction();
         this.setInitialData();
         this.setEndList();
+    }
+
+    private void setLocation() {
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                googleMap.addMarker(new MarkerOptions().position(LOCATION_MEETING));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LOCATION_MEETING, 13f));
+            }
+        });
     }
 
     private void sendRequestJoinMeeting() {
@@ -531,7 +572,6 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
         recyclerViewTrophies.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
                 if(dy > 0) //check for scroll down{
                     visibleItemCount = mLayoutManagerTrophies.getChildCount();
                 totalItemCount = mLayoutManagerTrophies.getItemCount();
@@ -553,7 +593,6 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
             pageNumber++;
             firstTime = false;
         }
-
     }
 
     private StringRequest getStringRequestMessages(final int meetingId){
@@ -608,7 +647,6 @@ public class MeetingDetailActivity extends AppCompatActivity implements DialogEd
     public void loadMoreMessage() {
         loadNextDataFromApi();
     }
-
 
     @Override
     public void setDescriptionMeeting(String description) {

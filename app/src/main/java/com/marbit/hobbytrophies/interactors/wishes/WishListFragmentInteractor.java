@@ -21,7 +21,7 @@ public class WishListFragmentInteractor {
     }
 
     public void loadWishList() {
-        WishDAO wishDAO = new WishDAO();
+        WishDAO wishDAO = new WishDAO(context);
         wishDAO.getWishesByUser(Preferences.getUserId(context), new WishDAO.WishDAOListener() {
             @Override
             public void loadWishesSuccessful(List<Wish> wishList) {

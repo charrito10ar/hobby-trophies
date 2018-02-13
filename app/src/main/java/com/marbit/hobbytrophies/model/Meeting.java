@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 import com.marbit.hobbytrophies.R;
+import com.marbit.hobbytrophies.model.meeting.Location;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,10 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-/**
- * Created by marcelo on 13/01/17.
- */
 
 public class Meeting implements Parcelable {
     private Calendar calendar = Calendar.getInstance();
@@ -35,6 +32,7 @@ public class Meeting implements Parcelable {
     private String userOwnerAvatar;
     private List<Trophy> trophyList;
     private List<String> membersList;
+    private Location location;
     private DateFormat format = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
     private boolean full;
 
@@ -64,6 +62,7 @@ public class Meeting implements Parcelable {
         userOwnerAvatar = in.readString();
         date = new Date(in.readLong());
         full = in.readByte() != 0;
+        location = in.readParcelable(Location.class.getClassLoader());
     }
 
     public static final Creator<Meeting> CREATOR = new Creator<Meeting>() {
@@ -220,6 +219,7 @@ public class Meeting implements Parcelable {
         dest.writeString(userOwnerAvatar);
         dest.writeLong(date.getTime());
         dest.writeByte((byte) (full ? 1 : 0));
+        dest.writeParcelable(location, flags);
     }
 
     public String getUserOwner() {
@@ -252,5 +252,13 @@ public class Meeting implements Parcelable {
 
     public void setReserved(int reserved) {
         this.reserved = reserved;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

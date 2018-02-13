@@ -27,6 +27,7 @@ public class DataBaseConstants {
     public static String COLUMN_CHAT_MESSAGES = "chat-messages";
     public static String COLUMN_ITEM_CHATS = "item-chats";
     public static String COLUMN_USER_CHATS = "user-chats";
+    public static String COLUMN_USER_LOCATION = "user-location";
     public static String COLUMN_USER_WISH_LIST = "user-wish-list";
     public static String COLUMN_WISH_ITEMS = "wish-list-items";
 

@@ -9,17 +9,13 @@ import android.support.v7.app.AlertDialog;
 
 import com.marbit.hobbytrophies.R;
 
-/**
- * Created by marcelo on 5/02/17.
- */
-
 public class DialogFilterMeeting extends DialogFragment {
-
 
     private static OnDialogFilterMeetingInteractionListener mListener;
     public static final int ALL_MEETINGS = 0;
     public static final int MY_GAMES_MEETINGS = 1;
     public static final int MY_MEETINGS = 2;
+    public static final int NEARBY_MEETINGS = 3;
     private static int typeRequest;
 
     public static DialogFilterMeeting  newInstance(Fragment fragment, int optionSelect) {
@@ -37,7 +33,6 @@ public class DialogFilterMeeting extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.filter_meeting_dialog_title)
                 .setSingleChoiceItems(R.array.filter_meeting_options, typeRequest,new DialogInterface.OnClickListener() {
@@ -51,7 +46,10 @@ public class DialogFilterMeeting extends DialogFragment {
                                 break;
                             case 2:
                                 mListener.onDialogFilterMeetingInteraction(MY_MEETINGS);
-
+                                break;
+                            case 3:
+                                mListener.onDialogFilterMeetingInteraction(NEARBY_MEETINGS);
+                                break;
                         }
                         dismiss();
                     }
@@ -59,11 +57,7 @@ public class DialogFilterMeeting extends DialogFragment {
         return builder.create();
     }
 
-
     public interface OnDialogFilterMeetingInteractionListener {
         void onDialogFilterMeetingInteraction(int code);
     }
-
-
-
 }

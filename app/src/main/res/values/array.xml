@@ -31,6 +31,7 @@
         <item>@string/just_for_fun</item>
         <item>@string/cooperative</item>
         <item>@string/share_play</item>
+        <item>@string/physical_play</item>
     </string-array>
 
     <string-array name="edit_meeting_options">
@@ -42,6 +43,7 @@
         <item>@string/filter_all_meetings</item>
         <item>@string/filter_my_games_meetings</item>
         <item>@string/filter_my_meetings</item>
+        <item>@string/filter_nearby_meetings</item>
     </string-array>
 
     <string-array name="item_types">
@@ -69,4 +71,5 @@
         <item>@string/order_by_price_down</item>
     </string-array>
     <string name="console_vr">VR</string>
+    <string name="filter_nearby_meetings">Que esten cerca mío</string>
 </resources>

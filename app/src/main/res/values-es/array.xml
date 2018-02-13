@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="console_vr">VR</string>
+    <string name="filter_nearby_meetings">Que esten cerca mío</string>
 </resources>

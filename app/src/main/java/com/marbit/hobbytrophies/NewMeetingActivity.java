@@ -2,6 +2,7 @@ package com.marbit.hobbytrophies;
 
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,33 +29,48 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.marbit.hobbytrophies.adapters.TrophyMeetingAdapter;
 import com.marbit.hobbytrophies.dialogs.DialogSearchLocalGame;
+import com.marbit.hobbytrophies.interfaces.meetings.NewMeetingView;
 import com.marbit.hobbytrophies.model.Game;
 import com.marbit.hobbytrophies.model.Trophy;
+import com.marbit.hobbytrophies.model.meeting.Location;
 import com.marbit.hobbytrophies.utilities.DatePickerFragment;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.marbit.hobbytrophies.utilities.Preferences;
 import com.marbit.hobbytrophies.utilities.TimePickerFragment;
 import com.marbit.hobbytrophies.utilities.Utilities;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class NewMeetingActivity extends AppCompatActivity implements TimePickerFragment.TimeDatePickerListener, TextWatcher, DialogSearchLocalGame.DialogSearchLocalGameListener {
+public class NewMeetingActivity extends AppCompatActivity implements NewMeetingView, TimePickerFragment.TimeDatePickerListener, TextWatcher, DialogSearchLocalGame.DialogSearchLocalGameListener {
 
-    private TextView gameNameTextView;
-    private TextView gameTypeTextView;
-    private TextView dateTimeTextView;
-    private TextView amountMembersTextView;
-    private EditText descriptionEditText;
+    private static int PLACE_PICKER_REQUEST = 1;
+    @BindView(R.id.text_view_name_game) TextView gameNameTextView;
+    @BindView(R.id.text_view_type_game) TextView gameTypeTextView;
+    @BindView(R.id.text_view_time_meeting) TextView dateTimeTextView;
+    @BindView(R.id.text_view_amount_people) TextView amountMembersTextView;
+    @BindView(R.id.text_view_description_meeting) EditText descriptionEditText;
+    @BindView(R.id.recycler_view_trophies_new_meeting) RecyclerView recyclerViewTrophies;
+    @BindView(R.id.scroll_layout_step_one) View layoutStepOne;
+    @BindView(R.id.new_meeting_swipe_refresh) SwipeRefreshLayout layoutStepTwo;
+    @BindView(R.id.layout_location) LinearLayout layoutLocation;
+    @BindView(R.id.text_view_location) TextView textViewLocation;
     private int gameTypeSelected;
     private Game gameSelected;
     private String stringDateSelected;
@@ -64,30 +79,22 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
     private boolean gameLoad = false;
     private boolean typeLoad = false;
     private ArrayList<Game> userGamesList;
-    private View layoutStepOne;
-    private SwipeRefreshLayout layoutStepTwo;
-    private RecyclerView recyclerViewTrophies;
     private RequestQueue requestQueue;
     private List<Trophy> trophies;
     private TrophyMeetingAdapter trophyMeetingAdapter;
     private int step;
     private DateUtils dateUtils;
+    private Place selectedPlace = null;
+    private boolean validPlace = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_new);
+        ButterKnife.bind(this);
         this.dateUtils = new DateUtils();
-        this.gameNameTextView = (TextView) findViewById(R.id.text_view_name_game);
-        this.gameTypeTextView = (TextView) findViewById(R.id.text_view_type_game);
-        this.dateTimeTextView = (TextView) findViewById(R.id.text_view_time_meeting);
-        this.amountMembersTextView = (TextView) findViewById(R.id.text_view_amount_people);
-        this.descriptionEditText = (EditText) findViewById(R.id.text_view_description_meeting);
         this.descriptionEditText.addTextChangedListener(this);
         this.userGamesList = (ArrayList<Game>) Preferences.getGameList(getApplicationContext());
-        this.layoutStepOne = (ScrollView) findViewById(R.id.scroll_layout_step_one);
-        this.layoutStepTwo = (SwipeRefreshLayout) findViewById(R.id.new_meeting_swipe_refresh);
-        this.recyclerViewTrophies = (RecyclerView) findViewById(R.id.recycler_view_trophies_new_meeting);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         this.recyclerViewTrophies.setLayoutManager(mLayoutManager);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -95,7 +102,6 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
         this.trophies = new ArrayList<>();
         this.trophyMeetingAdapter = new TrophyMeetingAdapter(getApplicationContext(), true);
         this.recyclerViewTrophies.setAdapter(trophyMeetingAdapter);
-
         layoutStepTwo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -204,6 +210,12 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
 
     private void sendRequestNewMeeting() {
         JSONObject jsonObject = new JSONObject();
+        Location location = new Location();
+        if(selectedPlace != null){
+            location.setDescription(selectedPlace.getAddress().toString());
+            location.setLongitude(selectedPlace.getLatLng().longitude);
+            location.setLatitude(selectedPlace.getLatLng().latitude);
+        }
         try {
             jsonObject.put("user-admin", Preferences.getUserName(getApplicationContext()));
             jsonObject.put("game-id", gameSelected.getId());
@@ -212,6 +224,10 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
             jsonObject.put("type", gameTypeSelected);
             jsonObject.put("places", amountMembersTextView.getText());
             jsonObject.put("trophies", new JSONArray(trophyMeetingAdapter.getSelectedTrophiesList()));
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            JSONObject jsonObjectLocation = new JSONObject(gson.toJson(location));
+            jsonObject.put( "location", jsonObjectLocation);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -243,13 +259,11 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
                 Toast.makeText(NewMeetingActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }).setShouldCache(false);
-
     }
 
     /**
      *  Listener XML
      */
-
     public void onClickGame(View view) {
 
         DialogSearchLocalGame dialogSearchLocalGame = DialogSearchLocalGame.newInstance(userGamesList);
@@ -282,6 +296,8 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
                         String[] gamesTypeArray = getResources().getStringArray(R.array.games_type);
                         gameTypeTextView.setText(gamesTypeArray[which]);
                         typeLoad = true;
+                        setLocationLayout(gameTypeSelected);
+                        setValidPlace();
                         onTextChanged(descriptionEditText.getText(), 0, 0, 0);
                     }
                 });
@@ -307,13 +323,11 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
     }
 
     private boolean fieldsComplete() {
-        return this.dateTimeLoad && this.typeLoad && this.gameLoad;
+        return this.dateTimeLoad && this.typeLoad && this.gameLoad && this.validPlace;
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {   }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -327,9 +341,7 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
     }
 
     @Override
-    public void afterTextChanged(Editable editable) {
-
-    }
+    public void afterTextChanged(Editable editable) {    }
 
     @Override
     public void selectGame(Game game) {
@@ -337,5 +349,50 @@ public class NewMeetingActivity extends AppCompatActivity implements TimePickerF
         gameNameTextView.setText(game.getName());
         gameLoad = true;
         onTextChanged(descriptionEditText.getText(), 0, 0, 0);
+    }
+
+    @Override
+    public void setLocationLayout(int gameType) {
+        if(gameType == 5){
+            showLocationInput();
+        }else {
+            hideLocationInput();
+        }
+    }
+
+    @Override
+    public void showLocationInput() {
+        this.layoutLocation.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLocationInput() {
+        this.layoutLocation.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setNamePlaceSelected(Place placeSelected) {
+        this.textViewLocation.setText(placeSelected.getAddress());
+    }
+
+    public void onClickLocation(View view) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                this.selectedPlace = PlacePicker.getPlace(data, this);
+                setNamePlaceSelected(selectedPlace);
+                setValidPlace();
+                onTextChanged(this.descriptionEditText.getText(), 0, 0, 0);
+            }
+        }
+    }
+
+    public void setValidPlace() {
+        this.validPlace = this.gameTypeSelected != 5 || selectedPlace != null;
     }
 }

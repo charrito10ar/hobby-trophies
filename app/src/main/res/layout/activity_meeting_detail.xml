@@ -63,34 +63,46 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/meeting_detail_swipe_refresh"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_above="@+id/post_comment_layout">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_meeting_trophies"
-            android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:paddingBottom="64dp"
-            android:clipToPadding="false"
-            android:layout_height="match_parent" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:visibility="visible">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map_view"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:visibility="gone"
+            map:cameraZoom="13"
+            map:mapType="normal"
+            map:liteMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/meeting_detail_swipe_refresh"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/map_view"
+            android:layout_above="@+id/post_comment_layout">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_meeting_trophies"
+                android:layout_width="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:paddingBottom="64dp"
+                android:clipToPadding="false"
+                android:layout_height="match_parent" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
 
         <LinearLayout
         android:id="@+id/post_comment_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@color/material_grey_200"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
