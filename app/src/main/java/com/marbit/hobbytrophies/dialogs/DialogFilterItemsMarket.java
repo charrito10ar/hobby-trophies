@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,7 +38,9 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
     private String[] orderByArray;
     private Filter filter;
     private RangeSeekBar seekbarPrice;
+    private SeekBar seekBarDistance;
     private TextView textViewRangePrice;
+    private TextView textViewRangeDistance;
     private CheckBox checkboxBarter;
     private CheckBox checkboxDigital;
     private EditText editTextSearch;
@@ -82,16 +85,40 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
         this.spinnerOrderBy.setOnItemSelectedListener(this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapterOrderBy.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Button buttonCancel = (Button) view.findViewById(R.id.button_cancel);
+        Button buttonCancel = view.findViewById(R.id.button_cancel);
         buttonCancel.setOnClickListener(this);
-        Button buttonApply = (Button) view.findViewById(R.id.button_apply_filter);
+        Button buttonApply = view.findViewById(R.id.button_apply_filter);
         buttonApply.setOnClickListener(this);
-        this.seekbarPrice = (RangeSeekBar) view.findViewById(R.id.seekbar_range_price);
+        this.seekbarPrice = view.findViewById(R.id.seekbar_range_price);
         this.seekbarPrice.setOnRangeSeekBarChangeListener(this);
-        this.textViewRangePrice = (TextView) view.findViewById(R.id.text_view_range_price);
-        this.checkboxBarter = (CheckBox) view.findViewById(R.id.checkbox_barter);
+        this.seekBarDistance = view.findViewById(R.id.seekbar_range_distance);
+        this.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress == 0){
+                    filter.setMaxDistance(5000);
+                    textViewRangeDistance.setText("Cualquier distancia");
+                }else {
+                    filter.setMaxDistance(progress);
+                    textViewRangeDistance.setText(getString(R.string.range_distance, (Integer) progress));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        this.textViewRangeDistance = view.findViewById(R.id.text_view_range_distance);
+        this.textViewRangePrice = view.findViewById(R.id.text_view_range_price);
+        this.checkboxBarter = view.findViewById(R.id.checkbox_barter);
         this.checkboxBarter.setOnCheckedChangeListener(this);
-        this.checkboxDigital = (CheckBox) view.findViewById(R.id.checkbox_digital);
+        this.checkboxDigital = view.findViewById(R.id.checkbox_digital);
         this.checkboxDigital.setOnCheckedChangeListener(this);
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -115,9 +142,14 @@ public class DialogFilterItemsMarket extends DialogFragment implements View.OnCl
 
     @Override
     public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-        this.filter.setMinPrice((int)minValue);
-        this.filter.setMaxPrice((int)maxValue);
-        textViewRangePrice.setText(getString(R.string.range_price, (Integer)minValue, (Integer)maxValue));
+        switch (bar.getId()){
+            case R.id.seekbar_range_price:
+                this.filter.setMinPrice((int)minValue);
+                this.filter.setMaxPrice((int)maxValue);
+                textViewRangePrice.setText(getString(R.string.range_price, (Integer)minValue, (Integer)maxValue));
+                break;
+        }
+
     }
 
     @Override

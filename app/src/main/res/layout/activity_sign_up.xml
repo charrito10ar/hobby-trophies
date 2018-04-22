@@ -122,7 +122,7 @@
             android:background="@drawable/background_login_button_google"
             android:text="Iniciar sesión con Google"
             android:onClick="clickGoogleButton"/>
-
+<!--
         <com.facebook.login.widget.LoginButton
             android:id="@+id/sign_in_button_facebook"
             android:visibility="visible"
@@ -133,7 +133,7 @@
             android:layout_marginTop="30dp"
             />
 
-
+-->
     </RelativeLayout>
 
     <RelativeLayout

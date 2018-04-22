@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.marbit.hobbytrophies.dao.ItemDAO;
 import com.marbit.hobbytrophies.dao.UserDAO;
-import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.model.meeting.Location;
 import com.marbit.hobbytrophies.utilities.Preferences;
@@ -23,7 +22,7 @@ public class ItemDetailActivityInteractor implements ItemDAO.ItemDAOEditListener
     }
 
     public void delete(Item item) {
-        ItemDAO itemDAO = new ItemDAO(this);
+        ItemDAO itemDAO = new ItemDAO(context, this);
         itemDAO.delete(item);
     }
 
@@ -52,14 +51,14 @@ public class ItemDetailActivityInteractor implements ItemDAO.ItemDAOEditListener
     }
 
     public void loadRemoteItem(String itemId) {
-        ItemDAO itemDAO = new ItemDAO();
+        ItemDAO itemDAO = new ItemDAO(context);
         itemDAO.loadItemById(context, itemId, new ItemDAO.SingleItemDAOListener() {
             @Override
             public void loadItemByIdSuccess(final Item item) {
                 UserDAO userDAO = new UserDAO(context);
                 userDAO.getUserLocation(Preferences.getUserId(context), new UserDAO.ListenerUserLocationDAO() {
                     @Override
-                    public void loadUserLocationSuccessful(LocationUser location) {
+                    public void loadUserLocationSuccessful(Location location) {
                         item.setLocation(location);
                         presenterInterface.loadRemoteItemSuccess(item);
                     }

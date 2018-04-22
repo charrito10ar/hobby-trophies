@@ -4,10 +4,8 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.util.Log;
 
 import com.marbit.hobbytrophies.dao.LocationDAO;
-import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.utilities.Preferences;
 
 import java.io.IOException;
@@ -22,7 +20,7 @@ public class MainActivityInteractor {
     }
 
     public void saveUserLocation(Location location) {
-        LocationUser locationUser = new LocationUser(location);
+        com.marbit.hobbytrophies.model.meeting.Location locationUser = new com.marbit.hobbytrophies.model.meeting.Location(location);
         Address address = getAddress(location.getLatitude(), location.getLongitude());
         locationUser.setCountryCode(address.getCountryCode());
         locationUser.setLocality(address.getLocality());

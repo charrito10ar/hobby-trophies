@@ -5,11 +5,9 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
-import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.model.meeting.Location;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +30,7 @@ public class Item implements Parcelable{
     private boolean isBarter;
     private Object date;
     private int status;
-    private LocationUser location;
+    private Location location;
 
     public Item(String userId, String userName, String description, int itemCategory, String price, boolean isDigital, boolean isBarter) {
         this.userId = userId;
@@ -241,11 +239,11 @@ public class Item implements Parcelable{
         this.userName = userName;
     }
 
-    public LocationUser getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(LocationUser location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 }

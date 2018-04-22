@@ -10,13 +10,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.marbit.hobbytrophies.chat.dao.ChatDAO;
-import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.market.model.UserMarket;
 import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
 import com.marbit.hobbytrophies.model.meeting.Location;
+import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
 import com.marbit.hobbytrophies.utilities.Preferences;
+import com.marbit.hobbytrophies.utilities.Utilities;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,24 +33,29 @@ public class ItemDAO implements ItemDAOInterface{
     private final DatabaseReference databaseReference;
     private ItemDAOListener mListener;
     private ItemDAOEditListener mEditListener;
+    private Context context;
 
 
-    public ItemDAO(){
+    public ItemDAO(Context context){
         this.database = FirebaseDatabase.getInstance();
         this.databaseReference = database.getReference();
+        this.context = context;
     }
 
-    public ItemDAO(ItemDAOListener mListener){
+    public ItemDAO(Context context, ItemDAOListener mListener){
         this.database = FirebaseDatabase.getInstance();
         this.databaseReference = database.getReference();
         this.mListener = mListener;
+        this.context = context;
     }
 
-    public ItemDAO(ItemDAOEditListener mEditListener){
+    public ItemDAO(Context context, ItemDAOEditListener mEditListener){
         this.database = FirebaseDatabase.getInstance();
         this.databaseReference = database.getReference();
         this.mEditListener = mEditListener;
+        this.context = context;
     }
+
     @Override
     public void loadItems() {
 //        Query recentPostsQuery = databaseReference.orderByChild(DataBaseConstants.CHILD_USER_NAME);
@@ -80,7 +86,7 @@ public class ItemDAO implements ItemDAOInterface{
                 UserDAO userDAO = new UserDAO(context);
                 userDAO.getUserLocation(Preferences.getUserId(context), new UserDAO.ListenerUserLocationDAO() {
                     @Override
-                    public void loadUserLocationSuccessful(LocationUser location) {
+                    public void loadUserLocationSuccessful(Location location) {
                         item.setLocation(location);
                         singleItemDAOListener.loadItemByIdSuccess(item);
                     }
@@ -122,19 +128,35 @@ public class ItemDAO implements ItemDAOInterface{
         itemFilterQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                List<Item> items = new ArrayList<>();
+                final List<Item> items = new ArrayList<>();
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    Item item = postSnapshot.getValue(Item.class);
-                    if(item.getStatus() == 0) {// NO ESTA VENDIDO
-                        if(isItemToAdd(item, filter)){
-                            items.add(item);
+                    final Item item = postSnapshot.getValue(Item.class);
+                    UserDAO userDAO = new UserDAO(context);
+                    userDAO.getUserLocation(item.getUserId(), new UserDAO.ListenerUserLocationDAO() {
+                        @Override
+                        public void loadUserLocationSuccessful(Location location) {
+                            item.setLocation(location);
+                            if(item.getStatus() == 0) {// NO ESTA VENDIDO
+                                if(isItemToAdd(item, filter) && isDistanceSelected(item, filter)){
+                                    items.add(item);
+                                }
+                            }
+
+                            if(filter.getOrderBy() == DataBaseConstants.ORDER_BY_MOST_EXPENSIVE || filter.getOrderBy() == DataBaseConstants.ORDER_BY_MOST_RECENTLY){
+                                Collections.reverse(items);
+                            }
+                            mListener.loadItemsByFilterSuccess(items);
                         }
-                    }
+
+                        @Override
+                        public void loadUserLocationError(String errorMessage) {
+
+                        }
+                    });
+
+
                 }
-                if(filter.getOrderBy() == DataBaseConstants.ORDER_BY_MOST_EXPENSIVE || filter.getOrderBy() == DataBaseConstants.ORDER_BY_MOST_RECENTLY){
-                    Collections.reverse(items);
-                }
-                mListener.loadItemsByFilterSuccess(items);
+
             }
 
             @Override
@@ -142,6 +164,17 @@ public class ItemDAO implements ItemDAOInterface{
 
             }
         });
+    }
+
+    private boolean isDistanceSelected(Item item, Filter filter) {
+        if(filter.getMaxDistance() < 5000 && item.getLocation() != null){
+            if(Utilities.locationIsNearBy(context, item.getLocation(), filter.getMaxDistance()* Constants.TEN_KM)){
+                return true;
+            }else {
+                return false;
+            }
+        }
+        return false;
     }
 
     private boolean isItemToAdd(Item item, Filter filter) {

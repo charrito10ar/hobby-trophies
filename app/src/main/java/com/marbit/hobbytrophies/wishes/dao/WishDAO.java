@@ -168,7 +168,7 @@ public class WishDAO implements WishDAOInterface{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final long itemListSize = dataSnapshot.getChildrenCount();
                 for (DataSnapshot itemKey :dataSnapshot.getChildren()){
-                    ItemDAO itemDAO = new ItemDAO();
+                    ItemDAO itemDAO = new ItemDAO(context);
                     itemDAO.loadItemById(context, itemKey.getKey(), new ItemDAO.SingleItemDAOListener() {
                         @Override
                         public void loadItemByIdSuccess(Item item) {

@@ -25,7 +25,7 @@ public class FavouritesPresenter {
         final List<Item> remoteList = new ArrayList<>();
         List<Item> list = Utilities.loadFavorites(context);
         final int sizeList = list.size();
-        ItemDAO itemDAO = new ItemDAO();
+        ItemDAO itemDAO = new ItemDAO(context);
         for (Item item : list) {
             itemDAO.loadItemById(context, item.getId(), new ItemDAO.SingleItemDAOListener() {
                 @Override

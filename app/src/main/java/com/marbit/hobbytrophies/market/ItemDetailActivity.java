@@ -287,7 +287,7 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailA
 
     private void setLocation() {
         if(item.getLocation() != null && !item.getLocation().getLocality().equals("")){
-            LOCATION_ITEM = new LatLng(item.getLocation().getLatitud(), item.getLocation().getLongitud());
+            LOCATION_ITEM = new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude());
             mMapView.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +37,7 @@ import com.marbit.hobbytrophies.utilities.Constants;
 import com.marbit.hobbytrophies.utilities.DateUtils;
 import com.marbit.hobbytrophies.utilities.Network;
 import com.marbit.hobbytrophies.utilities.Preferences;
+import com.marbit.hobbytrophies.utilities.Utilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +47,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -232,22 +231,13 @@ public class MeetingFragment extends Fragment implements SheetLayout.OnFabAnimat
                     list.add(meeting.getDate(getContext()));
                 }
             }if(meeting.getType() == 5 && typeRequest == DialogFilterMeeting.ALL_MEETINGS){
-                if(meetingIsNear(meeting.getLocation())){
+                if(Utilities.locationIsNearBy(getContext(), meeting.getLocation(), Constants.TEN_KM)){
                     meetingListNearby.add(meeting);
                 }
             }
             list.add(meeting);
         }
         return list;
-    }
-
-    private boolean meetingIsNear(Location location) {
-        float[] results = new float[1];
-        Location userLocation = Preferences.getUserLocation(getContext());
-        android.location.Location.distanceBetween(location.getLatitude(), location.getLongitude(),
-                userLocation.getLatitude(), userLocation.getLongitude(),
-                results);
-         return results[0] < Constants.TEN_KM;
     }
 
     private void refreshContent(ArrayList<Object> genericList) {

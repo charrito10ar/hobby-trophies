@@ -13,7 +13,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.model.User;
 import com.marbit.hobbytrophies.model.meeting.Location;
 import com.marbit.hobbytrophies.utilities.DataBaseConstants;
@@ -44,7 +43,7 @@ public class UserDAO implements UserDAOInterface {
         databaseReference.child(DataBaseConstants.COLUMN_USER_LOCATION).child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                LocationUser location = dataSnapshot.getValue(LocationUser.class);
+                Location location = dataSnapshot.getValue(Location.class);
                 listenerUserLocationDAO.loadUserLocationSuccessful(location);
             }
 
@@ -82,7 +81,7 @@ public class UserDAO implements UserDAOInterface {
     }
 
     public interface ListenerUserLocationDAO{
-        void loadUserLocationSuccessful(LocationUser location);
+        void loadUserLocationSuccessful(Location location);
         void loadUserLocationError(String errorMessage);
     }
 }

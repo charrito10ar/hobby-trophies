@@ -11,7 +11,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.marbit.hobbytrophies.dao.ItemDAO;
 import com.marbit.hobbytrophies.dao.UserDAO;
-import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.interfaces.market.MarketFragmentPresenterInterface;
 import com.marbit.hobbytrophies.model.market.Filter;
 import com.marbit.hobbytrophies.model.market.Item;
@@ -48,7 +47,7 @@ public class MarketFragmentInteractor implements ItemDAO.ItemDAOListener {
                     UserDAO userDAO = new UserDAO(context);
                     userDAO.getUserLocation(item.getUserId(), new UserDAO.ListenerUserLocationDAO() {
                         @Override
-                        public void loadUserLocationSuccessful(LocationUser location) {
+                        public void loadUserLocationSuccessful(Location location) {
                             item.setLocation(location);
                             items.add(item);
                             if(sizeList == items.size()){
@@ -72,7 +71,7 @@ public class MarketFragmentInteractor implements ItemDAO.ItemDAOListener {
     }
 
     public void applyFilter(Filter filter) {
-        ItemDAO itemDAO = new ItemDAO(this);
+        ItemDAO itemDAO = new ItemDAO(context, this);
         itemDAO.loadItemsByFilter(filter);
     }
 

@@ -8,8 +8,8 @@ android {
         applicationId "com.marbit.hobbytrophies"
         minSdkVersion 18
         targetSdkVersion 27
-        versionCode 15
-        versionName "1.6"
+        versionCode 16
+        versionName "1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -63,7 +63,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    //compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.karumi:dexter:4.2.0'
     compile 'com.google.android.gms:play-services-location:11.6.0'
     compile 'com.google.android.gms:play-services-places:11.6.0'

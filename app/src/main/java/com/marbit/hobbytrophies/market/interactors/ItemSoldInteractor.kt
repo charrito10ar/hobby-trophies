@@ -8,11 +8,11 @@ import com.marbit.hobbytrophies.market.model.Rate
 import com.marbit.hobbytrophies.market.model.UserMarket
 import com.marbit.hobbytrophies.model.market.Item
 
-class ItemSoldInteractor constructor(context: Context, private val presenterListener: ItemSoldPresenterInterface) {
+class ItemSoldInteractor constructor(val context: Context, private val presenterListener: ItemSoldPresenterInterface) {
 
 
     fun loadPossiblesBuyerSuccessful(itemId: String) {
-        val itemDao = ItemDAO()
+        val itemDao = ItemDAO(context)
         itemDao.loadPossiblesBuyers(itemId, { presenterListener.loadPossiblesBuyerSuccessful(it) })
     }
 
@@ -20,7 +20,7 @@ class ItemSoldInteractor constructor(context: Context, private val presenterList
         item.status = 1
         val rateDAO = RateDAO()
         rateDAO.insertRate(rate, RateDAO.RateListener {
-            val itemDao = ItemDAO()
+            val itemDao = ItemDAO(context)
             itemDao.markSold(item, userMarket)
             presenterListener.soldInHobbySuccess()
         })
@@ -28,7 +28,7 @@ class ItemSoldInteractor constructor(context: Context, private val presenterList
 
     fun soldOutHobby(item: Item) {
         item.status = 1
-        val itemDao = ItemDAO()
+        val itemDao = ItemDAO(context)
         itemDao.markSold(item)
     }
 }

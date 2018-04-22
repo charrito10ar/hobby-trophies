@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
 import com.marbit.hobbytrophies.model.market.Item;
+import com.marbit.hobbytrophies.model.meeting.Location;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,5 +116,14 @@ public class Utilities {
             default:
                 return "Mira esto que encontré en HobbyTrophies: ";
         }
+    }
+
+    public static boolean locationIsNearBy(Context context, Location location, float maxDistance) {
+        float[] results = new float[1];
+        Location userLocation = Preferences.getUserLocation(context);
+        android.location.Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                userLocation.getLatitude(), userLocation.getLongitude(),
+                results);
+        return results[0] < maxDistance;
     }
 }

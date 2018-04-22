@@ -8,6 +8,7 @@ public class Filter {
     private int itemCategory;
     private boolean digital;
     private int orderBy;
+    private int maxDistance = 5000;
 
     public double getMinPrice() {
         return minPrice;
@@ -63,5 +64,12 @@ public class Filter {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setMaxDistance(int maxDistance) {
+        this.maxDistance = maxDistance;
+    }
+    public int getMaxDistance() {
+        return this.maxDistance;
     }
 }

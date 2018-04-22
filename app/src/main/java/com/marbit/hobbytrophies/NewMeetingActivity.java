@@ -36,7 +36,6 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.marbit.hobbytrophies.adapters.TrophyMeetingAdapter;
 import com.marbit.hobbytrophies.dialogs.DialogSearchLocalGame;
 import com.marbit.hobbytrophies.interfaces.meetings.NewMeetingView;
@@ -212,7 +211,7 @@ public class NewMeetingActivity extends AppCompatActivity implements NewMeetingV
         JSONObject jsonObject = new JSONObject();
         Location location = new Location();
         if(selectedPlace != null){
-            location.setDescription(selectedPlace.getAddress().toString());
+            location.setLocality(selectedPlace.getAddress().toString());
             location.setLongitude(selectedPlace.getLatLng().longitude);
             location.setLatitude(selectedPlace.getLatLng().latitude);
         }

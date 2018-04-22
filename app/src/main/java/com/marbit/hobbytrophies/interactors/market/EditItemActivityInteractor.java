@@ -16,7 +16,7 @@ public class EditItemActivityInteractor {
     }
 
     public void updateItem(Item item) {
-        ItemDAO itemDAO = new ItemDAO();
+        ItemDAO itemDAO = new ItemDAO(context);
         itemDAO.updateItem(item, new ItemDAO.EditItemDAOListener() {
             @Override
             public void editItemSuccess() {

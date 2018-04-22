@@ -47,9 +47,7 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     private RelativeLayout layoutEmptyList;
     private boolean isFilter;
 
-    public MarketFragment() {
-
-    }
+    public MarketFragment() {}
 
     public static MarketFragment newInstance() {
         return new MarketFragment();
@@ -90,13 +88,13 @@ public class MarketFragment extends Fragment implements MarketFragmentView, View
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        presenter.loadItems();
         setHasOptionsMenu(true);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        presenter.loadItems();
     }
 
     @Override

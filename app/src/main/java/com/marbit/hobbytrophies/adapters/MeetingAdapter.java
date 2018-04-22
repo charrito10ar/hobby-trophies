@@ -146,7 +146,7 @@ public class MeetingAdapter extends RecyclerView.Adapter{
             }
             if(meeting.getType() == 5){
                 address.setVisibility(View.VISIBLE);
-                address.setText(mView.getContext().getString(R.string.address_meeting_txt, meeting.getLocation().getDescription()));
+                address.setText(mView.getContext().getString(R.string.address_meeting_txt, meeting.getLocation().getLocality()));
             }else {
                 address.setVisibility(View.GONE);
             }

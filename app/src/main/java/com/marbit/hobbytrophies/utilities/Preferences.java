@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.marbit.hobbytrophies.dao.bodies.LocationUser;
 import com.marbit.hobbytrophies.model.Game;
 import com.marbit.hobbytrophies.model.meeting.Location;
 
@@ -215,10 +214,10 @@ public class Preferences {
         return false;
     }
 
-    public static void saveUserLocation(Context context, LocationUser locationUser) {
+    public static void saveUserLocation(Context context, Location locationUser) {
         Preferences.saveString(context, locationUser.getLocality(), Constants.PREFERENCE_USER_LOCALITY);
-        Preferences.saveDouble(context, locationUser.getLatitud(), Constants.PREFERENCE_USER_LATITUDE);
-        Preferences.saveDouble(context, locationUser.getLongitud(), Constants.PREFERENCE_USER_LONGITUDE);
+        Preferences.saveDouble(context, locationUser.getLatitude(), Constants.PREFERENCE_USER_LATITUDE);
+        Preferences.saveDouble(context, locationUser.getLongitude(), Constants.PREFERENCE_USER_LONGITUDE);
     }
 
     public static Location getUserLocation(Context context){

@@ -3,21 +3,33 @@ package com.marbit.hobbytrophies.model.meeting;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Location implements Parcelable{
-    private String description;
+
+    @SerializedName("description")
+    private String locality;
     private double latitude;
     private double longitude;
+    private String countryCode;
 
     public Location(){
-        description = "";
+        locality = "";
         latitude = 0;
         longitude = 0;
+        countryCode = "";
     }
 
-    protected Location(Parcel in) {
-        description = in.readString();
+    public Location(android.location.Location location) {
+        this.longitude = location.getLongitude();
+        this.latitude = location.getLatitude();
+    }
+
+    public Location(Parcel in) {
+        locality = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
+        countryCode = in.readString();
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -33,17 +45,17 @@ public class Location implements Parcelable{
     };
 
     public Location(String address, double latitude, double longitude) {
-        this.description = address;
+        this.locality = address;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public String getDescription() {
-        return description;
+    public String getLocality() {
+        return locality;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setLocality(String locality) {
+        this.locality = locality;
     }
 
     public double getLatitude() {
@@ -62,6 +74,14 @@ public class Location implements Parcelable{
         this.longitude = longitude;
     }
 
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -69,8 +89,9 @@ public class Location implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(description);
+        dest.writeString(locality);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
+        dest.writeString(countryCode);
     }
 }
