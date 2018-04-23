@@ -6,9 +6,11 @@ import com.marbit.hobbytrophies.chat.dao.ChatDAO;
 import com.marbit.hobbytrophies.chat.interfaces.ChatActivityPresenterInterface;
 import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
+import com.marbit.hobbytrophies.dao.ItemDAO;
 import com.marbit.hobbytrophies.dao.UserDAO;
 import com.marbit.hobbytrophies.firebase.FirebaseNotifications;
 import com.marbit.hobbytrophies.model.User;
+import com.marbit.hobbytrophies.model.market.Item;
 
 import org.json.JSONException;
 
@@ -74,6 +76,21 @@ public class ChatActivityInteractor implements ChatDAO.ChatDAOListener {
             @Override
             public void loadUserBasicProfileSuccessful(User user) {
                 presenter.loadUserBasicProfileSuccessful(user);
+            }
+        });
+    }
+
+    public void loadItem(String itemId) {
+        ItemDAO itemDAO = new ItemDAO(context);
+        itemDAO.loadItemById(context, itemId, new ItemDAO.SingleItemDAOListener() {
+            @Override
+            public void loadItemByIdSuccess(Item item) {
+                presenter.loadItemSuccessful(item);
+            }
+
+            @Override
+            public void loadItemByIdError(String message) {
+                presenter.loadItemError(message);
             }
         });
     }

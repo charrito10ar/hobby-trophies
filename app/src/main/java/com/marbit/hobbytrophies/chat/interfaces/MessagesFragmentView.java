@@ -10,4 +10,8 @@ public interface MessagesFragmentView {
     void addMessage(Chat chat);
 
     void insertNewHeaderChat(Chat chat);
+
+    void showLoading();
+
+    void hideLoading();
 }

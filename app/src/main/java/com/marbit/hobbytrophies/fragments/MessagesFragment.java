@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.marbit.hobbytrophies.R;
 import com.marbit.hobbytrophies.chat.adapters.MessageChatAdapter;
@@ -26,6 +27,7 @@ public class MessagesFragment extends Fragment implements MessagesFragmentView{
     private MessagesFragmentPresenter presenter;
     private MessageChatAdapter messageChatAdapter;
     private List<Chat> chatList;
+    private ProgressBar progressBar;
     private int count;
 
     public MessagesFragment() {
@@ -49,7 +51,8 @@ public class MessagesFragment extends Fragment implements MessagesFragmentView{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_chat_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        RecyclerView recyclerView = view.findViewById(R.id.list);
+        this.progressBar = view.findViewById(R.id.progress_bar);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         layoutManager.setReverseLayout(true);
@@ -110,6 +113,16 @@ public class MessagesFragment extends Fragment implements MessagesFragmentView{
         if(count > chatList.size()) {
             messageChatAdapter.insertChat(chat);
         }
+    }
+
+    @Override
+    public void showLoading() {
+        this.progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        this.progressBar.setVisibility(View.GONE);
     }
 
     public interface MessagesFragmentInteractionListener {

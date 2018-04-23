@@ -176,6 +176,16 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView,
         presenter.loadChat(chatId);
     }
 
+    @Override
+    public void showMessage(String message) {
+        editTextMessage.setEnabled(false);
+    }
+
+    @Override
+    public void setDisableWriteMessage() {
+        editTextMessage.setEnabled(false);
+    }
+
     public void clickSendMessage(View view) {
         presenter.sendMessage(chat.getItem(), chat.getTitleItem(), chat.getBuyer(), chat.getSeller(), Preferences.getUserId(getApplicationContext()), editTextMessage.getText().toString(), buyerName, sellerName);
         editTextMessage.setText("");

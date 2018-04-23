@@ -22,4 +22,8 @@ public interface ChatActivityView {
     void setAvatarSeller(String urlAvatar);
 
     void loadChat(String chatId);
+
+    void showMessage(String message);
+
+    void setDisableWriteMessage();
 }

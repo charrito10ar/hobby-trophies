@@ -18,6 +18,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/text_view_empty_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="16dp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:text="Aún no has agregado a favoritos ningún item del mercadillo"/>
     </RelativeLayout>
 
 

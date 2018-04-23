@@ -10,7 +10,6 @@ import com.marbit.hobbytrophies.utilities.Utilities;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class FavouritesPresenter {
     private final Context context;
     private FavouritesFragmentView favouritesFragmentView;
@@ -26,23 +25,29 @@ public class FavouritesPresenter {
         List<Item> list = Utilities.loadFavorites(context);
         final int sizeList = list.size();
         ItemDAO itemDAO = new ItemDAO(context);
-        for (Item item : list) {
-            itemDAO.loadItemById(context, item.getId(), new ItemDAO.SingleItemDAOListener() {
-                @Override
-                public void loadItemByIdSuccess(Item item) {
-                    remoteList.add(item);
-                    if(remoteList.size() == sizeList){
-                        favouritesFragmentView.hideProgressBar();
-                        favouritesFragmentView.loadFavouritesSuccessful(remoteList);
+        if(sizeList > 0){
+            for (Item item : list) {
+                itemDAO.loadItemById(context, item.getId(), new ItemDAO.SingleItemDAOListener() {
+                    @Override
+                    public void loadItemByIdSuccess(Item item) {
+                        remoteList.add(item);
+                        if(remoteList.size() == sizeList){
+                            favouritesFragmentView.hideProgressBar();
+                            favouritesFragmentView.hideEmptyView();
+                            favouritesFragmentView.loadFavouritesSuccessful(remoteList);
+                        }
                     }
-                }
 
-                @Override
-                public void loadItemByIdError(String message) {
-                    favouritesFragmentView.hideProgressBar();
-                    favouritesFragmentView.loadFavouritesError(message);
-                }
-            });
+                    @Override
+                    public void loadItemByIdError(String message) {
+                        favouritesFragmentView.hideProgressBar();
+                        favouritesFragmentView.loadFavouritesError(message);
+                    }
+                });
+            }
+        }else {
+            favouritesFragmentView.hideProgressBar();
+            favouritesFragmentView.showEmptyView();
         }
     }
 }

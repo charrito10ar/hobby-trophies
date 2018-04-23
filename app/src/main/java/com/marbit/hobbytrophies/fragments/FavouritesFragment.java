@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.marbit.hobbytrophies.R;
@@ -31,6 +32,7 @@ public class FavouritesFragment extends Fragment implements FavouritesFragmentVi
     private FavouritesFragmentListener mListener;
     @BindView(R.id.recycler_view_favourites) RecyclerView recyclerView;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.text_view_empty_list) TextView emptyView;
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private ItemProfileSalesAdapter itemProfileSalesAdapter;
     private FavouritesPresenter presenter;
@@ -116,6 +118,16 @@ public class FavouritesFragment extends Fragment implements FavouritesFragmentVi
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showEmptyView() {
+        this.emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideEmptyView() {
+        this.emptyView.setVisibility(View.GONE);
     }
 
     @Override

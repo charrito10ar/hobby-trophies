@@ -12,4 +12,8 @@ public interface FavouritesFragmentView {
     void showProgressBar();
 
     void hideProgressBar();
+
+    void showEmptyView();
+
+    void hideEmptyView();
 }

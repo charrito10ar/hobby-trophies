@@ -8,6 +8,7 @@ import com.marbit.hobbytrophies.chat.interfaces.ChatActivityView;
 import com.marbit.hobbytrophies.chat.model.Chat;
 import com.marbit.hobbytrophies.chat.model.MessageChat;
 import com.marbit.hobbytrophies.model.User;
+import com.marbit.hobbytrophies.model.market.Item;
 
 import java.util.List;
 
@@ -48,6 +49,18 @@ public class ChatActivityPresenter implements ChatActivityPresenterInterface {
         chatActivityView.loadUserBasicProfileSuccessful(user);
     }
 
+    @Override
+    public void loadItemError(String message) {
+        chatActivityView.showMessage(message);
+    }
+
+    @Override
+    public void loadItemSuccessful(Item item) {
+        if(item.getStatus() != 0){
+            chatActivityView.setDisableWriteMessage();
+        }
+    }
+
     public void sendMessage(String itemId, String titleItem, String buyer, String seller, String author, String message, String buyerName, String sellerName) {
         this.interactor.sendMessage(itemId, titleItem, buyer, seller, author, message, buyerName, sellerName);
     }
@@ -64,8 +77,8 @@ public class ChatActivityPresenter implements ChatActivityPresenterInterface {
         interactor.loadPartnerUserChat(partnerUserChat);
     }
 
-    public void loadItem(String item) {
-
+    public void loadItem(String itemId) {
+        interactor.loadItem(itemId);
     }
 
     public void loadChat(String chatId) {

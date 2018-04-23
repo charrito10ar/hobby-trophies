@@ -20,11 +20,13 @@ public class MessagesFragmentPresenter implements MessagesFragmentPresenterInter
     }
 
     public void loadChatsHeaders(String userName) {
+        messagesFragmentView.showLoading();
         interactor.loadChatsHeaders(userName);
     }
 
     @Override
     public void loadChatHeadersSuccessful(List<Chat> chatList) {
+        messagesFragmentView.hideLoading();
         messagesFragmentView.loadChatHeadersSuccessful(chatList);
     }
 

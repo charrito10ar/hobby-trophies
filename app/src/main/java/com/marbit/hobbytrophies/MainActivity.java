@@ -320,7 +320,6 @@ public class MainActivity extends BaseActivity
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-                                Toast.makeText(getApplicationContext(), "Latitud: " + location.getLatitude(), Toast.LENGTH_LONG).show();
                                 presenter.saveUserLocation(location);
                             }
                         }
